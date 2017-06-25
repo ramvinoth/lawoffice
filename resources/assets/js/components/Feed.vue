@@ -1,41 +1,60 @@
 <template>
-        <div class="feed-content-area">
-            <div class="media feeds" v-for="post in posts">
-                <div class="media-left feed-pic left-arrow">
-                  <div class="pr10">
-                      <a href="#">
-                        <img class="media-object" :src="post.user.avatar" alt="" width="50px" height="50px">
-                      </a>
-                  </div>
+    <div class="">
+    <!-- Post -->
+    <div class="row" v-for="post in posts">
+        <div class="col-md-8">
+            <!-- Box Comment -->
+            <div class="box box-widget">
+                <div class="box-header with-border">
+                    <div class="user-block">
+                        <img class="img-circle" :src="post.user.avatar" alt="User Image"/>
+                        <span class="username"><a href="#">{{post.user.name}}</a></span>
+                        <span class="description">Shared publicly - {{post.created_at}}</span>
+                    </div>
+                    <!-- /.user-block -->
+                    <div class="box-tools">
+                        <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="Mark as read">
+                            <i class="fa fa-circle-o"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Minimize">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove post">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                    <!-- /.box-tools -->
                 </div>
-                <div class="media-body">
-                    <div class="f-action"><i class="fa fa-ellipsis-h"></i>
-                        <div 
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="feed-content-area">
+                        <p>{{post.content}}</p>
                     </div>
-                    <div class="feedbox">
-                        <h4 class="media-heading feed-title"><span class="fowner-name">{{ post.user.name }}</span></a> posted status</h4>
-                        <div class="feedcontent"><p>{{ post.content }}</p></div>
-                        <div class="feedbtm">
-                            <div class="fs13rem text-left">
-                                <like :id="post.id"></like>
-                                <span class="comment-section"><i class="fa fa-comment-o pr5"></i>Comment</span>
-                                <span class="dot p1">.</span>
-                                <span class="small">{{ post.created_at }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="likers small" v-if="Object.keys(post.likes).length">
-                        <div class="likers-list">
-                            <span class="">Liked by</span>
-                            <span class="text-left pl5" v-for="like in post.likes">
-                                    <a href="">{{like.user.name}}</a>,
-                                  <!--img :src="like.user.avatar" :alt="like.user.name" :title="like.user.name" width="20px" height="20px" class="avatar-like"-->
-                            </span>
-                        </div>
-                    </div>
+                    <!--a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> Share</a-->
+                    <like :id="post.id"></like>
+                    <span class="pull-right text-muted">127 likes - 3 comments</span>
                 </div>
+                <!-- /.box-body -->
+                
+                <comment></comment>
+                <!-- /.box-footer -->
+                <div class="box-footer">
+                  <form action="#" method="post">
+                    <img class="img-responsive img-circle img-sm" :src="getUserAvatar.avatar"  alt="Alt Text">
+                    <!-- .img-push is used to add margin to elements next to floating images -->
+                    <div class="img-push">
+                      <input type="text" class="form-control input-sm" placeholder="Press enter to post comment">
+                    </div>
+                  </form>
+                </div>
+                <!-- /.box-footer -->
             </div>
         </div>
+    </div>
+    <!-- /.post -->
+    </div>
+        
+        
 </template>
 
 <script>
@@ -73,6 +92,9 @@
 
                 return likers
             },
+            getUserAvatar() {
+                return this.$store.getters.auth_user_data
+            }
         }
     }
 </script>
@@ -80,6 +102,12 @@
 
 
 <style>
+    .posts{
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
     .feedbox{
         position: relative;
         padding: 20px 0px 0px 20px;
@@ -151,8 +179,7 @@
         cursor: pointer;
     }
     .feed-content-area {
-        width: 800px;
-        margin: 0 auto;
+        min-height: 50px;
     }
     .comment-section{
         color: #949596;
@@ -181,7 +208,5 @@
     }
     @media only screen and (max-width: 1440px) and (min-width: 1350px)
     .feed-content-area {
-        min-width: 750px;
-        max-width: 750px;
     }
 </style>

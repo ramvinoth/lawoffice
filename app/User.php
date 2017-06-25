@@ -3,6 +3,7 @@
 namespace App;
 
 use Storage;
+use Laravel\Passport\HasApiTokens;
 use App\Traits\Friendable;
 use Laravel\Scout\Searchable;
 use Illuminate\Notifications\Notifiable;
@@ -10,6 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    use HasApiTokens;
     use Notifiable;
     use Friendable;
     use Searchable;

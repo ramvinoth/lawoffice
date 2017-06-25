@@ -16,3 +16,12 @@ use Illuminate\Http\Request;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
+
+Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function(){
+   Route::post('sidebar-toggle', 'Api\UserApiController@postSidebarToggle');
+});
+/*
+Route::group(['middleware' => 'auth:api'], function(){
+   Route::get('caselist', 'Api\CaseListApiController@show');
+});
+*/

@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-    <post></post>
-    <feed></feed>
+    <div id= "feedContainer" class="feed-container">
+        <post></post>
+        <feed></feed>
+    </div>
 @endsection

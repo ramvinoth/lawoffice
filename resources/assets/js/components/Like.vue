@@ -1,9 +1,9 @@
 <template>
-    <span class="emptyheart heart" v-if="!auth_user_likes_post" @click="like()">
-        <i class="fa fa-heart-o fs18rem pr5"></i><span class="like">Like</span>
+    <span class="link-black text-sm" v-if="!auth_user_likes_post" @click="like()">
+        <i class="fa fa-thumbs-o-up margin-r-5"></i><span class="like">Like</span>
     </span>
-    <span class="fullheart heart" v-else @click="unlike()">
-        <i class="fa fa-heart colred fs18rem pr5"></i><span class="like">Liked</span>
+    <span class="link-black text-sm" v-else @click="unlike()">
+        <i class="fa fa-thumbs-o-up colred margin-r-5"></i><span class="like">Liked</span>
     </span>
 </template>
 

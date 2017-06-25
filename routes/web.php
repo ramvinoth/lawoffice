@@ -1,23 +1,29 @@
 <?php
 
 Route::get('/', function () {
-    if(Auth::user()){
-        return view('home');
-    }else{
-        return view('welcome');
-    }
+    return view('home');
+});
+Route::get('/home', function () {
+    return view('home');
 });
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
+Route::group(['prefix' => 'api/'], function(){
+   Route::resource('caselist', 'CaseListController');
+});
 
 Route::group(['middleware' => 'auth'], function(){
     Route::get('/profile/{slug}', [
         'uses' => 'ProfilesController@index',
         'as' => 'profile'
     ]);
-
+    
+    Route::get('/caselist', [
+        'uses' => 'CaseListController@show',
+        'as' => 'caselist'
+    ]);
+    
     Route::get('/profile/edit/profile', [
         'uses' => 'ProfilesController@edit',
         'as' => 'profile.edit'

@@ -76,7 +76,13 @@ nav.navbar-static-side {
     background-color: #2f4050;
     border-color: #2f4050;
 }
-
+.feed-container{
+    width: 100%;
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-top: 100px;
+}
 
 body.mini-navbar .navbar-default .nav > li > a {
     font-size: 16px;
@@ -90,10 +96,9 @@ body.mini-navbar .navbar-default .nav > li > a {
 
 #page-wrapper{
     min-height: 562px;
-    height: 100%;
+    height: 100vh;
     background-color: #e9eaed;
     margin: 0 0 0 50px;
-    padding-top: 100px;
 }
 
 .fsmooth {
@@ -683,3 +688,100 @@ li>a.topbarImage{
 .feeds{
     width: 100%
 }
+
+.panel-heading {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  align-items: center;
+}
+
+.filter {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.filter-column {
+  -webkit-box-flex: 4;
+  flex: 4;
+  padding-right: 15px;
+}
+
+.filter-operator {
+  -webkit-box-flex: 4;
+  flex: 4;
+  padding-right: 15px;
+}
+
+.filter-input {
+  -webkit-box-flex: 6;
+  flex: 6;
+  padding-right: 15px;
+}
+
+.filter-btn {
+  -webkit-box-flex: 1;
+  flex: 1;
+}
+
+.pagination-footer {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  align-items: center;
+}
+
+.pagination-input {
+  width: 45px;
+}
+
+.select2-container--default .select2-selection--single{
+    border: 1px solid #d2d6de;
+    border-radius: 0px;
+    height: 34px;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow{
+    height: 30px;
+}
+
+/* RV Form Styles */
+.form-group .form-hr-50{
+    width: 50%;
+    float: left;
+    padding: 0px;
+    height: 60px;
+}
+.form-group.form-box{
+    width: 100%;
+    border: 1px solid #efefef;
+    padding: 20px;
+}
+.form-inline-block{
+    display: inline-block;
+    width: 100%;
+}
+.pL10{
+    padding-left: 10px!important;
+}
+.pR10{
+    padding-right: 10px!important;
+}
+.mT10{
+    margin-top: 10px!important;
+}
+.mT5{
+    margin-top: 5px!important;
+}
+.hide{
+    display: none; 
+}
+/* RV Form Styles END */

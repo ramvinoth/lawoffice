@@ -1,0 +1,78 @@
+<template>
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="/"><b>Law Office</b> Suite</a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="login-box-body">
+            <p class="login-box-msg">Sign in to start your session</p>
+
+            <form action="/login" method="POST" role="form">
+                <input type="hidden" name="_token" :value="csrf">
+                <div class="form-group has-feedback">
+                    <input type="email" name="email" class="form-control" placeholder="Email">
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input type="password" name="password" class="form-control" placeholder="Password">
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                <div class="row">
+                    <div class="col-xs-8">
+                        <div class="checkbox">
+                            <label>
+                                <input name="remember" type="checkbox" checked>
+                                <div class="mT5">Remember Me</div>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-xs-4">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+
+            <div class="social-auth-links text-center hide">
+                <p>- OR -</p>
+                <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using
+            Facebook</a>
+                <a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using
+            Google+</a>
+            </div>
+            <!-- /.social-auth-links -->
+
+            <a href="/password/reset">I forgot my password</a><br>
+            <a href="register.html" class="text-center" style="display:none;">Register a new membership</a>
+
+        </div>
+        <!-- /.login-box-body -->
+    </div>
+</template>
+
+<script>
+export default{
+    data() {
+            return {
+                csrf: "",
+            } 
+        },
+    methods: {
+        logout(e) {
+            e.preventDefault();
+            document.getElementById('logout-form').submit()
+        }
+    },
+    mounted() {
+        this.csrf = window.Laravel.csrfToken        
+    }
+}
+    
+</script>
+
+<style>
+    body{
+        background: #efefef;
+    }
+</style>
