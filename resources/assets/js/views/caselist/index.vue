@@ -1,5 +1,5 @@
 <template>
-    <data-viewer :source="source" :thead="thead" :filter="filter" :create="create" :title="title">
+    <data-viewer :source="source" :thead="thead" :filter="filter" :create="create" :title="title" :params="params">
         <template scope="props">
             <tr @click="$router.push('/caselist/' + props.item.id)">
                 <td>{{props.item.id}}</td>
@@ -33,8 +33,18 @@
                     {title: 'REFERED BY', key: 'refered_by', sort: true},
                 ],
                 filter: [
-                    'id', 'srno', 'case_type', 'case_no', 'petitioner', 'respondant'
-                ]
+                    'id', 'court', 'bench', 'sno', 'vno', 'case_type', 'filing_date', 'admission', 'petitioner', 'respondant', 'appear', 'contact', 'no_of', 'refer_by', 'refer_contact', 'refer_to', 'to_contact', 'district', 'c_prayer', 'citation', 'status', 's_text', 'disposal', 'expiry_date', 'by_whom', 'category', 'case_no', 'against', 'against1', 'mcdisposal', 'mcjudge', 'judge', 'main_petitioner', 'posted_date', 'mpno', 'other', 'crime_no', 'police_st', 'loan', 'bank', 'branch', 'loan_cat', 'possession', 'sale', 'upload', 'returned', 'represent', 'present', 'return_expiry', 'result', 'priority'
+                ],
+                params: {
+                    column: 'id',
+                    direction: 'desc',
+                    per_page: 10,
+                    page: 1,
+                    search_column: 'id',
+                    search_operator: 'equal_to',
+                    search_query_1: 'CMA',
+                    search_query_2: ''
+                },
             }
         },
         components: {

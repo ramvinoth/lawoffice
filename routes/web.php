@@ -11,6 +11,7 @@ Auth::routes();
 
 Route::group(['prefix' => 'api/'], function(){
    Route::resource('caselist', 'CaseListController');
+   Route::resource('diary', 'DiaryController');
 });
 
 Route::group(['middleware' => 'auth'], function(){
@@ -79,4 +80,8 @@ Route::group(['middleware' => 'auth'], function(){
         'uses' => 'LikesController@unlike'
     ]);
 
+    Route::get('/storage/{path}/{file}', [
+	'as'=>'image', 
+	'uses'=>'ImageController@getImage'
+    ]);
 });

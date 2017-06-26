@@ -83,22 +83,12 @@
     import axios from 'axios'
 
     export default {
-        props: ['source', 'thead', 'filter', 'create', 'title'],
+        props: ['source', 'thead', 'filter', 'create', 'title', 'params'],
         data() {
             return {
                 showFilter: false,
                 model: {
                     data: []
-                },
-                params: {
-                    column: 'id',
-                    direction: 'desc',
-                    per_page: 10,
-                    page: 1,
-                    search_column: 'case_type',
-                    search_operator: 'equal_to',
-                    search_query_1: 'CMA',
-                    search_query_2: ''
                 },
                 operators: {
                     equal_to: '=',

@@ -47,7 +47,7 @@
           </a>
         </li>
         <li>
-          <a href="#/">
+          <a href="#/diary">
             <i class="fa fa-envelope"></i> <span>Diary</span>
             <span class="pull-right-container">
               <small class="label pull-right bg-green">12</small>

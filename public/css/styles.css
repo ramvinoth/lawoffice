@@ -784,4 +784,7 @@ li>a.topbarImage{
 .hide{
     display: none; 
 }
+.panel {
+    margin-bottom: 0px;
+}
 /* RV Form Styles END */
