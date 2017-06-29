@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Tamizhan') }}</title>
+    <title>{{ config('app.name', 'Law Office Suite') }}</title>
 
      <!-- Fonts -->
      <!-- Bootstrap 3.3.6 -->
@@ -66,7 +66,8 @@
     <!-- Bootstrap 3.3.6 -->
     <script src="../../bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
-    
+    <!-- bootstrap datepicker -->
+    <script src="../../plugins/datepicker/bootstrap-datepicker.js"></script>
     <!-- Select2 -->
     <script src="../../plugins/select2/select2.full.min.js"></script>
     <script type="text/javascript" src="/js/custom.js"></script>

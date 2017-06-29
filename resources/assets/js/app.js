@@ -48,18 +48,12 @@ import Vue from 'vue'
 import App from './App.vue'
 import { store } from './store'
 import router from './router'
-import Datepicker from 'vuejs-datepicker';
 
 Vue.component('init', require('./components/Init.vue'));
 Vue.component('topnav', require('./components/inner/TopNav.vue'));
 Vue.component('leftnav', require('./components/inner/LeftNav.vue'));
 Vue.component('select2', require('./components/Select2.vue'));
  
-Vue.component('datepicker', {
-    components: {
-        Datepicker
-    }
-});
 
 Vue.http.headers.common['X-CSRF-TOKEN'] = window.Laravel.csrfToken;
 const app = new Vue({

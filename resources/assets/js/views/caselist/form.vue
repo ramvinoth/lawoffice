@@ -99,14 +99,14 @@
                         <div class="row datepicker">
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <datepicker v-model="form.filing_date" placeholder="Date of Filing"></datepicker>
+                                    <datepicker v-model="form.filing_date" :value="form.filing_date" placeholder="Date of Filing"></datepicker>
                                     <small class="text-danger" v-if="errors.email">{{errors.email[0]}}</small>
                                 </div>
                             </div>
                             
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <datepicker v-model="form.admission" placeholder="Date of Admission"></datepicker>
+                                    <datepicker v-model="form.admission" :value="form.admission" placeholder="Date of Admission"></datepicker>
                                     <small class="text-danger" v-if="errors.phone">{{errors.phone[0]}}</small>
                                 </div>
                             </div>
@@ -114,20 +114,20 @@
                         <div class="row datepicker">
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <datepicker v-model="form.returned" placeholder="Date of Return"></datepicker>
+                                    <datepicker v-model="form.returned" :value="form.returned" placeholder="Date of Return"></datepicker>
                                     <small class="text-danger" v-if="errors.phone">{{errors.phone[0]}}</small>
                                 </div>
                             </div>
                             
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <datepicker v-model="form.return_expiry" placeholder="Date of Expiry"></datepicker>
+                                    <datepicker v-model="form.return_expiry" :value="form.return_expiry" placeholder="Date of Expiry"></datepicker>
                                     <small class="text-danger" v-if="errors.phone">{{errors.phone[0]}}</small>
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <datepicker v-model="form.represent" placeholder="Date of Representation"></datepicker>
+                                    <datepicker v-model="form.represent" :value="form.represent" placeholder="Date of Representation"></datepicker>
                                     <small class="text-danger" v-if="errors.phone">{{errors.phone[0]}}</small>
                                 </div>
                             </div>
@@ -170,7 +170,7 @@
                                     <input type="text" class="form-control" placeholder="Place" v-model="lower_court.lplace">
                                 </div>
                                 <div class="col-sm-2 datepicker">
-                                    <datepicker v-model="lower_court.order" placeholder="Order Date"></datepicker>
+                                    <datepicker v-model="lower_court.order" :value="lower_court.order" placeholder="Order Date"></datepicker>
                                 </div>
                                 <input type="hidden" name="against" :value="lower_court"/>
                             </div>
@@ -192,7 +192,7 @@
                                     <input type="text" class="form-control" placeholder="Place" v-model="lower_court1.lplace">
                                 </div>
                                 <div class="col-sm-2 datepicker">
-                                    <datepicker v-model="lower_court1.order" placeholder="Order Date"></datepicker>
+                                    <datepicker v-model="lower_court1.order" :value="lower_court1.order" placeholder="Order Date"></datepicker>
                                 </div>
                                 <input type="hidden" name="against1" :value="lower_court1"/>
                             </div>
@@ -257,7 +257,7 @@
                                             <input type="text" class="form-control" placeholder="Year" v-model="misc_sr[0].myear">
                                         </div>
                                         <div class="col-sm-3 datepicker">
-                                            <datepicker v-model="misc_sr[0].mdate" placeholder="DD/MM/YYYY"></datepicker>
+                                            <datepicker v-model="misc_sr[0].mdate" :value="misc_sr[0].mdate" placeholder="DD/MM/YYYY"></datepicker>
                                         </div>
                                         <input type="hidden" name="misc_sr" v-model='misc_sr'>
                                         <div class="col-sm-6 mT10">
@@ -306,7 +306,7 @@
                                             <input type="text" class="form-control" placeholder="Year" v-model="misc_pet.mpyear">
                                         </div>
                                         <div class="col-sm-3 datepicker">
-                                            <datepicker v-model="misc_pet.date" placeholder="DD/MM/YYYY"></datepicker>
+                                            <datepicker v-model="misc_pet.date" :value="misc_pet.date" placeholder="DD/MM/YYYY"></datepicker>
                                         </div>
                                     </div>
                                     <div class="row mT10">
@@ -365,7 +365,7 @@
                         <div class="row">
                             <div class="col-sm-4 datepicker">
                                 <label>Posted on</label>
-                                <datepicker v-model="form.posted_date" placeholder="DD/MM/YYYY"></datepicker>
+                                <datepicker v-model="form.posted_date" :value="form.posted_date" placeholder="DD/MM/YYYY"></datepicker>
                             </div>
                             
                             <div class="col-sm-4">
@@ -414,8 +414,8 @@
 <script>
     import Vue from 'vue'
     import axios from 'axios'
-    import Datepicker from 'vuejs-datepicker'
-
+    import Datepicker from '../../components/DatePicker.vue'
+    
     var state = {
         date1: new Date()
     }

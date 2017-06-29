@@ -68,9 +68,16 @@ class CaseListController extends Controller
      * @param  \App\Case  $case
      * @return \Illuminate\Http\Response
      */
-    public function edit(CaseList $caselist)
+    public function edit($id)
     {
         //
+        $caselist = \App\CaseList::findOrFail($id);
+
+        return response()
+            ->json([
+                'form' => $caselist,
+                'option' => []
+            ]);
     }
 
     /**

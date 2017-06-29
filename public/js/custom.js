@@ -13,4 +13,4 @@ if(load == "" || load == "feed"){
     
 }
 
-console.log("sss : "+href[2]);
+//console.log("sss : "+href[2]);

@@ -3,7 +3,7 @@
         <div class="panel-heading">
             <span class="panel-title">{{model.company}} / {{model.name}}</span>
             <div>
-                <router-link :to="'/caselist/' + model.id + '/edit'" class="btn btn-primary btn-sm">Edit</router-link>
+                <router-link :to="'/caselist/' + model[0].id + '/edit'" class="btn btn-primary btn-sm">Edit</router-link>
                 <button class="btn btn-danger btn-sm" @click="remove">Delete</button>
             </div>
         </div>

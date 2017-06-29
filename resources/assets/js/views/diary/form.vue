@@ -10,6 +10,7 @@
                     <div class="col-sm-8">
                         <label>Case Number</label>
                         <div class="row">
+                            <div class="col-sm-6">
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <input type="text" placeholder="Type" class="form-control" v-model="form.ctype">
@@ -27,14 +28,15 @@
                                     <input type="text" placeholder="Year" class="form-control" v-model="form.cyear">
                                     <small class="text-danger" v-if="errors.cyear">{{errors.court[0]}}</small>
                                 </div>
-                                <input type="hidden" name="case_no" id="case_no" :value="concatValue([form.ctype,form.cno,form.cyear])" v-model="form.case_no" />
+                                <input type="hidden" name="case_no" id="case_no" :value="concatValue({'type' : form.ctype, 'no' : form.cno, 'year' : form.cyear})" v-model="form.case_no" />
+                            </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group datepicker">
                                     <label>Date</label>
-                                    <datepicker v-model="form.cdate" placeholder="DD/MM/YYYY"></datepicker>
+                                    <datepicker :value="form.cdate" v-model="form.cdate" placeholder="DD/MM/YYYY"></datepicker>
                                 </div>
                             </div>
                         </div>
@@ -82,7 +84,7 @@
                             <div class="col-sm-6">
                                 <div class="form-group datepicker">
                                     <label>Remarks</label>
-                                    <datepicker v-model="form.posted" placeholder="DD/MM/YYYY"></datepicker>
+                                    <datepicker :value="form.posted" v-model="form.posted" placeholder="DD/MM/YYYY"></datepicker>
                                 </div>
                             </div>
                         </div>
@@ -96,7 +98,7 @@
 <script>
     import Vue from 'vue'
     import axios from 'axios'
-    import Datepicker from 'vuejs-datepicker'
+    import Datepicker from '../../components/DatePicker.vue'
 
     var state = {
         date1: new Date()
@@ -159,12 +161,9 @@
                         Vue.set(vm.$data, 'errors', error.response.data)
                     })
             },
-            concatValue(arrVal){
-                console.log("arrVal length : "+arrVal.length);
-                var result= "";
-                for(var i=0; i<arrVal.length;i++){
-                    result += arrVal[i]+"/"
-                }
+            concatValue(caseNoObj){
+                //console.log("caseNoObj length : "+caseNoObj.size());
+                var result= caseNoObj.type+"."+caseNoObj;
                 console.log(result);
                 return result;
             },
