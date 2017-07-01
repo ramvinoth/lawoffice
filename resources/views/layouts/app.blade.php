@@ -22,7 +22,6 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
            folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
-    <link rel="stylesheet" href="../../plugins/select2/select2.min.css">
     
     <link href="/css/styles.css" rel="stylesheet" type="text/css">
         
@@ -61,21 +60,10 @@
         @endif
     </script>
     
-    <!-- jQuery 2.2.3 -->
-    <script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
-    <!-- Bootstrap 3.3.6 -->
-    <script src="../../bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
-    <!-- bootstrap datepicker -->
-    <script src="../../plugins/datepicker/bootstrap-datepicker.js"></script>
-    <!-- Select2 -->
-    <script src="../../plugins/select2/select2.full.min.js"></script>
     <script type="text/javascript" src="/js/custom.js"></script>
     
     <!-- SlimScroll -->
     <script src="../../plugins/slimScroll/jquery.slimscroll.min.js"></script>
-    <!-- FastClick -->
-    <script src="../../plugins/fastclick/fastclick.js"></script>
     <!-- AdminLTE App -->
     <script src="../../dist/js/app.min.js"></script>
     <!-- AdminLTE for demo purposes -->

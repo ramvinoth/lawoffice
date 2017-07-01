@@ -42,7 +42,7 @@
                     page: 1,
                     search_column: 'id',
                     search_operator: 'equal_to',
-                    search_query_1: 'CMA',
+                    search_query_1: '',
                     search_query_2: ''
                 },
             }

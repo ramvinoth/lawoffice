@@ -242,21 +242,39 @@ body.mini-navbar .navbar-default .nav > li > a {
 /* Login Form END */
 
 .select-style {
-    border: 1px solid #ccc;
-    width: 120px;
-    border-radius: 3px;
+    border: 1px solid #e7e7e7;
     overflow: hidden;
-    background: #fafafa url("../images/arrow.png") no-repeat 90% 50%;
+    background: #fff;
+    padding: 0;
+    position: relative;
 }
 
 .select-style select {
-    padding: 5px 8px;
-    width: 130%;
+    padding: 4px 23px 4px 5px;
+    width: 100%;
     border: none;
     box-shadow: none;
     background: transparent;
     background-image: none;
     -webkit-appearance: none;
+    color: #000;
+    -moz-appearance: none;
+    appearance: none;
+    font-size: 14px;
+}
+.select-style:after {
+    content: '';
+    background: none repeat scroll 0 0 transparent;
+    height: 7px;
+    position: absolute;
+    width: 7px;
+    margin-top: 1px;
+    border-width: 1px 1px 0 0;
+    box-shadow: 1.5px 1.5px 0 #000;
+    transform: rotate(43deg);
+    float: right;
+    right: 10px;
+    top: 10px;
 }
 
 .select-style select:focus {

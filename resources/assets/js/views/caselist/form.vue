@@ -11,29 +11,38 @@
                     <div class="col-sm-8">
                         <div class="row">
                             <div class="col-sm-6">
-                                <div class="form-group">
                                     <label>Court</label>
-                                    <select2 :options="[{id: '1',text : 'High Court'},{id : '2', text : 'DRT'},{id : '3', text : 'Consumer Court'},{id : '4', text : 'District Court'},{id : '5', text : 'Supreme Court'}]" name="court" id="court" class="form-control" v-model="form.court">
-                                        <option disabled value="0">Select Court</option>
-                                    </select2>
+                                <div class="form-group select-style">
+                                    <select name="court" id="court" class="form-control" v-model="form.court" v-on:change="loadCaseType">
+                                        <option disabled value="">Select Court</option>
+                                        <option value="1">High Court</option>
+                                        <option value="2">DRT</option>
+                                        <option value="3">Consumer Court</option>
+                                        <option value="4">District Court</option>
+                                        <option value="5">Supreme Court</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Bench</label>
-                                    <select2 :options="[{id: 1,text : 'Madurai'},{id : 2, text : 'Madras'}]" name="bench" id="bench" class="form-control" v-model="form.bench">
-                                        <option disabled value="0">Select Bench</option>
-                                    </select2>
+                                <label>Bench</label>
+                                <div class="form-group select-style">
+                                    <select name="bench" id="bench" class="form-control" v-model="form.bench" placeholder="Select Bench">
+                                        <option disabled value="">Select Bench</option>
+                                        <option value="Madurai">Madurai</option>
+                                        <option value="Madras">Madras</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>Case Type</label>
-                                    <select2 :options="[{id: 1,text : 'Madurai'},{id : 2, text : 'Madras'}]" name="bench" id="bench" class="form-control" v-model="form.case_type">
-                                        <option disabled value="0">Select Case Type</option>
-                                    </select2>
+                                <label>Case Type</label>
+                                <div class="form-group select-style">
+                                    <select name="bench" id="bench" class="form-control" v-model="form.case_type">
+                                        <option v-for="cases in casetype" :value="cases.value">
+                                          {{cases.text}}
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-sm-4">
@@ -57,9 +66,14 @@
                                 <div class="form-group form-inline-block">
                                     <div class="form-hr-50 pR10">
                                         <label>Appearing for</label>
-                                        <select2 :options="[{id: 'Appellant',text : 'Appellant'},{id : 'Petitioner', text : 'Petitioner'},{id : 'Respondent', text : 'Respondent'}]" name="appear" id="appear" class="form-control" v-model="form.appear">
-                                            <option disabled value="0">Select Court</option>
-                                        </select2>
+                                        <div class="select-style">
+                                        <select name="appear" id="appear" class="form-control" v-model="form.appear">
+                                            <option disabled value="">Select Court</option>
+                                            <option value="Appellant" selected="">Appellant</option>
+                                            <option value="Petitioner">Petitioner</option>
+                                            <option value="Respondent">Respondent</option>
+                                        </select>
+                                        </div>
                                     </div>
                                     <div class="form-hr-50">
                                         <label>Contact No</label>
@@ -68,9 +82,44 @@
                                 </div>
                                 <div class="form-group">
                                     <label>District</label>
-                                    <select2 :options="[{id:'THIRUVALLUR',text:'THIRUVALLUR'},{id:'CHENNAI',text:'CHENNAI'},{id:'KANCHEEPURAM',text:'KANCHEEPURAM'},{id:'VELLORE',text:'VELLORE'},{id:'KRISHNAGIRI',text:'KRISHNAGIRI'},{id:'DHARMAPURI',text:'DHARMAPURI'},{id:'TIRUVANNAMALAI',text:'TIRUVANNAMALAI'},{id:'VILLUPURAM',text:'VILLUPURAM'},{id:'SALEM',text:'SALEM'},{id:'NAMAKKAL',text:'NAMAKKAL'},{id:'ERODE',text:'ERODE'},{id:'THE NILGIRIS',text:'THE NILGIRIS'},{id:'COIMBATORE',text:'COIMBATORE'},{id:'DINDIGUL',text:'DINDIGUL'},{id:'KARUR',text:'KARUR'},{id:'TIRUCHIRAPPALLI',text:'TIRUCHIRAPPALLI'},{id:'PERAMBALUR',text:'PERAMBALUR'},{id:'CUDDALORE',text:'CUDDALORE'},{id:'NAGAPATTINAM',text:'NAGAPATTINAM'},{id:'THIRUVARUR',text:'THIRUVARUR'},{id:'THANJAVUR',text:'THANJAVUR'},{id:'PUDUKKOTTAI',text:'PUDUKKOTTAI'},{id:'SIVAGANGA',text:'SIVAGANGA'},{id:'MADURAI',text:'MADURAI'},{id:'THENI',text:'THENI'},{id:'VIRDHUNAGAR',text:'VIRDHUNAGAR'},{id:'RAMANATHAPURAM',text:'RAMANATHAPURAM'},{id:'THOOTHUKKUDI',text:'THOOTHUKKUDI'},{id:'TIRUNELVELI',text:'TIRUNELVELI'},{id:'KANNIYAKUMARI',text:'KANNIYAKUMARI'},{id:'ARIYALUR',text:'ARIYALUR'},{id:'TIRUPPUR',text:'TIRUPPUR'}]" name="district" id="district" class="form-control" v-model="form.district">
-                                        <option disabled value="0">Select District</option>
-                                    </select2>
+                                    <div class="select-style">
+                                    <select name="district" id="district" class="form-control" v-model="form.district">
+                                        <option disabled value="">Select District</option>
+                                        <option value="">Choose District</option>
+                                        <option value="THIRUVALLUR">THIRUVALLUR</option>
+                                        <option value="CHENNAI">CHENNAI</option>
+                                        <option value="KANCHEEPURAM">KANCHEEPURAM</option>
+                                        <option value="VELLORE">VELLORE</option>
+                                        <option value="KRISHNAGIRI">KRISHNAGIRI</option>
+                                        <option value="DHARMAPURI">DHARMAPURI</option>
+                                        <option value="TIRUVANNAMALAI">TIRUVANNAMALAI</option>
+                                        <option value="VILLUPURAM">VILLUPURAM</option>
+                                        <option value="SALEM">SALEM</option>
+                                        <option value="NAMAKKAL">NAMAKKAL</option>
+                                        <option value="ERODE">ERODE</option>
+                                        <option value="THE NILGIRIS">THE NILGIRIS</option>
+                                        <option value="COIMBATORE">COIMBATORE</option>
+                                        <option value="DINDIGUL">DINDIGUL</option>
+                                        <option value="KARUR">KARUR</option>
+                                        <option value="TIRUCHIRAPPALLI">TIRUCHIRAPPALLI</option>
+                                        <option value="PERAMBALUR">PERAMBALUR</option>
+                                        <option value="CUDDALORE">CUDDALORE</option>
+                                        <option value="NAGAPATTINAM">NAGAPATTINAM</option>
+                                        <option value="THIRUVARUR">THIRUVARUR</option>
+                                        <option value="THANJAVUR">THANJAVUR</option>
+                                        <option value="PUDUKKOTTAI">PUDUKKOTTAI</option>
+                                        <option value="SIVAGANGA">SIVAGANGA</option>
+                                        <option value="MADURAI">MADURAI</option>
+                                        <option value="THENI">THENI</option>
+                                        <option value="VIRDHUNAGAR">VIRDHUNAGAR</option>
+                                        <option value="RAMANATHAPURAM">RAMANATHAPURAM</option>
+                                        <option value="THOOTHUKKUDI">THOOTHUKKUDI</option>
+                                        <option value="TIRUNELVELI">TIRUNELVELI</option>
+                                        <option value="KANNIYAKUMARI">KANNIYAKUMARI</option>
+                                        <option value="ARIYALUR">ARIYALUR</option>
+                                        <option value="TIRUPPUR">TIRUPPUR</option>
+                                    </select>
+                                    </div>
                                 </div>
                             </div>
                         
@@ -137,9 +186,7 @@
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <label>Refered By</label>
-                                    <select2 :options="[{id: 'Appellant',text : 'Appellant'},{id : 'Petitioner', text : 'Petitioner'},{id : 'Respondent', text : 'Respondent'}]" name="refer_by" id="refer_by" class="form-control" v-model="form.refer_by">
-                                        <option disabled value="0">Select Court</option>
-                                    </select2>
+                                    <input type="text" class="form-control" placeholder="Refered By" v-model="form.refer_by">
                                 </div>
                             </div>
                             
@@ -348,10 +395,13 @@
                         <label>Status</label>
                         <div class="row">
                             <div class="col-sm-4">
-                                <div class="form-group">
-                                    <select2 :options="[{id: 'Admit',text : 'Admit'},{id: 'Adjourned Admission',text : 'Adjourned Admission'},{id : 'Notice Before Admission', text : 'Notice Before Admission'}]" name="status" id="status" class="form-control" v-model="form.status">
-                                        <option disabled value="0">Select Bench</option>
-                                    </select2>
+                                <div class="form-group select-style">
+                                    <select name="status" id="status" class="form-control" v-model="form.status">
+                                        <option value="" selected="">Select Any</option>
+										<option value="Admit">Admit</option>
+										<option value="Adjourned Admission">Adjourned Admission</option>
+										<option value="Notice Before Admission">Notice Before Admission</option>
+                                    </select>
                                 </div>
                             </div>
                             
@@ -399,7 +449,7 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Upload File</label>  
-                                    <input type="file" name="upload" v-on:change="form.upload" class="form-control" id="uploadFile">
+                                    <input type="file" name="upload" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length" accept="image/*" class="form-control" id="uploadFile">
                                 </div>
                             </div>
                         </div>
@@ -416,9 +466,6 @@
     import axios from 'axios'
     import Datepicker from '../../components/DatePicker.vue'
     
-    var state = {
-        date1: new Date()
-    }
     
     export default {
         name: 'CaseListForm',
@@ -441,10 +488,60 @@
                 connected:[{type: '',cno: '', year: ''}],
                 misc_pet: { mpno: '', mpyear: '', mpdate: '', mpprayer: '', mpdisposal: '', mpreturn: '', mprepresent: ''},
                 other_counsel: {},
-                format: 'dd/MM/yyyy',
-                disabled: {},
-                eventMsg: null,
-                state: state
+                highcourt: [
+                    {value: '', text: 'Select one'},
+                    {value: 'CMA', text: '(CMA) Civil Miscellaneous Appeal'},
+                    {value: 'CMSA', text: '(CMSA) Civil Miscellaneous Second Appeal'},
+                    {value: 'CRP', text: '(CRP) Civil Revision Petition'},
+                    {value: 'Crl-A', text: '(Crl.A) Criminal Appeal'},
+                    {value: 'Crl-RC', text: '(Crl.RC) Criminal Revision Petition'},
+                    {value: 'Caveat-P', text: '(Caveat.P) Caveat Petition'},
+                    {value: 'Crl-OP', text: '(Crl.OP) Criminal Original Petition'},
+                    {value: 'Cont-P', text: '(Cont.P) Contempt Petition'},
+                    {value: 'Cross-obj', text: '(Cross.obj) Cross Objection'},
+                    {value: 'AS', text: '(AS) Appeal Suit'},
+                    {value: 'HCP', text: '(HCP) Habeas Corpus Petition'},
+                    {value: 'Rev-P', text: '(Rev.P) Review Petition'},
+                    {value: 'SA', text: '(SA) Second Appeal'},
+                    {value: 'Tr-CMP', text: '(Tr.CMP) Transfer Civil Miscellaneous Petition'},
+                    {value: 'WA', text: '(W.A) Writ Appeal'},
+                    {value: 'WP', text: '(W.P) Writ Petition'},
+                ],
+                drt: [
+                    {value: '', text: 'Select one'},
+                    {value: 'Caveat', text: '(Caveat) Caveat'},
+                    {value: 'OA', text: '(OA) OA'},
+                    {value: 'SA', text: '(SA) SA'},
+                ],
+                consumercourt: [
+                    {value: '', text: 'Select one'},
+                    {value: 'Con-FA', text: '(ConFA) Consumer-FA'},
+                    {value: 'Con-OP', text: '(ConOP) Consumer-OP'},
+                ],
+                districtcourt: [
+                    {value: '', text: 'Select one'},
+                    {value: 'AS', text: '(AS) Appeal Suit'},
+                    {value: 'AROP', text: '(AROP) Arbitration Original Petition'},
+                    {value: 'CMA', text: '(CMA) Civil Miscellaneous Appeal'},
+                    {value: 'EP', text: '(E.P) Execution Petition'},
+                    {value: 'GWOP', text: '(GWOP) Guardian &amp; Wards Original Petition'},
+                    {value: 'HMOP', text: '(HMOP) Hindu Marriage Original Petition'},
+                    {value: 'IDOP', text: '(IDOP) Indian Diverse Original Petition'},
+                    {value: 'MCOP', text: '(MCOP) Motor Accident Claim Original Petition'},
+                    {value: 'MHOP', text: '(MHOP) Mental Health Original Petition'},
+                    {value: 'OS', text: '(O.S) Original Suit'},
+                    {value: 'RCA', text: '(RCA) RCA'},
+                    {value: 'RCOP', text: '(RCOP) RCOP'},
+                    {value: 'SOP', text: '(SOP) Success Original Petition'},
+                ],
+                supremecourt: [
+                    {value: '', text: 'Select one'},
+                    {value: 'Civil-Appeal', text: 'Civil Appeal'},
+                    {value: 'Criminal-Appeal', text: 'Criminal Appeal'},
+                    {value: 'SLP-Criminal', text: 'SLP Criminal'},
+                    {value: 'SLP-Civil', text: 'SLP Civil'},
+                ],
+                casetype: [],
             }
         },
         beforeMount() {
@@ -456,8 +553,13 @@
             }
             this.fetchData()
         },
+        mounted(){
+        },
         watch: {
-            '$route': 'fetchData'
+            '$route': 'fetchData',
+            form: function(val){
+                this.loadCaseType()
+            }
         },
         methods: {
             fetchData() {
@@ -492,7 +594,25 @@
                 if(type === "misc_pet"){
                     
                 }
-            }
+            },
+            loadCaseType: function(){
+                if(this.form.court == "1"){
+                    this.casetype = this.highcourt;
+                }else if(this.form.court == "2"){
+                    this.casetype = this.drt;
+                }else if(this.form.court == "3"){
+                    this.casetype = this.consumercourt;
+                }else if(this.form.court == "4"){
+                    this.casetype = this.districtcourt;
+                }else if(this.form.court == "5"){
+                    this.casetype = this.supremecourt;
+                }else{
+                    this.casetype = [{'text':'Choose Court', value:''}];
+                }
+            },
+            filesChange: function(name, files){
+                
+            },
         }
     }
 </script>
@@ -503,5 +623,9 @@
     font-size: 100%;
     border: 1px solid #ccc;
     width: 100%;
+}
+select{
+    height: 38px;
+    line-height: 35px;
 }
 </style>

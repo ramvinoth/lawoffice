@@ -62,12 +62,14 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Bench</label>
+                                    <div class="select-style">
                                     <select name="status" id="status" class="form-control" v-model="form.status">
                                         <option disabled value="">Select Any</option>
 										<option value="Admit">Admit</option>
 										<option value="Notice Before Admission">Notice Before Admission</option>
 										<option value="Adjournal Admission">Adjournal Admission</option>
                                     </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
