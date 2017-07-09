@@ -42,7 +42,7 @@
             </router-link>
         </li>
         <li>
-          <a href="#/">
+          <a href="#/calendar">
             <i class="fa fa-calendar"></i> <span>Calendar</span>
           </a>
         </li>

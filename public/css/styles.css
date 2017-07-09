@@ -805,4 +805,28 @@ li>a.topbarImage{
 .panel {
     margin-bottom: 0px;
 }
+span.required_label {
+    color: #C63036;
+}
+.radio label {
+    position: relative;
+    padding-left: 5px;
+    outline: inherit;
+    display: inline-block;
+    vertical-align: middle;
+    font-weight: 400;
+    font-size: 14px;
+}
+.r-inline, .c-inline {
+    position: relative;
+    vertical-align: middle;
+    padding-left: 20px;
+    font-weight: normal;
+    display: inline-block;
+    cursor: pointer;
+    margin-bottom: 0;
+}
+.r-inline+.r-inline, .c-inline+.c-inline {
+    margin-top: 10px;
+    margin-left: 10px;
 /* RV Form Styles END */

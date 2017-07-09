@@ -1,20 +1,26 @@
 <template>
-    <data-viewer :source="source" :thead="thead" :filter="filter" :create="create" :title="title" :params="params">
-        <template scope="props">
-            <tr @click="$router.push('/caselist/' + props.item.id)">
-                <td>{{props.item.id}}</td>
-                <td>{{props.item.sno}}</td>
-                <td>{{props.item.case_type}}</td>
-                <td>{{props.item.vno}}</td>
-                <td>{{props.item.petitioner}}</td>
-                <td>{{props.item.respondant}}</td>
-                <td>{{props.item.refer_by}}</td>
-            </tr>
-        </template>
-    </data-viewer>
+    <div>
+        <data-viewer :source="source" :thead="thead" :filter="filter" :create="create" :title="title" :params="params">
+            <template scope="props">
+                <tr @click="loadCase(props.item.id)">
+                    <td>{{props.item.id}}</td>
+                    <td>{{props.item.sno}}</td>
+                    <td>{{props.item.case_type}}</td>
+                    <td>{{props.item.vno}}</td>
+                    <td>{{props.item.petitioner}}</td>
+                    <td>{{props.item.respondant}}</td>
+                    <td>{{props.item.refer_by}}</td>
+                </tr>
+            </template>
+        </data-viewer>
+        <mpopup><viewcase :model="case_data"></viewcase></mpopup>
+    </div>
 </template>
 <script>
     import DataViewer from '../../components/DataViewer.vue'
+    import mpopup from '../../components/PopUp.vue'
+    import viewcase from '../caselist/show.vue'
+    import axios from 'axios'
 
     export default {
         name: 'CaseListIndex',
@@ -45,10 +51,37 @@
                     search_query_1: '',
                     search_query_2: ''
                 },
+                case_data: [],
             }
         },
         components: {
-            DataViewer
+            DataViewer,
+            mpopup,
+            viewcase
+        },
+        methods:{
+            fetchData(url, data_var) {
+                return new Promise((resolve, reject) => {
+                    var vm = this
+                    axios.get(url)
+                        .then(function(response) {
+                            Vue.set(vm.$data, data_var , response.data);
+                            resolve(response); // the request was successfull
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                            reject(error); // the request failed
+                        })
+                });
+            },
+            loadCase(caseId){
+                //this.$router.push('/caselist/' + caseId);
+                this.fetchData('/api/caselist/' + caseId,'case_data');
+                this.showPopUp();
+            },
+            showPopUp(){
+                this.$store.commit('set_ispopshow',true);  
+            },
         }
     }
 </script>

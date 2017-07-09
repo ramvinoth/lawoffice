@@ -22,7 +22,7 @@ export default{
     },
     data(){
         return{
-            auth_user: ''
+            auth_user: '',
         }
     },
     computed:{
@@ -32,6 +32,5 @@ export default{
         }
     }
 }
-
 
 </script>

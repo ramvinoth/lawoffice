@@ -7,7 +7,10 @@ export const store = new Vuex.Store({
       state: {
             nots: [],
             posts: [],
-            auth_user: {}
+            auth_user: {},
+            popup: {ispopshow: false},
+            ajax: {isLoading: false},
+            slide: {isslide: false}
       },
       getters: {
             all_nots(state) {
@@ -21,6 +24,12 @@ export const store = new Vuex.Store({
             },
             auth_user_data(state) {
                   return state.auth_user
+            },
+            is_popshow(state){
+                return state.popup.ispopshow;
+            },
+            is_slide(state){
+                return state.slide.isslide;
             }
       },
       mutations: {
@@ -54,6 +63,15 @@ export const store = new Vuex.Store({
                   var index = post.likes.indexOf(like)
 
                   post.likes.splice(index, 1)
+            },
+            set_ispopshow(state, status){
+                state.popup.ispopshow = status;  
+            },
+            set_loading(state, status){
+                state.ajax.isLoading = status;
+            },
+            set_isslide(state, status){
+                state.slide.isslide = status;
             }
       }
 })

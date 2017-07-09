@@ -1,5 +1,5 @@
 <template>
-    <div class="panel panel-default">
+    <div id="create_case" class="panel panel-default">
         <div class="panel-heading bold">
             {{title}}
         </div>
@@ -8,12 +8,21 @@
                 <div class="row">
                     
                     <!-- First Column -->
-                    <div class="col-sm-8">
+                    <div class="col-sm-12">
                         <div class="row">
-                            <div class="col-sm-6">
-                                    <label>Court</label>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Case Title</label>
+                                    <span class="required_label">*</span>
+                                    <input type="text" placeholder="Case Title" class="form-control" v-model="form.case_title" required>
+                                    <small class="text-danger" v-if="errors.title">{{errors.title[0]}}</small>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <label>Court Type</label>
+                                <span class="required_label">*</span>
                                 <div class="form-group select-style">
-                                    <select name="court" id="court" class="form-control" v-model="form.court" v-on:change="loadCaseType">
+                                    <select name="court" id="court" class="form-control" v-model="form.court" v-on:change="selectCourt" required>
                                         <option disabled value="">Select Court</option>
                                         <option value="1">High Court</option>
                                         <option value="2">DRT</option>
@@ -23,7 +32,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            <div id="bench_div" class="col-sm-12" style="display:none">
                                 <label>Bench</label>
                                 <div class="form-group select-style">
                                     <select name="bench" id="bench" class="form-control" v-model="form.bench" placeholder="Select Bench">
@@ -33,110 +42,127 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <label>Case Type</label>
+                            
+                            <div id="state_div" class="col-sm-8" style="display:none;">
+                                <label>State</label>
+                                <span class="required_label">*</span>
                                 <div class="form-group select-style">
-                                    <select name="bench" id="bench" class="form-control" v-model="form.case_type">
-                                        <option v-for="cases in casetype" :value="cases.value">
-                                          {{cases.text}}
+                                    <select name="bench" id="bench" class="form-control" disabled>
+                                        <option v-for="state in states" :value="state.value" :selected="state.value == 31 ? 'selected' : false">
+                                          {{state.text}}
                                         </option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>SR Number</label>
-                                    <input type="text" class="form-control" v-model="form.sno">
-                                    <small class="text-danger" v-if="errors.court">{{errors.court[0]}}</small>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>Vakalath SR</label>
-                                    <input type="text" class="form-control" v-model="form.vno">
-                                    <small class="text-danger" v-if="errors.vno">{{errors.court_type[0]}}</small>
-                                </div>
-                            </div>
-                        </div>
-                        <hr></hr>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group form-inline-block">
-                                    <div class="form-hr-50 pR10">
-                                        <label>Appearing for</label>
-                                        <div class="select-style">
-                                        <select name="appear" id="appear" class="form-control" v-model="form.appear">
-                                            <option disabled value="">Select Court</option>
-                                            <option value="Appellant" selected="">Appellant</option>
-                                            <option value="Petitioner">Petitioner</option>
-                                            <option value="Respondent">Respondent</option>
-                                        </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-hr-50">
-                                        <label>Contact No</label>
-                                        <input type="text" class="form-control" placeholder="Contact no" v-model="form.contact">
-                                    </div>
-                                </div>
+                            <div id="district_div" class="col-sm-8" style="display:none">
                                 <div class="form-group">
                                     <label>District</label>
                                     <div class="select-style">
-                                    <select name="district" id="district" class="form-control" v-model="form.district">
+                                    <select name="district" id="district" class="form-control" v-model="form.district" @change="chooseDistrict">
                                         <option disabled value="">Select District</option>
-                                        <option value="">Choose District</option>
-                                        <option value="THIRUVALLUR">THIRUVALLUR</option>
-                                        <option value="CHENNAI">CHENNAI</option>
-                                        <option value="KANCHEEPURAM">KANCHEEPURAM</option>
-                                        <option value="VELLORE">VELLORE</option>
-                                        <option value="KRISHNAGIRI">KRISHNAGIRI</option>
-                                        <option value="DHARMAPURI">DHARMAPURI</option>
-                                        <option value="TIRUVANNAMALAI">TIRUVANNAMALAI</option>
-                                        <option value="VILLUPURAM">VILLUPURAM</option>
-                                        <option value="SALEM">SALEM</option>
-                                        <option value="NAMAKKAL">NAMAKKAL</option>
-                                        <option value="ERODE">ERODE</option>
-                                        <option value="THE NILGIRIS">THE NILGIRIS</option>
-                                        <option value="COIMBATORE">COIMBATORE</option>
-                                        <option value="DINDIGUL">DINDIGUL</option>
-                                        <option value="KARUR">KARUR</option>
-                                        <option value="TIRUCHIRAPPALLI">TIRUCHIRAPPALLI</option>
-                                        <option value="PERAMBALUR">PERAMBALUR</option>
-                                        <option value="CUDDALORE">CUDDALORE</option>
-                                        <option value="NAGAPATTINAM">NAGAPATTINAM</option>
-                                        <option value="THIRUVARUR">THIRUVARUR</option>
-                                        <option value="THANJAVUR">THANJAVUR</option>
-                                        <option value="PUDUKKOTTAI">PUDUKKOTTAI</option>
-                                        <option value="SIVAGANGA">SIVAGANGA</option>
-                                        <option value="MADURAI">MADURAI</option>
-                                        <option value="THENI">THENI</option>
-                                        <option value="VIRDHUNAGAR">VIRDHUNAGAR</option>
-                                        <option value="RAMANATHAPURAM">RAMANATHAPURAM</option>
-                                        <option value="THOOTHUKKUDI">THOOTHUKKUDI</option>
-                                        <option value="TIRUNELVELI">TIRUNELVELI</option>
-                                        <option value="KANNIYAKUMARI">KANNIYAKUMARI</option>
-                                        <option value="ARIYALUR">ARIYALUR</option>
-                                        <option value="TIRUPPUR">TIRUPPUR</option>
+                                        <option v-for="district in districts" :value="district.value">
+                                              {{district.text}}
+                                        </option>
                                     </select>
                                     </div>
                                 </div>
                             </div>
+
+                            <div id="subcourt_div" class="col-sm-8" style="display:none;">
+                                <div class="form-group">
+                                    <label>Court</label>
+                                    <div class="select-style">
+                                    <select name="district" id="district" class="form-control" v-model="form.subcourt" @change="chooseCourt">
+                                        <option disabled value="">Select Court</option>
+                                        <option v-for="court in courts" :value="court.value">
+                                              {{court.text}}
+                                        </option>
+                                    </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="casetype_div" class="col-sm-8" style="display:none;">
+                                <label>Case Type</label>
+                                <span class="required_label">*</span>
+                                <div class="form-group select-style">
+                                    <select name="bench" id="bench" class="form-control" v-model="form.case_type">
+                                        <option v-for="casetype in casetypes" :value="casetype.value">
+                                          {{casetype.text}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         
+                        
+                        <div class="row">
                             <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Case Number</label>
+                                    <span class="required_label">*</span>
+                                    <input type="text" name="case_no" class="form-control" placeholder="Case Number" v-model="form.case_no" required>
+                                    <small class="text-danger" v-if="errors.case_no">{{errors.address[0]}}</small>
+                                </div>
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <input type="text" name="category" class="form-control" placeholder="Category" v-model="form.category">
+                                    <small class="text-danger" v-if="errors.category">{{errors.category[0]}}</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>SR Number</label>
+                                    <input type="text" class="form-control" placeholder="SR Number" v-model="form.sno">
+                                    <small class="text-danger" v-if="errors.court">{{errors.court[0]}}</small>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Vakalath SR</label>
+                                    <input type="text" class="form-control" placeholder="Vakalath SR" v-model="form.vno">
+                                    <small class="text-danger" v-if="errors.vno">{{errors.court_type[0]}}</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr></hr>
+                    
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Appearing for</label>
+                                <div class="select-style">
+                                <select name="appear" id="appear" class="form-control" v-model="form.appear">
+                                    <option disabled value="">Select One</option>
+                                    <option value="Appellant" selected="">Appellant</option>
+                                    <option value="Petitioner">Petitioner</option>
+                                    <option value="Respondent">Respondent</option>
+                                </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Contact No</label>
+                                <input type="text" class="form-control" placeholder="Contact no" v-model="form.contact">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
                                 <label>Other Side Counsel</label>
-                                <div class="form-group form-inline-block form-box">
+                                <div id="othercousel_row" class="form-group form-inline-block form-box">
+                                    <div class="row mT10" v-for="(content, index) in form.other" :key="content.id">
+                                        <other_counsel :other_counsel="form.other" :length="index"></other_counsel>
+                                    </div>
                                     <div class="row">
-                                        <div class="col-sm-6">
-                                            <input type="text" class="form-control" placeholder="Other Side Counsel" v-model="other_counsel.court_type">
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <input type="text" class="form-control" placeholder="Contact no" v-model="other_counsel.other">
-                                        </div>
-                                        <input type="hidden" name="other_counsel" v-model='form.other'/>
-                                        <div class="col-sm-6 mT10">
-                                            <button class="btn btn-success">Add</button>
-                                            <button class="btn btn-danger">Remove</button>
+                                        <div class="col-sm-12 mT10">
+                                            <button class="btn btn-success" @click="addOtherSideCounsel($event)">Add</button>
+                                            <button class="btn btn-danger" @click="removeOtherSideCounsel($event)">Remove</button>
                                         </div>
                                     </div>
                                 </div>
@@ -146,34 +172,158 @@
                         <hr></hr>
                         
                         <div class="row datepicker">
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <div class="form-group">
                                     <datepicker v-model="form.filing_date" :value="form.filing_date" placeholder="Date of Filing"></datepicker>
                                     <small class="text-danger" v-if="errors.email">{{errors.email[0]}}</small>
                                 </div>
                             </div>
                             
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <div class="form-group">
                                     <datepicker v-model="form.admission" :value="form.admission" placeholder="Date of Admission"></datepicker>
                                     <small class="text-danger" v-if="errors.phone">{{errors.phone[0]}}</small>
                                 </div>
                             </div>
                         </div>
-                        <div class="row datepicker">
-                            <div class="col-sm-4">
+                        <div class="row datepicker pt10">
+                            <div class="col-sm-6">
                                 <div class="form-group">
                                     <datepicker v-model="form.returned" :value="form.returned" placeholder="Date of Return"></datepicker>
                                     <small class="text-danger" v-if="errors.phone">{{errors.phone[0]}}</small>
                                 </div>
                             </div>
                             
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <div class="form-group">
                                     <datepicker v-model="form.return_expiry" :value="form.return_expiry" placeholder="Date of Expiry"></datepicker>
                                     <small class="text-danger" v-if="errors.phone">{{errors.phone[0]}}</small>
                                 </div>
                             </div>
+                        </div>
+                        
+                        <div class="row pt20">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Refered By</label>
+                                    <input type="text" class="form-control" placeholder="Refered By" v-model="form.refer_by">
+                                </div>
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <div class="form-hr-50">
+                                    <label>Contact No</label>
+                                    <input type="text" class="form-control" placeholder="Contact no" v-model="form.refer_contact">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="lowercourt_div" style="display:none;">
+                            <label>Lower Court Number</label>
+                            <div class="form-group form-inline-block form-box">
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" placeholder="Type" v-model="lower_court.ltype">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" placeholder="Lower Court Number" v-model="lower_court.lno">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" placeholder="Year" v-model="lower_court.lyear">
+                                    </div>
+                                    <div class="col-sm-2 datepicker">
+                                        <input type="text" class="form-control" placeholder="Court" v-model="lower_court.lcourt">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" placeholder="Place" v-model="lower_court.lplace">
+                                    </div>
+                                    <div class="col-sm-2 datepicker">
+                                        <datepicker v-model="lower_court.order" :value="lower_court.order" placeholder="Order Date"></datepicker>
+                                    </div>
+                                    <input type="hidden" name="against" :value="lower_court"/>
+                                </div>
+                                <hr></hr>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" placeholder="Type" v-model="lower_court1.ltype">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" placeholder="Lower Court Number" v-model="lower_court1.lno">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" placeholder="Year" v-model="lower_court.lyear">
+                                    </div>
+                                    <div class="col-sm-2 datepicker">
+                                        <input type="text" class="form-control" placeholder="Court" v-model="lower_court1.lcourt">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" placeholder="Place" v-model="lower_court1.lplace">
+                                    </div>
+                                    <div class="col-sm-2 datepicker">
+                                        <datepicker v-model="lower_court1.order" :value="lower_court1.order" placeholder="Order Date"></datepicker>
+                                    </div>
+                                    <input type="hidden" name="against1" :value="lower_court1"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Appellant/Petitioner</label>
+                            <textarea name="petitioner" class="form-control" v-model="form.petitioner"></textarea>
+                            <small class="text-danger" v-if="errors.address">{{errors.address[0]}}</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Respondant</label>
+                            <textarea name="respondant" class="form-control" v-model="form.respondant"></textarea>
+                            <small class="text-danger" v-if="errors.address">{{errors.address[0]}}</small>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label>Prayer</label>
+                                <textarea name="c_prayer" class="form-control" v-model="form.c_prayer" placeholder="Case Description"></textarea>
+                                <small class="text-danger" v-if="errors.address">{{errors.address[0]}}</small>
+                            </div>
+                        </div>
+                        
+                        <hr></hr>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label>Miscellaneous Petition</label>
+                                <div class="form-group form-inline-block form-box" style="padding-top: 0px;">
+                                    <div class="row misc_pet_row mT10" v-for="(content, index) in form.misc_pet" :key="content.id">
+                                        <misc_petition :misc_pet="form.misc_pet" :length="index"></misc_petition>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6 mT10">
+                                            <button class="btn btn-success" @click="addMiscPet($event)">Add</button>
+                                            <button class="btn btn-danger" @click="removeMiscPet($event)">Remove</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr></hr>
+                        <div class="row" style="display:none;">
+                            <div class="col-sm-12">
+                                <label>Miscellaneous SR</label>
+                                <div class="form-group form-inline-block form-box">
+                                    <div class="row misc_sr_row mT10" v-for="(content, index) in form.misc_sr" :key="content.id">
+                                        <misc_row :misc_sr="form.misc_sr" :length="index"></misc_row>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6 mT10">
+                                            <button class="btn btn-success" @click="addMiscSR($event)">Add</button>
+                                            <button class="btn btn-danger" @click="removeMiscSR($event)">Remove</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--************************** To be Moved Inside **************************-->
+                        <div id="representation" class="row" style="display:none;">
+                            <hr></hr>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <datepicker v-model="form.represent" :value="form.represent" placeholder="Date of Representation"></datepicker>
@@ -181,267 +331,89 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label>Refered By</label>
-                                    <input type="text" class="form-control" placeholder="Refered By" v-model="form.refer_by">
-                                </div>
-                            </div>
-                            
-                            <div class="col-sm-3">
-                                <div class="form-hr-50">
-                                    <label>Contact No</label>
-                                    <input type="text" class="form-control" placeholder="Contact no" v-model="form.refer_contact">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <label>Lower Court Number</label>
-                        <div class="form-group form-inline-block form-box">
-                            <div class="row">
-                                <div class="col-sm-2">
-                                    <input type="text" class="form-control" placeholder="Type" v-model="lower_court.ltype">
-                                </div>
-                                <div class="col-sm-2">
-                                    <input type="text" class="form-control" placeholder="Lower Court Number" v-model="lower_court.lno">
-                                </div>
-                                <div class="col-sm-2">
-                                    <input type="text" class="form-control" placeholder="Year" v-model="lower_court.lyear">
-                                </div>
-                                <div class="col-sm-2 datepicker">
-                                    <input type="text" class="form-control" placeholder="Court" v-model="lower_court.lcourt">
-                                </div>
-                                <div class="col-sm-2">
-                                    <input type="text" class="form-control" placeholder="Place" v-model="lower_court.lplace">
-                                </div>
-                                <div class="col-sm-2 datepicker">
-                                    <datepicker v-model="lower_court.order" :value="lower_court.order" placeholder="Order Date"></datepicker>
-                                </div>
-                                <input type="hidden" name="against" :value="lower_court"/>
-                            </div>
-                            <hr></hr>
-                            <div class="row">
-                                <div class="col-sm-2">
-                                    <input type="text" class="form-control" placeholder="Type" v-model="lower_court1.ltype">
-                                </div>
-                                <div class="col-sm-2">
-                                    <input type="text" class="form-control" placeholder="Lower Court Number" v-model="lower_court1.lno">
-                                </div>
-                                <div class="col-sm-2">
-                                    <input type="text" class="form-control" placeholder="Year" v-model="lower_court.lyear">
-                                </div>
-                                <div class="col-sm-2 datepicker">
-                                    <input type="text" class="form-control" placeholder="Court" v-model="lower_court1.lcourt">
-                                </div>
-                                <div class="col-sm-2">
-                                    <input type="text" class="form-control" placeholder="Place" v-model="lower_court1.lplace">
-                                </div>
-                                <div class="col-sm-2 datepicker">
-                                    <datepicker v-model="lower_court1.order" :value="lower_court1.order" placeholder="Order Date"></datepicker>
-                                </div>
-                                <input type="hidden" name="against1" :value="lower_court1"/>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>Case Number</label>
-                                    <input type="text" name="case_no" class="form-control" placeholder="Case Number" v-model="form.case_no">
-                                    <small class="text-danger" v-if="errors.case_no">{{errors.address[0]}}</small>
-                                </div>
-                            </div>
-                            
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>Category</label>
-                                    <input type="text" name="category" class="form-control" placeholder="Category" v-model="form.category">
-                                    <small class="text-danger" v-if="errors.category">{{errors.category[0]}}</small>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Appellant/Petitioner</label>
-                            <textarea name="petitioner" class="form-control" v-model="form.address"></textarea>
-                            <small class="text-danger" v-if="errors.address">{{errors.address[0]}}</small>
-                        </div>
-                        <div class="form-group">
-                            <label>Respondant</label>
-                            <textarea name="respondant" class="form-control" v-model="form.address"></textarea>
-                            <small class="text-danger" v-if="errors.address">{{errors.address[0]}}</small>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <label>Prayer</label>
-                                <textarea name="c_prayer" class="form-control" v-model="form.address"></textarea>
-                                <small class="text-danger" v-if="errors.address">{{errors.address[0]}}</small>
-                            </div>
-                            
-                            <div class="col-sm-6">
-                                <label>Citation</label>
-                                <textarea name="citation" class="form-control" v-model="form.address"></textarea>
-                                <small class="text-danger" v-if="errors.address">{{errors.address[0]}}</small>
-                            </div>
-                        </div>
-                        
-                        <hr></hr>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <label>Miscellaneous SR</label>
-                                <div class="form-group form-inline-block form-box">
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <input type="text" class="form-control" placeholder="Category" v-model="misc_sr[0].mcat">
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <input type="text" class="form-control" placeholder="SR No" v-model="misc_sr[0].mno">
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <input type="text" class="form-control" placeholder="Year" v-model="misc_sr[0].myear">
-                                        </div>
-                                        <div class="col-sm-3 datepicker">
-                                            <datepicker v-model="misc_sr[0].mdate" :value="misc_sr[0].mdate" placeholder="DD/MM/YYYY"></datepicker>
-                                        </div>
-                                        <input type="hidden" name="misc_sr" v-model='misc_sr'>
-                                        <div class="col-sm-6 mT10">
-                                            <button class="btn btn-success">Add</button>
-                                            <button class="btn btn-danger">Remove</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-        
-                        <hr></hr>
-                        <div class="row">
+                        <div class="row" style="display:none;">
                             <div class="col-sm-12">
                                 <label>Connected Case</label>
                                 <div class="form-group form-inline-block form-box">
                                     <div class="row">
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" placeholder="Type" v-model="connected[0].type">
+                                            <input type="text" class="form-control" placeholder="Type" v-model="form.connected">
                                         </div>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" placeholder="Case No" v-model="connected[0].cno">
+                                            <input type="text" class="form-control" placeholder="Case No" v-model="form.connected">
                                         </div>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" placeholder="Year" v-model="connected[0].year">
+                                            <input type="text" class="form-control" placeholder="Year" v-model="form.connected">
                                         </div>
-                                        <input type="hidden" name="connected" v-model='connected'>
+                                        <input type="hidden" name="connected" v-model='form.connected'>
                                         <div class="col-sm-6 mT10">
                                             <button class="btn btn-success">Add</button>
                                             <button class="btn btn-danger">Remove</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr></hr>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <label>Miscellaneous Petition</label>
-                                <div class="form-group form-inline-block form-box">
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <input type="text" class="form-control" placeholder="MP No" v-model="misc_pet.mpno">
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <input type="text" class="form-control" placeholder="Year" v-model="misc_pet.mpyear">
-                                        </div>
-                                        <div class="col-sm-3 datepicker">
-                                            <datepicker v-model="misc_pet.date" :value="misc_pet.date" placeholder="DD/MM/YYYY"></datepicker>
-                                        </div>
-                                    </div>
-                                    <div class="row mT10">
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <textarea class="form-control" placeholder="MP Prayer" v-model="misc_pet.mpyear"></textarea>
-                                                <small class="text-danger" v-if="errors.address">{{errors.address[0]}</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" placeholder="MP Disposal Date" v-model="misc_pet.mpdisposal">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" placeholder="MP Date of Returned" v-model="misc_pet.mpreturn">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" placeholder="MP Date of Re-Presented" v-model="misc_pet.mprepresent">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" name="misc_pet" v-model="misc_pet"/>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <button @click="addGroup('misc_pet')" class="btn btn-success">Add</button>
-                                            <button @click="removeGroup('misc_pet')" class="btn btn-danger">Remove</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <label>Status</label>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group select-style">
-                                    <select name="status" id="status" class="form-control" v-model="form.status">
-                                        <option value="" selected="">Select Any</option>
-										<option value="Admit">Admit</option>
-										<option value="Adjourned Admission">Adjourned Admission</option>
-										<option value="Notice Before Admission">Notice Before Admission</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Status" v-model="form.s_text">
-                                </div>
-                            </div>
-                        </div>
-            
-                        <div class="row">
-                            <div class="col-sm-4 datepicker">
-                                <label>Posted on</label>
-                                <datepicker v-model="form.posted_date" :value="form.posted_date" placeholder="DD/MM/YYYY"></datepicker>
-                            </div>
-                            
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>Main Case Disposal</label>
-                                    <input type="text" class="form-control" placeholder="Main Case Disposal" v-model="form.disposal">
-                                    <small class="text-danger" v-if="errors.address">{{errors.address[0]}}</small>
-                                </div>
-                            </div>
-                        </div>
-                        <hr></hr>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>Judge</label>
-                                    <input type="text" class="form-control" placeholder="Judge" v-model="form.by_whom">
-                                    <small class="text-danger" v-if="errors.address">{{errors.address[0]}}</small>
-                                </div>
-                            </div>  
-                        </div>
-                        <div class="row">
+                        <div class="row" style="display:none;">
                             <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Result</label>
-                                    <textarea class="form-control" placeholder="Result" v-model="form.result"></textarea>
-                                    <small class="text-danger" v-if="errors.address">{{errors.address[0]}</small>
+                                <label>Citation</label>
+                                <textarea name="citation" class="form-control" v-model="form.address" placeholder="Citation"></textarea>
+                                <small class="text-danger" v-if="errors.address">{{errors.address[0]}}</small>
+                            </div>
+                        </div>
+                        <div id="disposal_status" class="row" style="display:none;">
+                            <label>Status</label>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group select-style">
+                                        <select name="status" id="status" class="form-control" v-model="form.status">
+                                            <option value="" selected="">Select Any</option>
+                                            <option value="Admit">Admit</option>
+                                            <option value="Adjourned Admission">Adjourned Admission</option>
+                                            <option value="Notice Before Admission">Notice Before Admission</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Status" v-model="form.s_text">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-4 datepicker">
+                                    <label>Posted on</label>
+                                    <datepicker v-model="form.posted_date" :value="form.posted_date" placeholder="DD/MM/YYYY"></datepicker>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Main Case Disposal</label>
+                                        <input type="text" class="form-control" placeholder="Main Case Disposal" v-model="form.disposal">
+                                        <small class="text-danger" v-if="errors.address">{{errors.address[0]}}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr></hr>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Judge</label>
+                                        <input type="text" class="form-control" placeholder="Judge" v-model="form.by_whom">
+                                        <small class="text-danger" v-if="errors.address">{{errors.address[0]}}</small>
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Result</label>
+                                        <textarea class="form-control" placeholder="Result" v-model="form.result"></textarea>
+                                        <small class="text-danger" v-if="errors.address">{{errors.address[0]}</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -465,12 +437,27 @@
     import Vue from 'vue'
     import axios from 'axios'
     import Datepicker from '../../components/DatePicker.vue'
+    import misc_petition from '../../components/MiscPetition.vue'
     
+    //Miscellaneous SR
+    Vue.component('misc_row', {
+        components:{
+            Datepicker,  
+        },
+        props: ['misc_sr','length'],
+        template: '<div><div class="col-sm-3"><input type="text" class="form-control" placeholder="Category" v-model="misc_sr[length].category"></div><div class="col-sm-3"><input type="text" class="form-control" placeholder="SR No" v-model="misc_sr[length].sr_no"></div><div class="col-sm-3"><input type="text" class="form-control" placeholder="Year" v-model="misc_sr[length].year"></div><div class="col-sm-3 datepicker"><datepicker v-model="misc_sr[length].date" :value="misc_sr[length].date" placeholder="DD/MM/YYYY"></datepicker></div></div>',
+    });
+    //OtherSide Counsel
+    Vue.component('other_counsel', {
+        props: ['other_counsel','length'],
+        template: '<div class="row othercousel_row"><div class="col-sm-6"><input type="text" class="form-control" placeholder="Other Side Counsel" v-model="other_counsel[length].other_counsel"></div><div class="col-sm-6"><input type="text" class="form-control" placeholder="Contact no" v-model="other_counsel[length].contact"></div></div>',
+    });
     
     export default {
         name: 'CaseListForm',
         components: {
-            Datepicker
+            Datepicker,
+            misc_petition,
         },
         data() {
             return {
@@ -484,64 +471,10 @@
                 method: 'post',
                 lower_court: { ltype: '', lno: '', lyear: '', lcourt: '', lplace: '', lorder: '', against: ''},
                 lower_court1:{ltype: '',lno: '', lyear: '', lcourt: '', lplace: '', lorder: '', against: ''},
-                misc_sr:[{mcat: '',mno: '', myear: '', mdate: ''}],
-                connected:[{type: '',cno: '', year: ''}],
-                misc_pet: { mpno: '', mpyear: '', mpdate: '', mpprayer: '', mpdisposal: '', mpreturn: '', mprepresent: ''},
-                other_counsel: {},
-                highcourt: [
-                    {value: '', text: 'Select one'},
-                    {value: 'CMA', text: '(CMA) Civil Miscellaneous Appeal'},
-                    {value: 'CMSA', text: '(CMSA) Civil Miscellaneous Second Appeal'},
-                    {value: 'CRP', text: '(CRP) Civil Revision Petition'},
-                    {value: 'Crl-A', text: '(Crl.A) Criminal Appeal'},
-                    {value: 'Crl-RC', text: '(Crl.RC) Criminal Revision Petition'},
-                    {value: 'Caveat-P', text: '(Caveat.P) Caveat Petition'},
-                    {value: 'Crl-OP', text: '(Crl.OP) Criminal Original Petition'},
-                    {value: 'Cont-P', text: '(Cont.P) Contempt Petition'},
-                    {value: 'Cross-obj', text: '(Cross.obj) Cross Objection'},
-                    {value: 'AS', text: '(AS) Appeal Suit'},
-                    {value: 'HCP', text: '(HCP) Habeas Corpus Petition'},
-                    {value: 'Rev-P', text: '(Rev.P) Review Petition'},
-                    {value: 'SA', text: '(SA) Second Appeal'},
-                    {value: 'Tr-CMP', text: '(Tr.CMP) Transfer Civil Miscellaneous Petition'},
-                    {value: 'WA', text: '(W.A) Writ Appeal'},
-                    {value: 'WP', text: '(W.P) Writ Petition'},
-                ],
-                drt: [
-                    {value: '', text: 'Select one'},
-                    {value: 'Caveat', text: '(Caveat) Caveat'},
-                    {value: 'OA', text: '(OA) OA'},
-                    {value: 'SA', text: '(SA) SA'},
-                ],
-                consumercourt: [
-                    {value: '', text: 'Select one'},
-                    {value: 'Con-FA', text: '(ConFA) Consumer-FA'},
-                    {value: 'Con-OP', text: '(ConOP) Consumer-OP'},
-                ],
-                districtcourt: [
-                    {value: '', text: 'Select one'},
-                    {value: 'AS', text: '(AS) Appeal Suit'},
-                    {value: 'AROP', text: '(AROP) Arbitration Original Petition'},
-                    {value: 'CMA', text: '(CMA) Civil Miscellaneous Appeal'},
-                    {value: 'EP', text: '(E.P) Execution Petition'},
-                    {value: 'GWOP', text: '(GWOP) Guardian &amp; Wards Original Petition'},
-                    {value: 'HMOP', text: '(HMOP) Hindu Marriage Original Petition'},
-                    {value: 'IDOP', text: '(IDOP) Indian Diverse Original Petition'},
-                    {value: 'MCOP', text: '(MCOP) Motor Accident Claim Original Petition'},
-                    {value: 'MHOP', text: '(MHOP) Mental Health Original Petition'},
-                    {value: 'OS', text: '(O.S) Original Suit'},
-                    {value: 'RCA', text: '(RCA) RCA'},
-                    {value: 'RCOP', text: '(RCOP) RCOP'},
-                    {value: 'SOP', text: '(SOP) Success Original Petition'},
-                ],
-                supremecourt: [
-                    {value: '', text: 'Select one'},
-                    {value: 'Civil-Appeal', text: 'Civil Appeal'},
-                    {value: 'Criminal-Appeal', text: 'Criminal Appeal'},
-                    {value: 'SLP-Criminal', text: 'SLP Criminal'},
-                    {value: 'SLP-Civil', text: 'SLP Civil'},
-                ],
-                casetype: [],
+                states: [],
+                districts: [],
+                courts: [],
+                casetypes: [],
             }
         },
         beforeMount() {
@@ -558,7 +491,7 @@
         watch: {
             '$route': 'fetchData',
             form: function(val){
-                this.loadCaseType()
+                //this.loadCaseType()
             }
         },
         methods: {
@@ -568,6 +501,16 @@
                     .then(function(response) {
                         Vue.set(vm.$data, 'form', response.data.form)
                         Vue.set(vm.$data, 'option', response.data.option)
+                    })
+                    .catch(function(error) {
+                        console.log(error)
+                    })
+            },
+            getData(url,params,data_var) {
+                var vm = this
+                axios.get(url+"?"+params)
+                    .then(function(response) {
+                        Vue.set(vm.$data, data_var, response.data)
                     })
                     .catch(function(error) {
                         console.log(error)
@@ -585,47 +528,109 @@
                         Vue.set(vm.$data, 'errors', error.response.data)
                     })
             },
-            addGroup(type){
-                if(type === "misc_pet"){
+            selectCourt(){
+                if(this.form.court == "1"){ //High Court
+                    document.getElementById("bench_div").style.display = 'block';
+                    document.getElementById("lowercourt_div").style.display = 'block';
+                }else if(this.form.court == "4"){ //Distirct Court
+                    document.getElementById("state_div").style.display = 'block';
+                    document.getElementById("district_div").style.display = 'block';
                     
-                }
-            },
-            removeGroup(type){
-                if(type === "misc_pet"){
-                    
-                }
-            },
-            loadCaseType: function(){
-                if(this.form.court == "1"){
-                    this.casetype = this.highcourt;
-                }else if(this.form.court == "2"){
-                    this.casetype = this.drt;
-                }else if(this.form.court == "3"){
-                    this.casetype = this.consumercourt;
-                }else if(this.form.court == "4"){
-                    this.casetype = this.districtcourt;
-                }else if(this.form.court == "5"){
-                    this.casetype = this.supremecourt;
+                    this.getData('api/court/getdata','type=state','states');
+                    this.getData('api/court/getdata','type=district&code=31','districts');
                 }else{
-                    this.casetype = [{'text':'Choose Court', value:''}];
+                    document.getElementById("district_div").style.display = 'none';
+                    document.getElementById("subcourt_div").style.display = 'none';
+                    document.getElementById("casetype_div").style.display = 'none';
+                    document.getElementById("lowercourt_div").style.display = 'none';
+                    document.getElementById("bench_div").style.display = 'none';
+                    document.getElementById("state_div").style.display = 'none';
                 }
+            },
+            selectState(){
+                document.getElementById("district").style.display = 'block';
+                this.getData('api/court/getdata','type=district&code='+this.form.court);
+            },
+            chooseDistrict(){
+                document.getElementById("subcourt_div").style.display = 'block';
+                this.getData('api/court/getdata','type=court&code='+this.form.district,'courts');
+            },
+            chooseCourt(){
+                document.getElementById("casetype_div").style.display = 'block';
+                this.getData('api/court/getdata','type=case_type&code='+this.form.subcourt,'casetypes');
             },
             filesChange: function(name, files){
                 
+            },
+            addOtherSideCounsel(event){
+                this.form.other.push({
+                    other_counsel: "",
+                    contact: "",
+                });
+                event.preventDefault();
+            },
+            removeOtherSideCounsel(){
+                if(this.form.other.length !== 1){
+                    this.form.other.pop();
+                }
+                event.preventDefault();
+            },
+            addMiscSR(event){
+                this.form.misc_sr.push({
+                    category: "",
+                    sr_no: "",
+                    year: "",
+                    date: "",
+                });
+                event.preventDefault();
+            },
+            removeMiscSR(event){
+                if(this.form.misc_sr.length !== 1){
+                    this.form.misc_sr.pop();
+                }
+                event.preventDefault();
+            },
+            addMiscPet(event){
+                this.form.misc_pet.push({
+                    mpno: "",
+                    mpyear: "",
+                    mpdate: "",
+                    mpprayer: "",
+                    mpdisposal: "",
+                    mpreturn: "",
+                    mprepresent: "",
+                });
+                event.preventDefault();
+            },
+            removeMiscPet(event){
+                if(this.form.misc_pet.length !== 1){
+                    this.form.misc_pet.pop();
+                }
+                event.preventDefault();
             },
         }
     }
 </script>
 
 <style>
-.datepicker input{
-    padding: .75em .5em;
-    font-size: 100%;
-    border: 1px solid #ccc;
-    width: 100%;
-}
-select{
-    height: 38px;
-    line-height: 35px;
-}
+    .datepicker input{
+        padding: .75em .5em;
+        font-size: 100%;
+        border: 1px solid #ccc;
+        width: 100%;
+    }
+    select{
+        height: 38px;
+        line-height: 35px;
+    }
+    #create_case{
+        background-color: #eaeaea;
+    }
+    #create_case > .panel-body{
+        width: 50%;
+        margin: auto;
+        border: 1px solid #efefef;
+        margin-top: 30px;
+        background-color: #fff;
+    }
 </style>

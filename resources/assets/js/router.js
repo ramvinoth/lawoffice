@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 
 const router = new VueRouter({
     routes: [
-        {path: '/', component: require('./views/caselist/index.vue')},
+        {path: '/', redirect: '/home'},
         {path: '/home', component: require('./views/caselist/index.vue')},
         {path: '/login', component: require('./components/Login.vue')},
         {path: '/diary', component: require('./views/diary/index.vue')},
@@ -17,6 +17,7 @@ const router = new VueRouter({
         {path: '/caselist/create', component: require('./views/caselist/form.vue')},
         {path: '/caselist/:id/edit', component: require('./views/caselist/form.vue'), meta: {mode: 'edit'}},
         {path: '/caselist/:id', component: require('./views/caselist/show.vue')},
+        {path: '/calendar/', component: require('./views/calendar/index.vue')},
     ]
 })
 

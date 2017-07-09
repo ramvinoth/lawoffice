@@ -10,8 +10,19 @@ Route::get('/home', function () {
 Auth::routes();
 
 Route::group(['prefix' => 'api/'], function(){
-   Route::resource('caselist', 'CaseListController');
-   Route::resource('diary', 'DiaryController');
+    Route::resource('caselist', 'CaseListController');
+    Route::resource('diary', 'DiaryController');
+    Route::resource('calendar', 'CalendarController');
+    Route::resource('event', 'EventController');
+    
+    Route::get('/court/getdata', [
+        'uses' => 'CourtController@getData',
+        'as' => 'court'
+    ]);
+    Route::get('/eventtype/getEventTypes', [
+        'uses' => 'EventController@getEventTypes',
+        'as' => 'event_types'
+    ]);
 });
 
 Route::group(['middleware' => 'auth'], function(){
