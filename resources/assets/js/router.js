@@ -18,7 +18,7 @@ const router = new VueRouter({
         {path: '/caselist/:id/edit', component: require('./views/caselist/form.vue'), meta: {mode: 'edit'}},
         {path: '/caselist/:id', component: require('./views/caselist/show.vue')},
         {path: '/calendar/', component: require('./views/calendar/index.vue')},
-    ]
+    ],
 })
 
 export default router

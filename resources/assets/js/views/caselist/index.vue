@@ -44,7 +44,7 @@
                 params: {
                     column: 'id',
                     direction: 'desc',
-                    per_page: 10,
+                    per_page: 25,
                     page: 1,
                     search_column: 'id',
                     search_operator: 'equal_to',

@@ -70,6 +70,7 @@
         position: relative;
         transition: all .5s ease-in-out;
         box-shadow: 0px 0px 8px #ffffff;
+        overflow: auto;
     }
     .topHeader{
         width: 100%;

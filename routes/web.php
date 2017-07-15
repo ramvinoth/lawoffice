@@ -19,6 +19,27 @@ Route::group(['prefix' => 'api/'], function(){
         'uses' => 'CourtController@getData',
         'as' => 'court'
     ]);
+    
+    Route::get('/caseinfo/petition/show', [
+        'uses' => 'CaseListController@getCasePetition',
+        'as' => 'petition'
+    ]);
+    
+    Route::post('/caseinfo/petition/create', [
+        'uses' => 'CaseListController@saveCasePetition',
+        'as' => 'savepetition'
+    ]);
+    
+    Route::delete('/caseinfo/petition/{id}', [
+        'uses' => 'CaseListController@deleteCasePetition',
+        'as' => 'delete_petition'
+    ]);
+    
+    Route::get('/caseinfo/connected/show', [
+        'uses' => 'CaseListController@getConnectedCase',
+        'as' => 'connected_case'
+    ]);
+    
     Route::get('/eventtype/getEventTypes', [
         'uses' => 'EventController@getEventTypes',
         'as' => 'event_types'

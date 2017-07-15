@@ -222,46 +222,32 @@
                             <div class="form-group form-inline-block form-box">
                                 <div class="row">
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" placeholder="Type" v-model="lower_court.ltype">
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <input type="text" class="form-control" placeholder="Lower Court Number" v-model="lower_court.lno">
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <input type="text" class="form-control" placeholder="Year" v-model="lower_court.lyear">
+                                        <input type="text" class="form-control" placeholder="Type" v-model="form.against.lno">
                                     </div>
                                     <div class="col-sm-2 datepicker">
-                                        <input type="text" class="form-control" placeholder="Court" v-model="lower_court.lcourt">
+                                        <input type="text" class="form-control" placeholder="Court" v-model="form.against.lcourt">
                                     </div>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" placeholder="Place" v-model="lower_court.lplace">
+                                        <input type="text" class="form-control" placeholder="Place" v-model="form.against.lplace">
                                     </div>
                                     <div class="col-sm-2 datepicker">
-                                        <datepicker v-model="lower_court.order" :value="lower_court.order" placeholder="Order Date"></datepicker>
+                                        <datepicker v-model="against.lorder" :value="form.against.lorder" placeholder="Order Date"></datepicker>
                                     </div>
-                                    <input type="hidden" name="against" :value="lower_court"/>
                                 </div>
                                 <hr></hr>
                                 <div class="row">
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" placeholder="Type" v-model="lower_court1.ltype">
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <input type="text" class="form-control" placeholder="Lower Court Number" v-model="lower_court1.lno">
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <input type="text" class="form-control" placeholder="Year" v-model="lower_court.lyear">
+                                        <input type="text" class="form-control" placeholder="Lower Court Number" v-model="form.against1.lno">
                                     </div>
                                     <div class="col-sm-2 datepicker">
-                                        <input type="text" class="form-control" placeholder="Court" v-model="lower_court1.lcourt">
+                                        <input type="text" class="form-control" placeholder="Court" v-model="form.against1.lcourt">
                                     </div>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" placeholder="Place" v-model="lower_court1.lplace">
+                                        <input type="text" class="form-control" placeholder="Place" v-model="form.against1.lplace">
                                     </div>
                                     <div class="col-sm-2 datepicker">
-                                        <datepicker v-model="lower_court1.order" :value="lower_court1.order" placeholder="Order Date"></datepicker>
+                                        <datepicker v-model="against1.order" :value="form.against1.lorder" placeholder="Order Date"></datepicker>
                                     </div>
-                                    <input type="hidden" name="against1" :value="lower_court1"/>
                                 </div>
                             </div>
                         </div>
@@ -469,8 +455,8 @@
                 redirect: '/',
                 store: '/api/caselist',
                 method: 'post',
-                lower_court: { ltype: '', lno: '', lyear: '', lcourt: '', lplace: '', lorder: '', against: ''},
-                lower_court1:{ltype: '',lno: '', lyear: '', lcourt: '', lplace: '', lorder: '', against: ''},
+                against: { lno: '', lcourt: '', lplace: '', lorder: ''},
+                against1:{lno: '', lcourt: '', lplace: '', lorder: ''},
                 states: [],
                 districts: [],
                 courts: [],
@@ -478,6 +464,8 @@
             }
         },
         beforeMount() {
+            this.form['against'] = this.against;
+            this.form['against1'] = this.against1;
             if(this.$route.meta.mode === 'edit') {
                 this.title = 'Edit'
                 this.initialize = '/api/caselist/' + this.$route.params.id + '/edit'
@@ -593,8 +581,6 @@
             addMiscPet(event){
                 this.form.misc_pet.push({
                     mpno: "",
-                    mpyear: "",
-                    mpdate: "",
                     mpprayer: "",
                     mpdisposal: "",
                     mpreturn: "",

@@ -39,7 +39,7 @@ Vue.http.interceptors.push((request, next) => {
 
 import Echo from "laravel-echo"
 import Pusher from 'pusher-js'
-
+/*
  window.Echo = new Echo({
      broadcaster: 'pusher',
      key: '7db6e47a9b3ce94067a9'
@@ -47,5 +47,5 @@ import Pusher from 'pusher-js'
 
 Pusher.log = function(message)
 {
-    window.console.log(message)
-}
+    //window.console.log(message)
+}*/

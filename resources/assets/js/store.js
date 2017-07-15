@@ -8,9 +8,9 @@ export const store = new Vuex.Store({
             nots: [],
             posts: [],
             auth_user: {},
-            popup: {ispopshow: false},
+            popup: {ispopshow: false,is_spopshow: false},
             ajax: {isLoading: false},
-            slide: {isslide: false}
+            slide: {isslide: false},
       },
       getters: {
             all_nots(state) {
@@ -30,7 +30,10 @@ export const store = new Vuex.Store({
             },
             is_slide(state){
                 return state.slide.isslide;
-            }
+            },
+            is_spopshow(state){
+                return state.popup.is_spopshow;  
+            },
       },
       mutations: {
             add_not(state, not) {
@@ -72,6 +75,9 @@ export const store = new Vuex.Store({
             },
             set_isslide(state, status){
                 state.slide.isslide = status;
-            }
+            },
+            set_spopshow(state, status){
+                state.popup.is_spopshow = status;  
+            },
       }
 })

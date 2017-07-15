@@ -90,7 +90,7 @@ class CaseList extends Model
         
         $misc_sr_table = ["misc_sr" => array(['category' => '', 'sr_no' => '', 'year' => '', 'date' => ''])];
         
-        $misc_pet_table = ["misc_pet" => array(['mpno' => '', 'mpyear' => '', 'mpdate' => '', 'mpprayer' => '', 'mpdisposal' => '', 'mpreturn' => '', 'mprepresent' => ''])];
+        $misc_pet_table = ["misc_pet" => array(['mpno' => '', 'mpprayer' => '', 'mpdisposal' => '', 'mpreturn' => '', 'mprepresent' => ''])];
         
         $merged_arr = array_merge($cases_table, $connected_table, $misc_sr_table, $misc_pet_table);
         
