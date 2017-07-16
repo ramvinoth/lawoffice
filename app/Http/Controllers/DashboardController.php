@@ -25,8 +25,10 @@ class DashboardController extends Controller
             $data = $caselist->getLatestCases();
         }else if($action == 'getcount'){
             $caselist = new CaseListController();
+            $event = new EventController();
             $data['all_cases'] = $caselist->getAllCaseCount();
             $data['all_pending'] = $caselist->getAllPendingCaseCount();
+            $data['all_events'] = $event->getAllEventsCount();
         }
         return response()->json($data);
     }

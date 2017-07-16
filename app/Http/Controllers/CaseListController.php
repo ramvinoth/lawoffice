@@ -71,6 +71,9 @@ class CaseListController extends Controller
         unset($case_array['connected']);
         unset($case_array['misc_pet']);
         
+        $case_array['created_at'] = new DateTime();
+        $case_array['updated_at'] = new DateTime();
+        
         $court_case = CaseList::create($case_array);
         foreach ($miscpet_arr as $key => $misc_pet){
             $miscpet_arr[$key]['cid'] = $court_case['id'];
@@ -264,7 +267,7 @@ class CaseListController extends Controller
     
     public function getLatestCases(){
         //print_r (1);
-        $data = CaseList::select('id', 'case_no', 'case_title', 'petitioner', 'status')->latest()->limit(10)->get();
+        $data = CaseList::select('id', 'case_no', 'case_title', 'petitioner', 'status')->orderBy('id', 'desc')->limit(10)->get();
         return $data;
     }
     

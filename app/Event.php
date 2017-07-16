@@ -20,7 +20,7 @@ class Event extends Model
     
     public static function initialize()
     {
-        $events_table = ['title' => '', 'start' => '', 'end' => '', 'type_id' => '', 'created_at' => '', 'updated_at' => ''];
+        $events_table = ['title' => '', 'start' => '', 'end' => '', 'type_id' => ''];
         
         return $events_table;
     }

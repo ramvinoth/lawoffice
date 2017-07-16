@@ -9,6 +9,7 @@ const router = new VueRouter({
         {path: '/', redirect: '/home'},
         {path: '/home',  redirect: '/dashboard'},
         {path: '/dashboard', component: require('./views/dashboard/index.vue')},
+        {path: '/register', component: require('./components/Register.vue')},
         {path: '/login', component: require('./components/Login.vue')},
         {path: '/diary', component: require('./views/diary/index.vue')},
         {path: '/diary/create', component: require('./views/diary/form.vue')},

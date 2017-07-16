@@ -18,7 +18,7 @@ class CompanyScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        $builder->where('org_id', '=', Auth::user()->org_id);
+        $builder->where($model->getTable() .'.org_id', '=', Auth::user()->org_id);
     }
 }
 ?>
