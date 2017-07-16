@@ -59,6 +59,12 @@
             mpopup,
             viewcase
         },
+        beforeMount() {
+            if(this.$route.meta.mode === 'show') {
+                var case_id = this.$route.params.id;
+                this.loadCase(case_id);
+            }
+        },
         methods:{
             fetchData(url, data_var) {
                 return new Promise((resolve, reject) => {

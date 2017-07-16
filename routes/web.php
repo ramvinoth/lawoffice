@@ -15,6 +15,11 @@ Route::group(['prefix' => 'api/'], function(){
     Route::resource('calendar', 'CalendarController');
     Route::resource('event', 'EventController');
     
+    Route::get('/dashboard', [
+        'uses' => 'DashboardController@index',
+        'as' => 'dashboard'
+    ]);
+    
     Route::get('/court/getdata', [
         'uses' => 'CourtController@getData',
         'as' => 'court'

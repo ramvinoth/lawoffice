@@ -100,8 +100,8 @@ class CaseListController extends Controller
         $data['court'] = $this->getCourt($data['court']);
         
         $data['other'] = json_decode($data['other'], true);
-        $data['against'] = json_decode(json_decode($data['against'], true));
-        $data['against1'] = json_decode(json_decode($data['against1'], true)); 
+        $data['against'] = json_decode($data['against'], true);
+        $data['against1'] = json_decode($data['against1'], true); 
         
         return response()->json($data);
     }
@@ -200,7 +200,7 @@ class CaseListController extends Controller
         
         return response()
             ->json([
-                'saved' => $petition,
+                'saved' => true,
             ]);
         
     }
@@ -260,5 +260,23 @@ class CaseListController extends Controller
         $case_id = $request->id;
         $connected = \App\ConnectedCase::where('cid','=',$case_id)->get();
         return response()->json($connected);
+    }
+    
+    public function getLatestCases(){
+        //print_r (1);
+        $data = CaseList::select('id', 'case_no', 'case_title', 'petitioner', 'status')->latest()->limit(10)->get();
+        return $data;
+    }
+    
+    public function getAllCaseCount(){
+        //print_r (1);
+        $data = CaseList::count();
+        return $data;
+    }
+    
+    public function getAllPendingCaseCount(){
+        //print_r (1);
+        $data = CaseList::where('status','=','Pending')->count();
+        return $data;
     }
 }

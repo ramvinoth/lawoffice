@@ -16,9 +16,6 @@
         <link href="/css/jquery-ui.min.css" rel="stylesheet">
         
         <!-- Scripts -->
-        <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
-        <script type="text/javascript" src="/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="/js/bootstrap-select.min.js"></script>
         
         <!-- Styles -->
     </head>

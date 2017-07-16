@@ -44,7 +44,8 @@ const app = new Vue({
 
 require('./bootstrap');
 
-require('../../../node_modules/jquery-ui-dist/jquery-ui.min.js');
+//require('../../../node_modules/jquery-ui-dist/jquery-ui.min.js');
+require('../../../public/js/jquery-ui.min.js');
 
 import Vue from 'vue'
 import App from './App.vue'
