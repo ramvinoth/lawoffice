@@ -22,13 +22,13 @@
                                 <label>Court Type</label>
                                 <span class="required_label">*</span>
                                 <div class="form-group select-style">
-                                    <select name="court" id="court" class="form-control" v-model="form.court" v-on:change="selectCourt" required>
+                                    <select name="court" id="court" class="form-control" v-model="form.court_type_id" v-on:change="selectCourt" required>
                                         <option disabled value="">Select Court</option>
-                                        <option value="1">High Court</option>
-                                        <option value="2">DRT</option>
-                                        <option value="3">Consumer Court</option>
-                                        <option value="4">District Court</option>
-                                        <option value="5">Supreme Court</option>
+                                        <option value="1">Supreme Court</option>
+                                        <option value="2">High Court</option>
+                                        <option value="3">District Court</option>
+                                        <option value="4">Consumer Court</option>
+                                        <option value="5">DRT</option>
                                     </select>
                                 </div>
                             </div>
@@ -47,7 +47,7 @@
                                 <label>State</label>
                                 <span class="required_label">*</span>
                                 <div class="form-group select-style">
-                                    <select name="bench" id="bench" class="form-control" disabled>
+                                    <select name="bench" id="bench" class="form-control" v-model="form.state_id" disabled>
                                         <option v-for="state in states" :value="state.value" :selected="state.value == 31 ? 'selected' : false">
                                           {{state.text}}
                                         </option>
@@ -58,7 +58,7 @@
                                 <div class="form-group">
                                     <label>District</label>
                                     <div class="select-style">
-                                    <select name="district" id="district" class="form-control" v-model="form.district" @change="chooseDistrict">
+                                    <select name="district" id="district" class="form-control" v-model="form.district" @change="getListOfCourts">
                                         <option disabled value="">Select District</option>
                                         <option v-for="district in districts" :value="district.value">
                                               {{district.text}}
@@ -68,11 +68,11 @@
                                 </div>
                             </div>
 
-                            <div id="subcourt_div" class="col-sm-8" style="display:none;">
+                            <div id="court_div" class="col-sm-8" style="display:none;">
                                 <div class="form-group">
                                     <label>Court</label>
                                     <div class="select-style">
-                                    <select name="district" id="district" class="form-control" v-model="form.subcourt" @change="chooseCourt">
+                                    <select name="district" id="district" class="form-control" v-model="form.court_id" @change="getCaseTypes">
                                         <option disabled value="">Select Court</option>
                                         <option v-for="court in courts" :value="court.value">
                                               {{court.text}}
@@ -517,35 +517,51 @@
                     })
             },
             selectCourt(){
-                if(this.form.court == "1"){ //High Court
-                    document.getElementById("bench_div").style.display = 'block';
+                document.getElementById("district_div").style.display = 'none';
+                document.getElementById("court_div").style.display = 'none';
+                document.getElementById("casetype_div").style.display = 'none';
+                document.getElementById("lowercourt_div").style.display = 'none';
+                document.getElementById("bench_div").style.display = 'none';
+                document.getElementById("state_div").style.display = 'none';
+                this.form.court_id = '';
+                this.form.district = '';
+                this.form.case_type = '';
+                
+                if(this.form.court_type_id == "1") //Supreme Court
+                {
+                    this.getCaseTypes();
+                }else if(this.form.court_type_id == "2") //High Court
+                {
                     document.getElementById("lowercourt_div").style.display = 'block';
-                }else if(this.form.court == "4"){ //Distirct Court
+                    this.getListOfCourts();
+                }else if(this.form.court_type_id == "3") //Distirct Court
+                {
                     document.getElementById("state_div").style.display = 'block';
                     document.getElementById("district_div").style.display = 'block';
                     
                     this.getData('api/court/getdata','type=state','states');
                     this.getData('api/court/getdata','type=district&code=31','districts');
-                }else{
-                    document.getElementById("district_div").style.display = 'none';
-                    document.getElementById("subcourt_div").style.display = 'none';
-                    document.getElementById("casetype_div").style.display = 'none';
-                    document.getElementById("lowercourt_div").style.display = 'none';
-                    document.getElementById("bench_div").style.display = 'none';
-                    document.getElementById("state_div").style.display = 'none';
+                }else if(this.form.court_type_id == "4") //Consumer Court
+                {
+                    document.getElementById("state_div").style.display = 'block';
+                    this.getData('api/court/getdata','type=state','states');
+                    this.getListOfCourts();
+                }else if(this.form.court_type_id == "5") //Tribunal
+                {
+                    this.getListOfCourts();
                 }
             },
-            selectState(){
+            getListOfDistricts(){
                 document.getElementById("district").style.display = 'block';
-                this.getData('api/court/getdata','type=district&code='+this.form.court);
+                this.getData('api/court/getdata','type=district&code='+this.form.court_type_id);
             },
-            chooseDistrict(){
-                document.getElementById("subcourt_div").style.display = 'block';
-                this.getData('api/court/getdata','type=court&code='+this.form.district,'courts');
+            getListOfCourts(){
+                document.getElementById("court_div").style.display = 'block';
+                this.getData('api/court/getdata','type=court&court_type='+this.form.court_type_id+'&district_code='+this.form.district,'courts');
             },
-            chooseCourt(){
+            getCaseTypes(){
                 document.getElementById("casetype_div").style.display = 'block';
-                this.getData('api/court/getdata','type=case_type&code='+this.form.subcourt,'casetypes');
+                this.getData('api/court/getdata','type=case_type&court_type='+this.form.court_type_id+'&code='+this.form.court_id,'casetypes');
             },
             filesChange: function(name, files){
                 

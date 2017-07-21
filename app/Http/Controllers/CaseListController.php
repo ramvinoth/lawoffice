@@ -14,12 +14,6 @@ class CaseListController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    protected $courts = ['1'=>'High Court',
-                        '2'=>'DRT',
-                        '3'=>'Consumer Court',
-                        '4'=>'District Court',
-                        '5'=>'Supreme Court'
-                       ];
     public function index()
     {
         //
@@ -98,9 +92,9 @@ class CaseListController extends Controller
     public function show($id)
     {
         //
-        $data = \App\CaseList::select('cases.*', 'courts.court_name')->where([['cases.id','=',$id]])->leftjoin('misc_sr', 'cases.id', '=', 'misc_sr.cid')->leftjoin('petition','cases.id','=','petition.cid')->leftjoin('courts','cases.subcourt','=','courts.id')->get();
+        $data = \App\CaseList::select('cases.*', 'COURT_TYPE.court_type')->where([['cases.id','=',$id]])->leftjoin('misc_sr', 'cases.id', '=', 'misc_sr.cid')->leftjoin('petition','cases.id','=','petition.cid')->leftjoin('COURT_TYPE','cases.court_type_id','=','COURT_TYPE.id')->get();
         $data= $data[0];
-        $data['court'] = $this->getCourt($data['court']);
+        //$data['court_type'] = $this->getCourtType($data['court_type']);
         
         $data['other'] = json_decode($data['other'], true);
         $data['against'] = json_decode($data['against'], true);
@@ -225,12 +219,12 @@ class CaseListController extends Controller
                 'deleted' => true
             ]);
     }
-    public function getCourt($courtId){
-        $courts = ['1'=>'High Court',
-                        '2'=>'DRT',
-                        '3'=>'Consumer Court',
-                        '4'=>'District Court',
-                        '5'=>'Supreme Court'
+    public function getCourtType($courtId){
+        $courts = ['1'=>'Supreme Court',
+                        '2'=>'High Court',
+                        '3'=>'District Court',
+                        '4'=>'Consumer Court',
+                        '5'=>'Tribunal Court'
                        ];
         return $courts[$courtId];
     }

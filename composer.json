@@ -10,7 +10,8 @@
         "pusher/pusher-php-server": "^2.6",
         "laravel/scout": "^2.0",
         "algolia/algoliasearch-client-php": "^1.13",
-        "laravel/passport": "^v1"
+        "laravel/passport": "^v1",
+        "guzzlehttp/guzzle": "^6.3"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

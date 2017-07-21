@@ -9,6 +9,10 @@ use Auth;
 
 class CompanyScope implements Scope
 {
+    public function __construct()
+    {
+        $this->org_id = Auth::user()->org_id;
+    }
     /**
      * Apply the scope to a given Eloquent query builder.
      *
@@ -18,7 +22,7 @@ class CompanyScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        $builder->where($model->getTable() .'.org_id', '=', Auth::user()->org_id);
+        $builder->where($model->getTable() .'.org_id', '=', $this->org_id);
     }
 }
 ?>

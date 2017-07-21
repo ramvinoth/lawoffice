@@ -12,7 +12,7 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <label>Court</label>
-                        <p>{{model.court}}</p>
+                        <p>{{model.court_type}}</p>
                     </div>
                     <div class="col-sm-4">
                         <label>Case no</label>
