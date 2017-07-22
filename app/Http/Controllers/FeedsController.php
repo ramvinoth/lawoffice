@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use App\User;
-use App\Post;
+use App\Models\User;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class FeedsController extends Controller

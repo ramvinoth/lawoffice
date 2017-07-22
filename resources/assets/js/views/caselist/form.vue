@@ -47,7 +47,7 @@
                                 <label>State</label>
                                 <span class="required_label">*</span>
                                 <div class="form-group select-style">
-                                    <select name="bench" id="bench" class="form-control" v-model="form.state_id" disabled>
+                                    <select name="bench" id="bench" class="form-control" disabled>
                                         <option v-for="state in states" :value="state.value" :selected="state.value == 31 ? 'selected' : false">
                                           {{state.text}}
                                         </option>
@@ -265,6 +265,20 @@
                         
                         <div class="row">
                             <div class="col-sm-12">
+                                <label>Priority</label>
+                                <div class="select-style">
+                                    <select name="c_prayer" class="form-control" v-model="form.priority" placeholder="Case Priority">
+                                        <option value="0">Low</option>
+                                        <option value="1">Medium</option>
+                                        <option value="2">High</option>
+                                    </select>
+                                </div>
+                                <small class="text-danger" v-if="errors.address">{{errors.address[0]}}</small>
+                            </div>
+                        </div>
+            
+                        <div class="row mT10">
+                            <div class="col-sm-12">
                                 <label>Prayer</label>
                                 <textarea name="c_prayer" class="form-control" v-model="form.c_prayer" placeholder="Case Description"></textarea>
                                 <small class="text-danger" v-if="errors.address">{{errors.address[0]}}</small>
@@ -325,12 +339,6 @@
                                         <div class="col-sm-3">
                                             <input type="text" class="form-control" placeholder="Type" v-model="form.connected">
                                         </div>
-                                        <div class="col-sm-3">
-                                            <input type="text" class="form-control" placeholder="Case No" v-model="form.connected">
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <input type="text" class="form-control" placeholder="Year" v-model="form.connected">
-                                        </div>
                                         <input type="hidden" name="connected" v-model='form.connected'>
                                         <div class="col-sm-6 mT10">
                                             <button class="btn btn-success">Add</button>
@@ -378,7 +386,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label>Main Case Disposal</label>
-                                        <input type="text" class="form-control" placeholder="Main Case Disposal" v-model="form.disposal">
+                                        <datepicker class="form-control" placeholder="Main Case Disposal" v-model="form.disposal" :value="form.disposal"></datepicker>
                                         <small class="text-danger" v-if="errors.address">{{errors.address[0]}}</small>
                                     </div>
                                 </div>
@@ -526,6 +534,7 @@
                 this.form.court_id = '';
                 this.form.district = '';
                 this.form.case_type = '';
+                this.form.state_id = 31;
                 
                 if(this.form.court_type_id == "1") //Supreme Court
                 {
@@ -538,7 +547,6 @@
                 {
                     document.getElementById("state_div").style.display = 'block';
                     document.getElementById("district_div").style.display = 'block';
-                    
                     this.getData('api/court/getdata','type=state','states');
                     this.getData('api/court/getdata','type=district&code=31','districts');
                 }else if(this.form.court_type_id == "4") //Consumer Court

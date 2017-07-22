@@ -35,12 +35,12 @@
                           <li><a href="#hearing" data-toggle="tab">Hearings</a></li>
                           <li><a href="#connected" data-toggle="tab">Connected Case</a></li>
                           <li><a href="#result" data-toggle="tab">Result</a></li>
-                          <li><a href="#result" data-toggle="tab">Activities</a></li>
+                          <li><a href="#activities" data-toggle="tab">Activities</a></li>
 
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="info">
-                                <div class="row">
+                                <div class="row caseinfo">
                                     <div class="col-sm-4">
                                         <div>
                                             <label>Vakalath No</label>
@@ -120,7 +120,7 @@
                             <!-- /.tab-pane -->
                             <div class="tab-pane" id="petition">
                                 <div class="" v-for="(obj, index) in petition" key="obj.id">
-                                    <div class="petition_div">
+                                    <div class="petition_div caseinfo">
                                         <hr v-if="index !== 0"></hr>
                                         <div id="petition_">
                                             <div class="pet_title">
@@ -175,7 +175,7 @@
                             <!-- /.tab-pane -->
                             <div class="tab-pane" id="connected">
                                 <div class="" v-for="(obj, index) in connected" key="obj.id">
-                                    <div class="con_case_div">
+                                    <div class="con_case_div caseinfo">
                                         <hr v-if="index !== 0"></hr>
                                         <div id="con_case">
                                             <div class="con_case_title">
@@ -188,22 +188,103 @@
                                             <div class="col-sm-4">
                                                 <div>
                                                     <label>Case number</label>
-                                                    <span :title="obj.con_no">{{obj.sno}}</span>
+                                                    <span :title="obj.con_no">{{obj.con_no}}</span>
                                                 </div>
                                                 <div>
                                                     <label>SR number</label>
-                                                    <span :title="obj.sno">{{obj.mpno}}</span>
+                                                    <span :title="obj.sno">{{obj.sno}}</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div>
+                                    <button class="btn btn-primary" @click='addConnectedCase' @closePopUp='closeSmallPopUp'>Add Connected Case</button>
+                                </div>
                             </div>
                             <!-- /.tab-pane -->
                             <div class="tab-pane" id="result">
-
+                                <div class="row caseinfo">
+                                    <div class="col-sm-4">
+                                        <div>
+                                            <label>Citation</label>
+                                            <span :title="model.prayer">{{model.citation}}</span>
+                                        </div>
+                                        <div>
+                                            <label>Prayer</label>
+                                            <span :title="model.prayer">{{model.prayer}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div>
+                                            <label>Status</label>
+                                            <span :title="model.status">{{model.status}}</span>
+                                        </div>
+                                        <div>
+                                            <label>Status text</label>
+                                            <span :title="model.s_text">{{model.s_text}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div>
+                                            <label>Posted on</label>
+                                            <span :title="model.posted_date">{{model.posted_date}}</span>
+                                        </div>
+                                        <div>
+                                            <label>Main Case Disposal</label>
+                                            <span :title="model.disposal">{{model.disposal}}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-4">
+                                        <div>
+                                            <label>Judge</label>
+                                            <span :title="model.by_whom">{{model.result}}</span>
+                                        </div>
+                                        <div>
+                                            <label>Result</label>
+                                            <span :title="model.disposal">{{model.result}}</span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
                             </div>
                             <!-- /.tab-pane -->
+                            <div class="tab-pane" id="activities">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <ul class="timeline">
+                                        <!-- timeline time label -->
+                                        <li class="time-label">
+                                            <span class="bg-red">
+                                                10 Feb. 2014
+                                            </span>
+                                        </li>
+                                        <!-- /.timeline-label -->
+
+                                        <!-- timeline item -->
+                                        <li>
+                                            <!-- timeline icon -->
+                                            <i class="fa fa-envelope bg-blue"></i>
+                                            <div class="timeline-item">
+                                                <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+
+                                                <h3 class="timeline-header"><a href="#">Support Team</a> ...</h3>
+
+                                                <div class="timeline-body">
+                                                    ... Content goes here
+                                                </div>
+
+                                                <div class="timeline-footer">
+                                                    <a class="btn btn-primary btn-xs">...</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <!-- END timeline item -->
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <!-- /.tab-content -->
                       </div>
@@ -214,23 +295,21 @@
             </div>
         </div>
         <spopup>
-            <misc_pet :misc_pet='misc_pet' :length='0'></misc_pet>
-            <div id="footer">
-                <button class="btn btn-success" @click="savePetiton">Save</button>
-                <button class="btn btn-danger" @click="closeSmallPopUp">Cancel</button>
-            </div>
+            <component :is='currentView' :data='pop_data' :length='0'></component>
         </spopup>
     </div>
 </template>
 <script>
     import spopup from '../../components/SmallPopUp.vue'
-    import misc_pet from '../../components/MiscPetition.vue'
+    import petitionForm from '../caselist/petitionForm.vue'
+    import connectedCaseForm from '../caselist/connectedCaseForm.vue'
     import axios from 'axios'
     export default {
         name: 'CategoryShow',
         props: ['model'],
         components: {
-            misc_pet, 
+            petitionForm,
+            connectedCaseForm,
             spopup
         },
         data() {
@@ -240,10 +319,13 @@
                 redirect: '/',
                 store: '/api/caselist',
                 method: 'post',
+                currentView: 'petitionForm',
                 petition: [],
                 hearing: [],
                 connected: [],
+                connected_case: [{con_no : '', sno : '', cid : ''}],
                 misc_pet: [{'cid': '', 'sno': '', 'mpno' : '', 'mpprayer' : '', 'mpdisposal' : '', 'mpreturn' : '', 'mprepresent' : ''}],
+                pop_data: [],
             }
         },
         beforeMount() {
@@ -257,7 +339,7 @@
             $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
                 var target = $(e.target).attr("href") // activated tab
                 //if ($(target).is(':empty')) {
-                if(target !== '#info'){
+                if(target !== '#info' && target !== '#result'){
                     target = target.replace('#', '');
                     vm.fetchData(`api/caseinfo/${target}/show`, `id=${vm.model.id}`, target);
                     vm.misc_pet[0].cid = vm.model.id;
@@ -293,6 +375,20 @@
                     })
             },
             
+            removeConCase(id) {
+                var vm = this;
+                axios.delete(`api/caseinfo/connected/${id}`)
+                    .then(function(response) {
+                        if (response.deleted) {
+                            //vm.$router.push(vm.redirect)
+                            //this.closeSmallPopUp();
+                        }
+                    })
+                    .catch(function(error) {
+                        console.log(error)
+                    })
+            },
+            
             fetchData(url, params, data_var) {
                 var vm = this
                 axios.get(url + "?" + params)
@@ -314,26 +410,30 @@
                 this.misc_pet = [{'cid': '', 'sno': '', 'mpno' : '', 'mpprayer' : '', 'mpdisposal' : '', 'mpreturn' : '', 'mprepresent' : ''}];
                 this.misc_pet[0].cid = this.model.id;
                 this.misc_pet[0].sno = this.model.sno;
+                this.pop_data = this.misc_pet;
+                this.currentView = 'petitionForm';
                 this.showSmallPopUp();
             },
-            savePetiton(){
-                var vm = this
-                axios[this.method]('/api/caseinfo/petition/create', this.misc_pet[0])
-                    .then(function(response) {
-                        console.log(response.data.saved);
-                        if(response.data.saved) {
-                            //vm.$router.push(vm.redirect)
-                            console.log(response.data.petition);
-                            vm.petition.push(response.data.petition);
-                            vm.closeSmallPopUp();
-                        }
-                    })
-                    .catch(function(error) {
-                        Vue.set(vm.$data, 'errors', error.response.data)
-                    })
+            
+            addConnectedCase(){
+                this.connected_case = [{'con_no' : '', 'sno' : this.model.sno, 'cid' : this.model.id}];
+                this.pop_data = this.connected_case;
+                this.currentView = 'connectedCaseForm';
+                this.showSmallPopUp();
+                
             },
+            
             editPetition(obj){
                 this.misc_pet[0] = obj;
+                this.pop_data = this.misc_pet;
+                this.currentView = 'petitionForm';
+                this.showSmallPopUp();
+            },
+            
+            editConCase(obj){
+                this.connected_case[0] = obj;
+                this.pop_data = this.connected_case;
+                this.currentView = 'connectedCaseForm';
                 this.showSmallPopUp();
             },
         }
@@ -351,7 +451,7 @@
         overflow: hidden;
         white-space: nowrap;
     }
-    #case_info>div span{
+    #case_info .caseinfo span{
         display: inline-block;
         width: 60%;
         text-overflow: ellipsis;

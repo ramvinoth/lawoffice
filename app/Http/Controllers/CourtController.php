@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Court;
-use App\GeoLocations;
-use App\CaseType;
+use App\Models\Court;
+use App\Models\GeoLocations;
+use App\Models\CaseType;
 use Illuminate\Http\Request;
 
 class CourtController extends Controller
 {
     public function getdata(Request $request){
         $type = $request->type;
+        $data = [];
         if($type == "state"){
             $data = GeoLocations::select('id as value','name as text')->where([['location_type','=','STATE']])->get();
         }else if($type== "district"){
@@ -23,7 +24,7 @@ class CourtController extends Controller
             $district_code = $request->district_code;
             $court_type = $request->court_type;
             
-            if($court_type != 3 && $district_code ==''){
+            if($court_type != 3){
                 $data = Court::select('id as value','court_name as text')->where([['court_type','=',$court_type]])->get();
             }else if($court_type == 3 && $district_code != ''){
                 $data = Court::select('id as value','court_name as text')->where([['location_id','=',$district_code]])->get();

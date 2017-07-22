@@ -9,7 +9,7 @@ Route::get('/home', function () {
 
 Auth::routes();
 
-Route::group(['prefix' => 'api/'], function(){
+Route::group(['prefix' => 'api/', 'middleware' => 'auth'], function(){
     Route::resource('caselist', 'CaseListController');
     Route::resource('diary', 'DiaryController');
     Route::resource('calendar', 'CalendarController');
@@ -40,9 +40,18 @@ Route::group(['prefix' => 'api/'], function(){
         'as' => 'delete_petition'
     ]);
     
+    
     Route::get('/caseinfo/connected/show', [
         'uses' => 'CaseListController@getConnectedCase',
         'as' => 'connected_case'
+    ]);
+    Route::post('/caseinfo/connected/create', [
+        'uses' => 'CaseListController@saveConnectedCase',
+        'as' => 'save_connected_case'
+    ]);
+    Route::delete('/caseinfo/connected/{id}', [
+        'uses' => 'CaseListController@deleteConnectedCase',
+        'as' => 'delete_petition'
     ]);
     
     Route::get('/eventtype/getEventTypes', [

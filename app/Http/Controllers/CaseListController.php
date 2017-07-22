@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use DateTime;
 use DateTimeZone;
-use App\CaseList;
+use App\Models\CaseList;
+use App\Models\Petition;
+use App\Models\ConnectedCase;
 use Illuminate\Http\Request;
 
 class CaseListController extends Controller
@@ -59,8 +61,11 @@ class CaseListController extends Controller
         
         $miscpet_arr = $case_array['misc_pet'];
         $case_array['other'] = json_encode($case_array['other']);
-        $case_array['against'] = json_encode($case_array['against']);
-        $case_array['against1'] = json_encode($case_array['against1']);
+        if($case_array['against'] !== ''){
+            $case_array['against'] = json_encode($case_array['against']);   
+        }else if($case_array['against1'] !== ''){
+            $case_array['against1'] = json_encode($case_array['against1']);   
+        }
         unset($case_array['misc_sr']);
         unset($case_array['connected']);
         unset($case_array['misc_pet']);
@@ -73,7 +78,7 @@ class CaseListController extends Controller
             $miscpet_arr[$key]['cid'] = $court_case['id'];
             $miscpet_arr[$key]['sno'] = $court_case['sno'];
         }
-        $petition = \App\Petition::insert($miscpet_arr);      
+        $petition = Petition::insert($miscpet_arr);      
         
         return response()
             ->json([
@@ -92,7 +97,7 @@ class CaseListController extends Controller
     public function show($id)
     {
         //
-        $data = \App\CaseList::select('cases.*', 'COURT_TYPE.court_type')->where([['cases.id','=',$id]])->leftjoin('misc_sr', 'cases.id', '=', 'misc_sr.cid')->leftjoin('petition','cases.id','=','petition.cid')->leftjoin('COURT_TYPE','cases.court_type_id','=','COURT_TYPE.id')->get();
+        $data = CaseList::select('cases.*', 'COURT_TYPE.court_type')->where([['cases.id','=',$id]])->leftjoin('misc_sr', 'cases.id', '=', 'misc_sr.cid')->leftjoin('petition','cases.id','=','petition.cid')->leftjoin('COURT_TYPE','cases.court_type_id','=','COURT_TYPE.id')->get();
         $data= $data[0];
         //$data['court_type'] = $this->getCourtType($data['court_type']);
         
@@ -112,9 +117,9 @@ class CaseListController extends Controller
     public function edit($id)
     {
         //
-        $caselist = \App\CaseList::select('cases.*')->where([['cases.id','=',$id]])->leftjoin('misc_sr as misc_sr', 'cases.id', '=', 'misc_sr.cid')->get();
+        $caselist = CaseList::select('cases.*')->where([['cases.id','=',$id]])->leftjoin('misc_sr as misc_sr', 'cases.id', '=', 'misc_sr.cid')->get();
         
-        $misc_pet = \App\Petition::where([['cid','=',$id]])->get();
+        $misc_pet = Petition::where([['cid','=',$id]])->get();
         
         $misc_pet_table = ["misc_pet" => array(['mpno' => '', 'mpyear' => '', 'mpdate' => '', 'mpprayer' => '', 'mpdisposal' => '', 'mpreturn' => '', 'mprepresent' => ''])];
         
@@ -131,28 +136,29 @@ class CaseListController extends Controller
         }else{
             $caselist['other'] = array(['other_counsel'=>'', 'contact'=>'']);
         }
-        
-        if(isset($caselist['against']) && $caselist['against'] !== '' && $caselist['against'] !== '-'){
-            $against_obj  = json_decode($caselist['against']);
-            if($against_obj == null){
-                $against_arr = explode("-",$caselist['against']);
-                $against = ['lno'=> $against_arr[0], 'lcourt'=> $against_arr[1], 'lplace'=> $against_arr[2], 'lorder'=> $against_arr[3]];
-                $caselist['against'] = $against;
+        if($caselist['court_type_id'] == 2){
+            if(isset($caselist['against']) && $caselist['against'] !== '' && $caselist['against'] !== '-'){
+                $against_obj  = json_decode($caselist['against']);
+                if($against_obj == null){
+                    $against_arr = explode("-",$caselist['against']);
+                    print_r ($caselist['against']);
+                    $against = ['lno'=> $against_arr[0], 'lcourt'=> $against_arr[1], 'lplace'=> $against_arr[2], 'lorder'=> $against_arr[3]];
+                    $caselist['against'] = $against;
+                }
+            }else{
+                $caselist['against'] = ['lno'=> '', 'lcourt'=> '', 'lplace'=> '', 'lorder'=> ''];
             }
-        }else{
-            $caselist['against'] = ['lno'=> '', 'lcourt'=> '', 'lplace'=> '', 'lorder'=> ''];
-        }
-        if(isset($caselist['against1']) && $caselist['against1'] !== '' && $caselist['against1'] !== '-'){
-            $against1_obj = json_decode($caselist['against1']);
-            if($against1_obj == null){
-                $against1_arr = explode("-",$caselist['against1']);
-                $against1 = ['lno'=> $against1_arr[0], 'lcourt'=> $against1_arr[1], 'lplace'=> $against1_arr[2], 'lorder'=> $against1_arr[3]];
-                $caselist['against1'] = $against1;
+            if(isset($caselist['against1']) && $caselist['against1'] !== '' && $caselist['against1'] !== '-'){
+                $against1_obj = json_decode($caselist['against1']);
+                if($against1_obj == null){
+                    $against1_arr = explode("-",$caselist['against1']);
+                    $against1 = ['lno'=> $against1_arr[0], 'lcourt'=> $against1_arr[1], 'lplace'=> $against1_arr[2], 'lorder'=> $against1_arr[3]];
+                    $caselist['against1'] = $against1;
+                }
+            }else{
+                $caselist['against1'] = ['lno'=> '', 'lcourt'=> '', 'lplace'=> '', 'lorder'=> ''];
             }
-        }else{
-            $caselist['against1'] = ['lno'=> '', 'lcourt'=> '', 'lplace'=> '', 'lorder'=> ''];
         }
-        
         $caselist['misc_pet'] = $misc_pet;
         
         return response()
@@ -192,7 +198,7 @@ class CaseListController extends Controller
             $miscpet_arr[$key]['sno'] = $court_case['sno'];
             unset($misc_pet['id']);
             unset($misc_pet['cid']);
-            $petition = \App\Petition::where([['cid','=',$case_id],['id','=',$pet_id]])->update($misc_pet); 
+            $petition = Petition::where([['cid','=',$case_id],['id','=',$pet_id]])->update($misc_pet); 
         }     
         
         return response()
@@ -231,22 +237,37 @@ class CaseListController extends Controller
     
     public function getCasePetition(Request $request){
         $case_id = $request->id;
-        $petition = \App\Petition::where('cid','=',$case_id)->get();
+        $petition = Petition::where('cid','=',$case_id)->get();
         return response()->json($petition);
     }
     
     public function saveCasePetition(Request $request){
         $petition_array = $request->all();
-        $petition = \App\Petition::insert($petition_array);
+        $petition = Petition::insert($petition_array);
         return response()
             ->json([
                 'saved' => $petition,
                 'petition' => $petition_array,
             ]);
     }
-    
+    public function saveConnectedCase(Request $request){
+        $con_case_array = $request->all();
+        $status = ConnectedCase::insert($con_case_array);
+        return response()
+            ->json([
+                'saved' => $status,
+                'petition' => $con_case_array,
+            ]);
+    }
     public function deleteCasePetition($id){
-        $status = \App\Petition::where('id','=',$id)->delete();
+        $status = Petition::where('id','=',$id)->delete();
+        return response()
+            ->json([
+                'deleted' => $status,
+            ]);
+    }
+    public function deleteConnectedCase($id){
+        $status = ConnectedCase::where('id','=',$id)->delete();
         return response()
             ->json([
                 'deleted' => $status,
@@ -255,7 +276,7 @@ class CaseListController extends Controller
     
     public function getConnectedCase(Request $request){
         $case_id = $request->id;
-        $connected = \App\ConnectedCase::where('cid','=',$case_id)->get();
+        $connected = ConnectedCase::where('cid','=',$case_id)->get();
         return response()->json($connected);
     }
     

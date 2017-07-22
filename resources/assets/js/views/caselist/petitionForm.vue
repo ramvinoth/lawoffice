@@ -1,51 +1,81 @@
 <template>
-<div class="row">
-    <div class="col-sm-12">
+    <div>
         <label>Petition {{length+1}}</label>
         <div class="form-group form-inline-block form-box">
             <div class="row">
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" placeholder="MP No" v-model="misc_pet[length].mpno">
+                    <input type="text" class="form-control" placeholder="MP No" v-model="data[length].mpno">
                 </div>
             </div>
             <div class="row mT10">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <textarea class="form-control" placeholder="MP Prayer" v-model="misc_pet[length].mpprayer"></textarea>
+                        <textarea class="form-control" placeholder="MP Prayer" v-model="data[length].mpprayer"></textarea>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-3">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="MP Disposal Date" v-model="misc_pet[length].mpdisposal">
+                        <datepicker class="form-control" placeholder="MP Disposal Date" v-model="data[length].mpdisposal" :value="data[length].mpdisposal"></datepicker>
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="MP Date of Returned" v-model="misc_pet[length].mpreturn">
+                        <datepicker class="form-control" placeholder="MP Date of Returned" v-model="data[length].mpreturn" :value="data[length].mpreturn"></datepicker>
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="MP Date of Re-Presented" v-model="misc_pet[length].mprepresent">
+                        <datepicker class="form-control" placeholder="MP Date of Re-Presented" v-model="data[length].mprepresent" :value="data[length].mprepresent"></datepicker>
                     </div>
                 </div>
             </div>
         </div>
+        <div id="footer">
+            <button class="btn btn-success" @click="savePetiton">Save</button>
+            <button class="btn btn-danger" @click="closeSmallPopUp">Cancel</button>
+        </div>
     </div>
-</div>
 </template>
 <script>
     import Datepicker from '../../components/DatePicker.vue'
+    import axios from 'axios'
     export default {
         name: 'PetitionForm',
-        components: [Datepicker],
-        props: ['case_data'],
-        mounted() {
-            if(this.case_data.petition == undefined || this.case_data.petition == ''){
-                this.case_data.petition = ['category' => '', 'sr_no' => '', 'year' => '', 'date' => '',]
+        components:{
+            Datepicker,
+        },
+        props: ['data','length'],
+        data() {
+            return{
+                resource: 'caselist',
+                initialize: '/api/caseinfo/create',
+                redirect: '/',
+                store: '/api/caselist',
+                method: 'post',
             }
         },
+        methods: {
+            savePetiton(){
+                var vm = this
+                axios[this.method]('/api/caseinfo/petition/create', this.data[0])
+                    .then(function(response) {
+                        console.log(response.data.saved);
+                        if(response.data.saved) {
+                            //vm.$router.push(vm.redirect)
+                            console.log(response.data.petition);
+                            vm.data.push(response.data.petition);
+                            vm.closeSmallPopUp();
+                        }
+                    })
+                    .catch(function(error) {
+                        Vue.set(vm.$data, 'errors', error.response.data)
+                    })
+            },
+            closeSmallPopUp(){
+                this.$store.commit("set_spopshow", false);
+            },
+        }
     }
 </script>

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Diary;
+use App\Models\Diary;
 use Illuminate\Http\Request;
 
 class DiaryController extends Controller

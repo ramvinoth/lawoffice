@@ -23,6 +23,7 @@
             value: function(value) {
                 //console.log(date)
                 // update options
+                $(this.$el).datepicker('setDate', value);
                 $(this.$el).datepicker({
                     dateFormat: 'dd/mm/yy'
                 })

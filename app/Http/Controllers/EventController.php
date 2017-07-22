@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use DateTime;
 use DateTimeZone;
 use Auth;
-use App\Event;
-use App\EventType;
+use App\Models\Event;
+use App\Models\EventType;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -28,7 +28,7 @@ class EventController extends Controller
         $sd = $sdate->getTimestamp()."000";
         $ed = $edate->getTimestamp()."000";
         
-        $data = \App\Event::select('title','start','end','EVENTTYPES.name as type_name','EVENTTYPES.color as backgroundColor')->join('EVENTTYPES','EVENTTYPES.id','=','EVENTS.type_id')->where([['EVENTS.start','>',$sd],['EVENTS.end','<',$ed]])->get();
+        $data = Event::select('title','start','end','EVENTTYPES.name as type_name','EVENTTYPES.color as backgroundColor')->join('EVENTTYPES','EVENTTYPES.id','=','EVENTS.type_id')->where([['EVENTS.start','>',$sd],['EVENTS.end','<',$ed]])->get();
         //print_r ($data);
         foreach ($data as $key => $event){
             $data[$key]['start'] = $this->convertLongToDate($data[$key]['start']);
@@ -49,7 +49,7 @@ class EventController extends Controller
     {
         //
         $event = Event::initialize();
-        $event_types = \App\EventType::select('id','name')->get();
+        $event_types = EventType::select('id','name')->get();
         return response()
             ->json([
                 'form' => $event,
@@ -97,7 +97,7 @@ class EventController extends Controller
     public function show($id)
     {
         //
-        $data = \App\Event::where([['id','=','1']])->get();
+        $data = Event::where([['id','=','1']])->get();
         return response()->json([
             'model' => $data
             ]);
@@ -145,7 +145,7 @@ class EventController extends Controller
     }
     
     public function getEventTypes(Request $request){
-        $data = \App\EventType::select('name','color')->get();
+        $data = EventType::select('name','color')->get();
         return response()->json($data);
     }
     
@@ -155,7 +155,7 @@ class EventController extends Controller
         // First day of this month
         $ld = new DateTime('last day of this month');
         
-        $data = \App\Event::select('title','start','end','EVENTTYPES.name as type_name')->join('EVENTTYPES','EVENTTYPES.id','=','EVENTS.type_id')->get();
+        $data = Event::select('title','start','end','EVENTTYPES.name as type_name')->join('EVENTTYPES','EVENTTYPES.id','=','EVENTS.type_id')->get();
         
         //$sd = strtotime("25-01-2012 00:00:00");
         //$sd = $sd->getTimestamp();
