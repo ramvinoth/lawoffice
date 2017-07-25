@@ -468,6 +468,12 @@ body.mini-navbar .navbar-default .nav > li > a {
 .pointer{
     cursor: pointer;
 }
+.h300px{
+    height: 300px;
+}
+.fs12px{
+    font-size: 12px;
+}
 .signup-box{
     width: 100%;
     position: relative;

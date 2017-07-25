@@ -8,6 +8,7 @@ use App\Models\CaseList;
 use App\Models\Petition;
 use App\Models\ConnectedCase;
 use Illuminate\Http\Request;
+use Auth;
 
 class CaseListController extends Controller
 {
@@ -80,6 +81,14 @@ class CaseListController extends Controller
         }
         $petition = Petition::insert($miscpet_arr);      
         
+        
+        $act_id = $court_case['id'];
+        $act_type = 'Add';
+        $act_by = Auth::user()->id;
+        $act_module = 'caselist';
+        $auditController = new AuditController();
+        $auditController->addToAudit($act_id, $act_type, $act_by, $act_module);
+        
         return response()
             ->json([
                 'saved' => true,
@@ -138,23 +147,22 @@ class CaseListController extends Controller
         }
         if($caselist['court_type_id'] == 2){
             if(isset($caselist['against']) && $caselist['against'] !== '' && $caselist['against'] !== '-'){
-                $against_obj  = json_decode($caselist['against']);
-                if($against_obj == null){
+                $against  = json_decode($caselist['against']);
+                if($against == null){
                     $against_arr = explode("-",$caselist['against']);
-                    print_r ($caselist['against']);
                     $against = ['lno'=> $against_arr[0], 'lcourt'=> $against_arr[1], 'lplace'=> $against_arr[2], 'lorder'=> $against_arr[3]];
-                    $caselist['against'] = $against;
                 }
+                $caselist['against'] = $against;
             }else{
                 $caselist['against'] = ['lno'=> '', 'lcourt'=> '', 'lplace'=> '', 'lorder'=> ''];
             }
             if(isset($caselist['against1']) && $caselist['against1'] !== '' && $caselist['against1'] !== '-'){
-                $against1_obj = json_decode($caselist['against1']);
-                if($against1_obj == null){
+                $against1 = json_decode($caselist['against1']);
+                if($against1 == null){
                     $against1_arr = explode("-",$caselist['against1']);
                     $against1 = ['lno'=> $against1_arr[0], 'lcourt'=> $against1_arr[1], 'lplace'=> $against1_arr[2], 'lorder'=> $against1_arr[3]];
-                    $caselist['against1'] = $against1;
                 }
+                $caselist['against1'] = $against1;
             }else{
                 $caselist['against1'] = ['lno'=> '', 'lcourt'=> '', 'lplace'=> '', 'lorder'=> ''];
             }
@@ -201,6 +209,13 @@ class CaseListController extends Controller
             $petition = Petition::where([['cid','=',$case_id],['id','=',$pet_id]])->update($misc_pet); 
         }     
         
+        $act_id = $case_array['id'];
+        $act_type = 'Update';
+        $act_by = Auth::user()->id;
+        $act_module = 'caselist';
+        $auditController = new AuditController();
+        $auditController->addToAudit($act_id, $act_type, $act_by, $act_module);
+        
         return response()
             ->json([
                 'saved' => true,
@@ -218,8 +233,16 @@ class CaseListController extends Controller
     {
         //
         
-        $caselist->join('petition','cases.id','petition.cid')->delete();
-
+        $caselist->leftjoin('petition','cases.id','=','petition.cid')->leftjoin('connected','cases.id','=','connected.cid')->delete();
+        
+        
+        $act_id = $court_case['id'];
+        $act_type = 'Delete';
+        $act_by = Auth::user()->id;
+        $act_module = 'caselist';
+        $auditController = new AuditController();
+        $auditController->addToAudit($act_id, $act_type, $act_by, $act_module);
+        
         return response()
             ->json([
                 'deleted' => true
@@ -280,20 +303,20 @@ class CaseListController extends Controller
         return response()->json($connected);
     }
     
+    /*
+        For Dashboard
+    */
     public function getLatestCases(){
-        //print_r (1);
         $data = CaseList::select('id', 'case_no', 'case_title', 'petitioner', 'status')->orderBy('id', 'desc')->limit(10)->get();
         return $data;
     }
     
     public function getAllCaseCount(){
-        //print_r (1);
         $data = CaseList::count();
         return $data;
     }
     
     public function getAllPendingCaseCount(){
-        //print_r (1);
         $data = CaseList::where('status','=','Pending')->count();
         return $data;
     }

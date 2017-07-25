@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Support\FilterPaginateOrder;
 use App\Scopes\CompanyScope;
+use App\Traits\Audit;
 use Auth;
 
 class CaseList extends BaseModel
@@ -22,6 +23,7 @@ class CaseList extends BaseModel
     }
     
     use FilterPaginateOrder;
+    use Audit;
     
     protected $table = 'cases';
     //protected $attributes = ['org_id' => Auth::user()->org_id];

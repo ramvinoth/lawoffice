@@ -68,7 +68,7 @@ class DashboardController extends Controller
     public function show($id)
     {
         //
-        $data = \App\Calendar::where([['cases.id','=',$id]])->join('misc_sr', 'cases.id', '=', 'misc_sr.cid')->join('petition','cases.id','=','petition.cid')->get();
+        $data = Calendar::where([['cases.id','=',$id]])->join('misc_sr', 'cases.id', '=', 'misc_sr.cid')->join('petition','cases.id','=','petition.cid')->get();
         return response()->json([
             'model' => $data
             ]);
@@ -83,7 +83,7 @@ class DashboardController extends Controller
     public function edit($id)
     {
         //
-        $calendar = \App\Calendar::findOrFail($id);
+        $calendar = Calendar::findOrFail($id);
 
         return response()
             ->json([

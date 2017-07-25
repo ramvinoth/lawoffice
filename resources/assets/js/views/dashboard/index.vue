@@ -158,7 +158,7 @@
                                 </div>
                                 <!-- /.box-header -->
                                 <div class="box-body">
-                                    <div class="table-responsive">
+                                    <div class="table-responsive h300px">
                                         <table class="table no-margin">
                                             <thead>
                                                 <tr>

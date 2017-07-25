@@ -222,13 +222,13 @@
                             <div class="form-group form-inline-block form-box">
                                 <div class="row">
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" placeholder="Type" v-model="form.against.lno">
+                                        <input type="text" class="form-control" placeholder="Type" v-model="form.against[0].lno">
                                     </div>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" placeholder="Court" v-model="form.against.lcourt">
+                                        <input type="text" class="form-control" placeholder="Court" v-model="form.against[0].lcourt">
                                     </div>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" placeholder="Place" v-model="form.against.lplace">
+                                        <input type="text" class="form-control" placeholder="Place" v-model="form.against[0].lplace">
                                     </div>
                                     <div class="col-sm-2">
                                         <datepicker v-model="against.lorder" :value="form.against.lorder" placeholder="Order Date"></datepicker>
@@ -240,10 +240,10 @@
                                         <input type="text" class="form-control" placeholder="Lower Court Number" v-model="form.against1.lno">
                                     </div>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" placeholder="Court" v-model="form.against1.lcourt">
+                                        <input type="text" class="form-control" placeholder="Court" v-model="form.against1[0].lcourt">
                                     </div>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" placeholder="Place" v-model="form.against1.lplace">
+                                        <input type="text" class="form-control" placeholder="Place" v-model="form.against1[0].lplace">
                                     </div>
                                     <div class="col-sm-2">
                                         <datepicker v-model="against1.order" :value="form.against1.lorder" placeholder="Order Date"></datepicker>
@@ -463,8 +463,8 @@
                 redirect: '/',
                 store: '/api/caselist',
                 method: 'post',
-                against: { lno: '', lcourt: '', lplace: '', lorder: ''},
-                against1:{lno: '', lcourt: '', lplace: '', lorder: ''},
+                against: [{ lno: '', lcourt: '', lplace: '', lorder: ''}],
+                against1: [{lno: '', lcourt: '', lplace: '', lorder: ''}],
                 states: [],
                 districts: [],
                 courts: [],

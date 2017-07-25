@@ -10,7 +10,15 @@
                         <div class="box-body">
                             <!-- the events -->
                             <div id="external-events">
-                                <div v-for="type in eventTypes" class="external-event" v-bind:style="{ background: type.color, color: '#fff'}">{{type.name}}</div>
+                                <div v-for="type in eventTypes" class="external-event" v-bind:style="{ background: type.color, color: '#fff'}">
+                                    <span>{{type.name}}</span>
+                                    <span class="fr pointer fs12px ml5">
+                                        <i class="fa fa-trash"></i>
+                                    </span>
+                                    <span class="fr pointer fs12px">
+                                        <i class="ion ion-edit"></i>
+                                    </span>
+                                </div>
                                 <div class="checkbox" style="display:none;">
                                     <label for="drop-remove">
                                         <input type="checkbox" id="drop-remove">
@@ -109,17 +117,17 @@ export default{
     beforeMount() {
         if(this.$route.meta.mode === 'edit') {
             this.title = 'Edit'
-            this.initialize = '/api/caselist/' + this.$route.params.id + '/edit'
-            this.store = '/api/caselist/' + this.$route.params.id
+            this.initialize = '/api/event/' + this.$route.params.id + '/edit'
+            this.store = '/api/event/' + this.$route.params.id
             this.method = 'put'
         }
         this.fetchData('/api/event/','events');
-        this.fetchData('/api/eventtype/getEventTypes','eventTypes').then((response) => {
+        this.fetchData('/api/eventtype/','eventTypes').then((response) => {
             this.ini_events($('#external-events div.external-event')); // gets here when the promise is resolved
         }, (error) => {
             console.error(error); // gets here when the promise is rejected
         });
-        this.fetchData('/api/eventtype/getEventTypes','eventTypes');
+        //this.fetchData('/api/eventtype/getEventTypes','eventTypes');
     },
     mounted(){
         var vm =this;
@@ -201,7 +209,16 @@ export default{
               if (val.length == 0) {
                 return;
               }
-
+                if(curColor == ''){
+                    curColor = '#00c0ef';
+                }
+                var params = 'name='+val+'&color='+currColor;
+                vm.saveData('/api/eventtype/',params).then((response) => {
+                    //this.ini_events($('#external-events div.external-event')); // gets here when the promise is resolved
+                }, (error) => {
+                    console.error(error); // gets here when the promise is rejected
+                    return;
+                });
               //Create events
               var event = $("<div />");
               event.css({"background-color": currColor, "border-color": currColor, "color": "#fff"}).addClass("external-event");
@@ -209,7 +226,7 @@ export default{
               $('#external-events').prepend(event);
 
               //Add draggable funtionality
-              ini_events(event);
+              vm.ini_events(event);
 
               //Remove event from text input
               $("#new-event").val("");
@@ -225,6 +242,20 @@ export default{
                 axios.get(url)
                     .then(function(response) {
                         Vue.set(vm.$data, data_var , response.data);
+                        resolve(response); // the request was successfull
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                        reject(error); // the request failed
+                    })
+            });
+        },
+        saveData(url, params) {
+            return new Promise((resolve, reject) => {
+                var vm = this
+                axios.post(url+"?"+params)
+                    .then(function(response) {
+                        //Vue.set(vm.$data, data_var , response.data);
                         resolve(response); // the request was successfull
                     })
                     .catch(function(error) {

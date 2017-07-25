@@ -14,6 +14,7 @@ Route::group(['prefix' => 'api/', 'middleware' => 'auth'], function(){
     Route::resource('diary', 'DiaryController');
     Route::resource('calendar', 'CalendarController');
     Route::resource('event', 'EventController');
+    Route::resource('eventtype', 'EventTypeController');
     
     Route::get('/dashboard', [
         'uses' => 'DashboardController@index',
@@ -54,10 +55,11 @@ Route::group(['prefix' => 'api/', 'middleware' => 'auth'], function(){
         'as' => 'delete_petition'
     ]);
     
-    Route::get('/eventtype/getEventTypes', [
-        'uses' => 'EventController@getEventTypes',
-        'as' => 'event_types'
+    Route::get('/caseinfo/activities/show', [
+        'uses' => 'AuditController@getCaseActivities',
+        'as' => 'activities'
     ]);
+    
 });
 
 Route::group(['middleware' => 'auth'], function(){

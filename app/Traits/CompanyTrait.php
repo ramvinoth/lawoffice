@@ -3,13 +3,14 @@
 namespace App\Traits;
 
 use App\Scopes\CompanyScope;
+use Auth;
 
 trait CompanyTrait
 {
     
     public function __construct(array $attributes = [])
     {
-      parent::__construct(array_merge($attributes, ['cust_id' => $this->custId]));
+      parent::__construct(array_merge($attributes, ['org_id' => Auth::user()->org_id]));
     }
     /**
      * Boot the scope.

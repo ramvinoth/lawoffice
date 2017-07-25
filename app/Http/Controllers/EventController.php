@@ -31,8 +31,8 @@ class EventController extends Controller
         $data = Event::select('title','start','end','EVENTTYPES.name as type_name','EVENTTYPES.color as backgroundColor')->join('EVENTTYPES','EVENTTYPES.id','=','EVENTS.type_id')->where([['EVENTS.start','>',$sd],['EVENTS.end','<',$ed]])->get();
         //print_r ($data);
         foreach ($data as $key => $event){
-            $data[$key]['start'] = $this->convertLongToDate($data[$key]['start']);
-            $data[$key]['end'] = $this->convertLongToDate($data[$key]['end']);
+            $data[$key]['start'] = $this->convertLongToDate($data[$key]['start'], 'Y-m-d');
+            $data[$key]['end'] = $this->convertLongToDate($data[$key]['end'], 'Y-m-d');
             $data[$key]['borderColor'] = $data[$key]['backgroundColor'];
         }
         
@@ -181,10 +181,13 @@ class EventController extends Controller
         return $sd->getTimeStamp()."000";
     }
     
-    public function convertLongToDate($date){
+    public function convertLongToDate($date, $format){
         $date = new DateTime(date('d-m-Y H:i:s', $date/1000));
         //$date->setTimeZone(new DateTimeZone('Asia/Calcutta'));
-        return $date->format('Y-m-d');
+        if($format == null || $format == ''){
+            $format = 'Y-m-d';
+        }
+        return $date->format($format);
     }
     
     public function getAllEventsCount(){

@@ -253,35 +253,39 @@
                             <div class="tab-pane" id="activities">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <ul class="timeline">
+                                        <div class="timeline">
                                         <!-- timeline time label -->
-                                        <li class="time-label">
-                                            <span class="bg-red">
-                                                10 Feb. 2014
-                                            </span>
-                                        </li>
-                                        <!-- /.timeline-label -->
+                                        <div v-for="(activityObj, index) in activities">
+                                            <div v-for="(activity, index) in activityObj">
+                                            <li class="time-label">
+                                                <span class="bg-red">
+                                                    {{activity['act_date']}}
+                                                </span>
+                                            </li>
+                                            <!-- /.timeline-label -->
 
-                                        <!-- timeline item -->
-                                        <li>
-                                            <!-- timeline icon -->
-                                            <i class="fa fa-envelope bg-blue"></i>
-                                            <div class="timeline-item">
-                                                <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+                                            <!-- timeline item -->
+                                            <li>
+                                                <!-- timeline icon -->
+                                                <i class="fa fa-envelope bg-blue"></i>
+                                                <div class="timeline-item">
+                                                    <span class="time"><i class="fa fa-clock-o"></i> {{activity['act_date']}}</span>
 
-                                                <h3 class="timeline-header"><a href="#">Support Team</a> ...</h3>
+                                                    <h3 class="timeline-header"><a href="#">{{activity['act_title']}}</a></h3>
 
-                                                <div class="timeline-body">
-                                                    ... Content goes here
+                                                    <div v-if="activity['act_content']" class="timeline-body">
+                                                        ... Content goes here
+                                                    </div>
+
+                                                    <div class="timeline-footer hide">
+                                                        <a class="btn btn-primary btn-xs">...</a>
+                                                    </div>
                                                 </div>
-
-                                                <div class="timeline-footer">
-                                                    <a class="btn btn-primary btn-xs">...</a>
-                                                </div>
+                                            </li>
+                                            <!-- END timeline item -->
                                             </div>
-                                        </li>
-                                        <!-- END timeline item -->
-                                        </ul>
+                                        </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -323,6 +327,7 @@
                 petition: [],
                 hearing: [],
                 connected: [],
+                activities: [],
                 connected_case: [{con_no : '', sno : '', cid : ''}],
                 misc_pet: [{'cid': '', 'sno': '', 'mpno' : '', 'mpprayer' : '', 'mpdisposal' : '', 'mpreturn' : '', 'mprepresent' : ''}],
                 pop_data: [],
