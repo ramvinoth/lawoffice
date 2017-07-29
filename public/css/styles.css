@@ -480,6 +480,12 @@ body.mini-navbar .navbar-default .nav > li > a {
 .fs12px{
     font-size: 12px;
 }
+.fl{
+    float: left;
+}
+.fr{
+    float: right;
+}
 .signup-box{
     width: 100%;
     position: relative;

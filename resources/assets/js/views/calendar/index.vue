@@ -12,10 +12,10 @@
                             <div id="external-events">
                                 <div v-for="type in eventTypes" class="external-event" v-bind:id="'eventtype_'+type.id" v-bind:style="{ background: type.color, color: '#fff'}">
                                     <span>{{type.name}}</span>
-                                    <span class="fr pointer fs12px ml5" @click="removeEventType(type.id)">
+                                    <span class="pull-right pointer fs12px ml5" @click="removeEventType(type.id)">
                                         <i class="fa fa-trash"></i>
                                     </span>
-                                    <span class="fr pointer fs12px" @click="editEventType(type.id)">
+                                    <span class="pull-right pointer fs12px" @click="editEventType(type.id)">
                                         <i class="ion ion-edit"></i>
                                     </span>
                                 </div>
@@ -212,8 +212,8 @@ export default{
               if (val.length == 0) {
                 return;
               }
-                if(curColor == ''){
-                    curColor = '#00c0ef';
+                if(typeof currColor == undefined){
+                    currColor = '#00c0ef';
                 }
                 var params = 'name='+val+'&color='+currColor;
                 vm.saveData('/api/eventtype/',params).then((response) => {
