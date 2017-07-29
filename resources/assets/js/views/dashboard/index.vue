@@ -287,7 +287,7 @@
                                 </div>
                                 <div v-else class="text-center h300px">
                                     <div class="emptycont">
-                                        <i class="ion ion-ios-calendar-outline fs5em"></i>
+                                        <i class="ion-ios-speedometer fs5em"></i>
                                         <div>No Available Data</div>
                                     </div>
                                 </div>

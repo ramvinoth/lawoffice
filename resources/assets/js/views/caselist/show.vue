@@ -366,7 +366,7 @@
             return {
                 resource: 'caselist',
                 initialize: '/api/caseinfo/create',
-                redirect: '/',
+                redirect: '/caselist',
                 store: '/api/caselist',
                 method: 'post',
                 currentView: 'petitionForm',
@@ -407,6 +407,7 @@
                 axios.delete(`api/${this.resource}/${this.model.id}`)
                     .then(function(response) {
                         if (response.data.deleted) {
+                            vm.closeMainPopUp();
                             vm.$router.push(vm.redirect)
                         }
                     })
@@ -459,6 +460,11 @@
             closeSmallPopUp(){
                 this.$store.commit("set_spopshow", false);
                 //document.getElementsByTagName("body")[0].style.overflow = "";
+            },
+            
+            closeMainPopUp(){
+                this.$store.commit("set_ispopshow", false);
+                document.getElementsByTagName("body")[0].style.overflow = "";
             },
             addPetition(){
                 this.misc_pet = [{'cid': '', 'sno': '', 'mpno' : '', 'mpprayer' : '', 'mpdisposal' : '', 'mpreturn' : '', 'mprepresent' : ''}];

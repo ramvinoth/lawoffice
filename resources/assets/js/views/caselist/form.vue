@@ -14,7 +14,7 @@
                                 <div class="form-group">
                                     <label>Case Title</label>
                                     <span class="required_label">*</span>
-                                    <input type="text" placeholder="Case Title" class="form-control" v-model="form.case_title" required>
+                                    <input type="text" name="case_title" placeholder="Case Title" class="form-control" v-model="form.case_title" required>
                                     <small class="text-danger" v-if="errors.title">{{errors.title[0]}}</small>
                                 </div>
                             </div>
@@ -222,16 +222,16 @@
                             <div class="form-group form-inline-block form-box">
                                 <div class="row">
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" placeholder="Type" v-model="form.against[0].lno">
+                                        <input type="text" class="form-control" placeholder="Type" v-model="form.against.lno">
                                     </div>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" placeholder="Court" v-model="form.against[0].lcourt">
+                                        <input type="text" class="form-control" placeholder="Court" v-model="form.against.lcourt">
                                     </div>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" placeholder="Place" v-model="form.against[0].lplace">
+                                        <input type="text" class="form-control" placeholder="Place" v-model="form.against.lplace">
                                     </div>
                                     <div class="col-sm-2">
-                                        <datepicker v-model="against.lorder" :value="form.against.lorder" placeholder="Order Date"></datepicker>
+                                        <datepicker v-model="form.against.lorder" :value="form.against.lorder" placeholder="Order Date"></datepicker>
                                     </div>
                                 </div>
                                 <hr></hr>
@@ -240,13 +240,13 @@
                                         <input type="text" class="form-control" placeholder="Lower Court Number" v-model="form.against1.lno">
                                     </div>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" placeholder="Court" v-model="form.against1[0].lcourt">
+                                        <input type="text" class="form-control" placeholder="Court" v-model="form.against1.lcourt">
                                     </div>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" placeholder="Place" v-model="form.against1[0].lplace">
+                                        <input type="text" class="form-control" placeholder="Place" v-model="form.against1.lplace">
                                     </div>
                                     <div class="col-sm-2">
-                                        <datepicker v-model="against1.order" :value="form.against1.lorder" placeholder="Order Date"></datepicker>
+                                        <datepicker v-model="form.against1.order" :value="form.against1.lorder" placeholder="Order Date"></datepicker>
                                     </div>
                                 </div>
                             </div>
@@ -460,11 +460,11 @@
                 option: {},
                 title: 'Create Case',
                 initialize: '/api/caselist/create',
-                redirect: '/',
+                redirect: '/caselist',
                 store: '/api/caselist',
                 method: 'post',
-                against: [{ lno: '', lcourt: '', lplace: '', lorder: ''}],
-                against1: [{lno: '', lcourt: '', lplace: '', lorder: ''}],
+                against: { lno: '', lcourt: '', lplace: '', lorder: ''},
+                against1: {lno: '', lcourt: '', lplace: '', lorder: ''},
                 states: [],
                 districts: [],
                 courts: [],

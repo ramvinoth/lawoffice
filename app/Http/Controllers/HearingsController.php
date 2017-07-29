@@ -132,14 +132,12 @@ class HearingsController extends Controller
     public function getHearings(Request $request)
     {
         $id = $request->id;
-        $dataObj = Hearing::where([['case_id','=',$id]])->get();
+        $data = Hearing::where([['case_id','=',$id]])->get();
         $commonUtil = new CommonUtil();
-        $jsonObj = [];
-        foreach($dataObj as $data){
-            $data['date'] = $commonUtil->convertLongToDate($data['date'], 'd-m-Y');
-            $jsonObj = $data;
+        foreach($data as $key => $dataObj){
+            $data[$key]['date'] = $commonUtil->convertLongToDate($data[$key]['date'], 'd-m-Y');
         }
-        return response()->json([$jsonObj]);
+        return response()->json($data);
     }
     
     public function deleteHearings($id){

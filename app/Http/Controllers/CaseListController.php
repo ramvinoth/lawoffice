@@ -64,7 +64,8 @@ class CaseListController extends Controller
         $case_array['other'] = json_encode($case_array['other']);
         if($case_array['against'] !== ''){
             $case_array['against'] = json_encode($case_array['against']);   
-        }else if($case_array['against1'] !== ''){
+        }
+        if($case_array['against1'] !== ''){
             $case_array['against1'] = json_encode($case_array['against1']);   
         }
         unset($case_array['misc_sr']);
@@ -72,14 +73,14 @@ class CaseListController extends Controller
         unset($case_array['misc_pet']);
         
         $case_array['created_at'] = (new DateTime())->getTimestamp();
-        $case_array['updated_at'] = (new DateTime())->getTimestamp();
         
         $court_case = CaseList::create($case_array);
         foreach ($miscpet_arr as $key => $misc_pet){
             $miscpet_arr[$key]['cid'] = $court_case['id'];
             $miscpet_arr[$key]['sno'] = $court_case['sno'];
+            $miscpet_arr[$key]['org_id'] = $court_case['org_id'];
         }
-        $petition = Petition::insert($miscpet_arr);      
+        $petition = Petition::insert($miscpet_arr);    
         
         
         $act_id = $court_case['id'];
@@ -233,10 +234,12 @@ class CaseListController extends Controller
     {
         //
         
-        $caselist->leftjoin('petition','cases.id','=','petition.cid')->leftjoin('connected','cases.id','=','connected.cid')->delete();
+        Petition::where('cid','=',$caselist->id)->delete();
+        ConnectedCase::where('cid','=',$caselist->id)->delete();
         
+        $caselist->delete();
         
-        $act_id = $court_case['id'];
+        $act_id = $caselist->id;
         $act_type = 'Delete';
         $act_by = Auth::user()->id;
         $act_module = 'caselist';

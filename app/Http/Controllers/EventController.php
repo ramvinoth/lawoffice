@@ -25,7 +25,8 @@ class EventController extends Controller
         // First day of this month
         $edate = new DateTime('last day of this month');
         
-        $data = $this->getEventsArr($sdate, $edate);
+        $isMonthView = true;
+        $data = $this->getEventsArr($sdate, $edate, $isMonthView);
         
         return response()->json($data);
         
@@ -180,12 +181,23 @@ class EventController extends Controller
         }
         return $date->format($format);
     }
-    public function getEventsArr($sdate, $edate){
+    public function getEventsArr($sdate, $edate, $isMonthView){
         $sd = $sdate->getTimestamp()."000";
         $ed = $edate->getTimestamp()."000";
         
-        $data = Event::select('EVENTS.id','title','start','end','EVENTTYPES.name as type_name','EVENTTYPES.color as backgroundColor')->join('EVENTTYPES','EVENTTYPES.id','=','EVENTS.type_id')->where([['EVENTS.start','>=',$sd],['EVENTS.end','<',$ed]])->get();
-        //print_r ($data);
+        $query = Event::select('EVENTS.id','title','start','end','EVENTTYPES.name as type_name','EVENTTYPES.color as backgroundColor')->join('EVENTTYPES','EVENTTYPES.id','=','EVENTS.type_id');
+        
+        if($isMonthView){
+            $query->where('EVENTS.start','>=',$sd)->orWhere('EVENTS.end','<',$ed);
+        }else{
+            $query->where([
+                ['EVENTS.start','>=',$sd],
+                ['EVENTS.end','<',$ed]
+            ]);
+        }
+        
+        $data = $query->get();
+        
         foreach ($data as $key => $event){
             $data[$key]['start'] = $this->convertLongToDate($data[$key]['start'], 'Y-m-d');
             $data[$key]['end'] = $this->convertLongToDate($data[$key]['end'], 'Y-m-d');
@@ -204,8 +216,8 @@ class EventController extends Controller
         // First day of this month
         $edate = (new DateTime())->format('Y-m-d 23:59:59');
         $edate = DateTime::createFromFormat('Y-m-d H:i:s', $edate);
-        
-        $data = $this->getEventsArr($sdate, $edate);
+        $isMonthView = false;
+        $data = $this->getEventsArr($sdate, $edate, $isMonthView);
         return $data;
     }
 }
