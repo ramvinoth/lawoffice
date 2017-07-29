@@ -63,7 +63,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $avatar = 'public/defaults/avatars/male.jpg';
+        $avatar = 'public/avatars/male.jpg';
         $user =  User::create([
             'name' => $data['name'],
             'email' => $data['email'],
