@@ -10,12 +10,12 @@
                         <div class="box-body">
                             <!-- the events -->
                             <div id="external-events">
-                                <div v-for="type in eventTypes" class="external-event" v-bind:style="{ background: type.color, color: '#fff'}">
+                                <div v-for="type in eventTypes" class="external-event" v-bind:id="'eventtype_'+type.id" v-bind:style="{ background: type.color, color: '#fff'}">
                                     <span>{{type.name}}</span>
-                                    <span class="fr pointer fs12px ml5">
+                                    <span class="fr pointer fs12px ml5" @click="removeEventType(type.id)">
                                         <i class="fa fa-trash"></i>
                                     </span>
-                                    <span class="fr pointer fs12px">
+                                    <span class="fr pointer fs12px" @click="editEventType(type.id)">
                                         <i class="ion ion-edit"></i>
                                     </span>
                                 </div>
@@ -81,7 +81,7 @@
             </div>
             <!-- /.row -->
             <slide>
-                <create-event></create-event>
+                <component :is="currentView" :data="compdata"></component>
             </slide>
         </section>
         <!-- /.content -->
@@ -92,13 +92,14 @@
 import axios from "axios"
 import fullCalendar from "fullcalendar"
 import createEvent from "../event/form.vue"
+import createEventType from "../eventType/form.vue"
 import slide from "../../components/Slide.vue"
-//import mpopup from "../../components/PopUp.vue"
     
 export default{
     name: 'CalendarIndex',
     components:{
         'create-event': createEvent,
+        'eventtype_form': createEventType,
         //mpopup,
         slide
     },
@@ -107,6 +108,8 @@ export default{
             initialize: '/api/calendar/',
             eventTypes: [],
             events: [],
+            currentView: 'create-event',
+            compdata: {'mode' : '', 'id' : ''},
         }
     },
     watch:{
@@ -236,6 +239,18 @@ export default{
 
     },
     methods: {
+        remove(url) {
+                var vm = this;
+                axios.delete(url)
+                    .then(function(response) {
+                        if (response.data.deleted) {
+                            //vm.$router.push(vm.redirect)
+                        }
+                    })
+                    .catch(function(error) {
+                        console.log(error)
+                    })
+        },
         fetchData(url, data_var) {
             return new Promise((resolve, reject) => {
                 var vm = this
@@ -292,9 +307,24 @@ export default{
             });
 
           });
-        }
+        },
         /*END-----------------------------------------------------------------*/
-    }
+        editEventType(id){
+            this.compdata.mode = 'edit';
+            this.compdata.id = id;
+            this.currentView = 'eventtype_form';
+            this.showSlide();
+        },
+        
+        removeEventType(id){
+            this.remove('/api/eventtype/'+id);
+            this.removeElement('eventtype_'+id);
+        },
+        removeElement(id){
+            var elem = document.getElementById(id);
+            elem.parentElement.removeChild(elem);
+        }
+    },
 }
 
 </script>

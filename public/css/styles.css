@@ -320,6 +320,9 @@ body.mini-navbar .navbar-default .nav > li > a {
 .mt50{
     margin-top: 50px;
 }
+.mt50per{
+    margin-top: 50%;
+}
 .mb5{
     margin-bottom: 5px;
 }
@@ -471,6 +474,9 @@ body.mini-navbar .navbar-default .nav > li > a {
 .h300px{
     height: 300px;
 }
+.h100vh{
+    height: 100vh;
+}
 .fs12px{
     font-size: 12px;
 }
@@ -618,6 +624,9 @@ body.mini-navbar .navbar-default .nav > li > a {
 }
 .fs23rem{
     font-size:2.3rem;
+}
+.fs5em{
+   font-size: 5em; 
 }
 .footer-bottom {
     position: fixed;
@@ -835,4 +844,10 @@ span.required_label {
 .r-inline+.r-inline, .c-inline+.c-inline {
     margin-top: 10px;
     margin-left: 10px;
+}
 /* RV Form Styles END */
+ 
+.emptycont{
+    position: relative;
+    top: 25%;
+}   

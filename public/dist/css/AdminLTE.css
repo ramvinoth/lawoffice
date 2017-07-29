@@ -2112,6 +2112,12 @@ a:focus {
   margin-right: 10px;
   margin-bottom: 15px;
 }
+
+.timeline > div li {
+  position: relative;
+  margin-right: 10px;
+  margin-bottom: 15px;
+}
 .timeline > div > div > li:before,
 .timeline > div > div > li:after {
   content: " ";
@@ -2168,7 +2174,7 @@ a:focus {
   left: 18px;
   top: 0;
 }
-.timeline > div > div > .time-label > span {
+.timeline > div > .time-label > span {
   font-weight: 600;
   padding: 5px;
   display: inline-block;

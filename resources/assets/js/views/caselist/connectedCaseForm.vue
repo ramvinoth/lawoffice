@@ -1,6 +1,6 @@
 <template>
 <div>
-        <label>Connected Case</label>
+        <label>{{title}} Connected Case</label>
         <div class="form-group form-inline-block form-box">
             <div class="row">
                 <div class="col-sm-12">
@@ -29,20 +29,29 @@
     export default {
         name: 'ConnectCaseForm',
         components: [],
-        props: ['data','length'],
+        props: ['data', 'length', 'mode', 'parent'],
         data() {
             return{
                 method: 'post',
+                store : '/api/caseinfo/connected/create',
+                title: 'Add',
             }
         },
         methods: {
             saveConnectedCase(){
-                var vm = this
-                axios[this.method]('/api/caseinfo/connected/create', this.data[0])
+                var vm = this;
+                if(this.mode == 'edit'){
+                    this.title = 'Edit'
+                    this.store = '/api/caseinfo/connected/update';
+                    this.method = 'put';
+                }
+                axios[this.method](this.store, this.data[0])
                     .then(function(response) {
-                        console.log(response.data.saved);
-                        if(response.data.saved) {
+                        if(response.data.updated) {
                             vm.data.push(response.data.petition);
+                            vm.closeSmallPopUp();
+                        }else if(response.data.saved){
+                            vm.parent.push(response.data.petition);
                             vm.closeSmallPopUp();
                         }
                     })

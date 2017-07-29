@@ -1,6 +1,6 @@
 <template>
     <div>
-        <label>Petition {{length+1}}</label>
+        <label>{{title}} Petition</label>
         <div class="form-group form-inline-block form-box">
             <div class="row">
                 <div class="col-sm-8">
@@ -46,26 +46,32 @@
         components:{
             Datepicker,
         },
-        props: ['data','length'],
+        props: ['data', 'length', 'mode', 'parent'],
         data() {
             return{
-                resource: 'caselist',
-                initialize: '/api/caseinfo/create',
+                resource: 'Petition',
+                title: 'Add',
+                initialize: '/api/caseinfo/petition/create',
                 redirect: '/',
-                store: '/api/caselist',
+                store: '/api/caseinfo/petition/create',
                 method: 'post',
             }
         },
         methods: {
             savePetiton(){
-                var vm = this
-                axios[this.method]('/api/caseinfo/petition/create', this.data[0])
+                var vm = this;
+                if(this.mode == 'edit'){
+                    this.title = 'Edit'
+                    this.store = '/api/caseinfo/petition/update';
+                    this.method = 'put';
+                }
+                axios[this.method](this.store, this.data[0])
                     .then(function(response) {
-                        console.log(response.data.saved);
-                        if(response.data.saved) {
-                            //vm.$router.push(vm.redirect)
-                            console.log(response.data.petition);
+                        if(response.data.updated) {
                             vm.data.push(response.data.petition);
+                            vm.closeSmallPopUp();
+                        }else if(response.data.saved){
+                            vm.parent.push(response.data.petition);
                             vm.closeSmallPopUp();
                         }
                     })

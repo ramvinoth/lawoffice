@@ -25,16 +25,7 @@ class EventController extends Controller
         // First day of this month
         $edate = new DateTime('last day of this month');
         
-        $sd = $sdate->getTimestamp()."000";
-        $ed = $edate->getTimestamp()."000";
-        
-        $data = Event::select('title','start','end','EVENTTYPES.name as type_name','EVENTTYPES.color as backgroundColor')->join('EVENTTYPES','EVENTTYPES.id','=','EVENTS.type_id')->where([['EVENTS.start','>',$sd],['EVENTS.end','<',$ed]])->get();
-        //print_r ($data);
-        foreach ($data as $key => $event){
-            $data[$key]['start'] = $this->convertLongToDate($data[$key]['start'], 'Y-m-d');
-            $data[$key]['end'] = $this->convertLongToDate($data[$key]['end'], 'Y-m-d');
-            $data[$key]['borderColor'] = $data[$key]['backgroundColor'];
-        }
+        $data = $this->getEventsArr($sdate, $edate);
         
         return response()->json($data);
         
@@ -189,9 +180,32 @@ class EventController extends Controller
         }
         return $date->format($format);
     }
+    public function getEventsArr($sdate, $edate){
+        $sd = $sdate->getTimestamp()."000";
+        $ed = $edate->getTimestamp()."000";
+        
+        $data = Event::select('EVENTS.id','title','start','end','EVENTTYPES.name as type_name','EVENTTYPES.color as backgroundColor')->join('EVENTTYPES','EVENTTYPES.id','=','EVENTS.type_id')->where([['EVENTS.start','>=',$sd],['EVENTS.end','<',$ed]])->get();
+        //print_r ($data);
+        foreach ($data as $key => $event){
+            $data[$key]['start'] = $this->convertLongToDate($data[$key]['start'], 'Y-m-d');
+            $data[$key]['end'] = $this->convertLongToDate($data[$key]['end'], 'Y-m-d');
+            $data[$key]['borderColor'] = $data[$key]['backgroundColor'];
+        }
+        return $data;
+    }
     
     public function getAllEventsCount(){
         $data = Event::count();
+        return $data;
+    }
+    public function getTodaysEvents(){
+        $sdate = (new DateTime())->format('Y-m-d 00:00:00');
+        $sdate = DateTime::createFromFormat('Y-m-d H:i:s', $sdate);
+        // First day of this month
+        $edate = (new DateTime())->format('Y-m-d 23:59:59');
+        $edate = DateTime::createFromFormat('Y-m-d H:i:s', $edate);
+        
+        $data = $this->getEventsArr($sdate, $edate);
         return $data;
     }
 }

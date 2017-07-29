@@ -71,8 +71,8 @@ class CaseListController extends Controller
         unset($case_array['connected']);
         unset($case_array['misc_pet']);
         
-        $case_array['created_at'] = new DateTime();
-        $case_array['updated_at'] = new DateTime();
+        $case_array['created_at'] = (new DateTime())->getTimestamp();
+        $case_array['updated_at'] = (new DateTime())->getTimestamp();
         
         $court_case = CaseList::create($case_array);
         foreach ($miscpet_arr as $key => $misc_pet){
@@ -264,9 +264,37 @@ class CaseListController extends Controller
         return response()->json($petition);
     }
     
+    public function updateCasePetition(Request $request){
+        $petition_array = $request->all();
+        $status = Petition::whereId($request->id)->update($petition_array);
+        
+        if($status){
+            $act_id = $petition_array['id'];
+            $act_type = 'Update';
+            $act_by = Auth::user()->id;
+            $act_module = 'petition';
+            $auditController = new AuditController();
+            $auditController->addToAudit($act_id, $act_type, $act_by, $act_module);
+        }
+        return response()
+            ->json([
+                'updated' => $status
+            ]);
+    }
+    
     public function saveCasePetition(Request $request){
         $petition_array = $request->all();
-        $petition = Petition::insert($petition_array);
+        $petition_array['created_at'] = (new DateTime())->getTimestamp();
+        
+        $petition = Petition::create($petition_array);
+        
+        $act_id = $petition_array['cid'];
+        $act_type = 'Add';
+        $act_by = Auth::user()->id;
+        $act_module = 'petition';
+        $auditController = new AuditController();
+        $auditController->addToAudit($act_id, $act_type, $act_by, $act_module);
+        
         return response()
             ->json([
                 'saved' => $petition,
@@ -275,15 +303,31 @@ class CaseListController extends Controller
     }
     public function saveConnectedCase(Request $request){
         $con_case_array = $request->all();
-        $status = ConnectedCase::insert($con_case_array);
+        $con_case = ConnectedCase::create($con_case_array);
+        
+        $act_id = $con_case['id'];
+        $act_type = 'Add';
+        $act_by = Auth::user()->id;
+        $act_module = 'connected case';
+        $auditController = new AuditController();
+        $auditController->addToAudit($act_id, $act_type, $act_by, $act_module);
+        
         return response()
             ->json([
-                'saved' => $status,
+                'saved' => true,
                 'petition' => $con_case_array,
             ]);
     }
     public function deleteCasePetition($id){
         $status = Petition::where('id','=',$id)->delete();
+        if($status){
+            $act_id = $id;
+            $act_type = 'Delete';
+            $act_by = Auth::user()->id;
+            $act_module = 'connected case';
+            $auditController = new AuditController();
+            $auditController->addToAudit($act_id, $act_type, $act_by, $act_module);
+        }
         return response()
             ->json([
                 'deleted' => $status,
@@ -291,6 +335,14 @@ class CaseListController extends Controller
     }
     public function deleteConnectedCase($id){
         $status = ConnectedCase::where('id','=',$id)->delete();
+        
+        $act_id = $id;
+        $act_type = 'Delete';
+        $act_by = Auth::user()->id;
+        $act_module = 'connected case';
+        $auditController = new AuditController();
+        $auditController->addToAudit($act_id, $act_type, $act_by, $act_module);
+        
         return response()
             ->json([
                 'deleted' => $status,
@@ -301,6 +353,25 @@ class CaseListController extends Controller
         $case_id = $request->id;
         $connected = ConnectedCase::where('cid','=',$case_id)->get();
         return response()->json($connected);
+    }
+    
+    public function updateConnectedCase(Request $request){
+        $connected_array = $request->all();
+        $status = ConnectedCase::whereId($request->id)->update($connected_array);
+        
+        if($status){
+            $act_id = $connected_array['id'];
+            $act_type = 'Update';
+            $act_by = Auth::user()->id;
+            $act_module = 'connected case';
+            $auditController = new AuditController();
+            $auditController->addToAudit($act_id, $act_type, $act_by, $act_module);
+        }
+        
+        return response()
+            ->json([
+                'updated' => $status
+            ]);
     }
     
     /*

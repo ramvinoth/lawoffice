@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Audit;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Util\CommonUtil;
 use DateTime;
 use Auth;
 
@@ -69,23 +70,24 @@ class AuditController extends Controller
     }
     
     public function getActivityJSONObject($activities){
-        $eventController = new EventController();
+        $commonUtil = new CommonUtil();
         $act_obj = [];
         foreach($activities as $activity){
-            $activity_arr = array();
-            $act_time = (new DateTime())->getTimeStamp().'000';
-            $activity['act_date'] = $eventController->convertLongToDate($act_time,'d-m-Y');
+            $act_time = $activity['act_time'];
+            $act_date = $activity['act_date'] = $commonUtil->convertLongToDate($act_time,'d-m-Y');
+            
             $user = User::find($activity['act_by']);
             if($activity['act_type'] == 'Add'){
-                $activity['act_string'] = $user->name.' added the '.$activity['act_module'];
+                $activity['act_title'] = $user->name.' added the '.$activity['act_module'];
             }else if($activity['act_type'] == 'Update'){
                 $activity['act_title'] = $user->name.' has updated the '.$activity['act_module'];
             }
-            $activity_arr[] = $activity;
-            if (isset($act_obj[$activity['act_date']])){
-                continue;
+            $activity_arr = array();
+            array_push($activity_arr, $activity);
+            if (isset($act_obj[$act_date])){
+                array_push($act_obj[$act_date], $activity);
             }else{
-                $act_obj = [$activity['act_date'] => $activity_arr];
+                $act_obj[$act_date] = $activity_arr;
             }
         }
         return $act_obj;

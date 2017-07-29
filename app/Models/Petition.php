@@ -19,6 +19,8 @@ class Petition extends BaseModel
     use FilterPaginateOrder;
     
     protected $table = 'petition';
+    
+    protected $fillable = ['org_id', 'cid', 'sno', 'mpno', 'mpdisposal', 'mpprayer', 'mpreturn', 'mprepresent', 'created_at', 'updated_at'];
  
     public function caselist()
     {

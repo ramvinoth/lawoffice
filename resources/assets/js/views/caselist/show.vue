@@ -32,7 +32,7 @@
                         <ul class="nav nav-tabs">
                           <li class="active"><a href="#info" data-toggle="tab">Info</a></li>
                           <li><a href="#petition" data-toggle="tab">Petitions</a></li>
-                          <li><a href="#hearing" data-toggle="tab">Hearings</a></li>
+                          <li><a href="#hearings" data-toggle="tab">Hearings</a></li>
                           <li><a href="#connected" data-toggle="tab">Connected Case</a></li>
                           <li><a href="#result" data-toggle="tab">Result</a></li>
                           <li><a href="#activities" data-toggle="tab">Activities</a></li>
@@ -119,10 +119,10 @@
                             </div>
                             <!-- /.tab-pane -->
                             <div class="tab-pane" id="petition">
-                                <div class="" v-for="(obj, index) in petition" key="obj.id">
+                                <div class="" v-for="(obj, index) in petition" key="obj.id" :id="'petition_'+obj.id">
                                     <div class="petition_div caseinfo">
                                         <hr v-if="index !== 0"></hr>
-                                        <div id="petition_">
+                                        <div>
                                             <div class="pet_title">
                                                 <div class="pet_number"><h4>Petition {{index+1}}</h4> </div>
                                                 <div class="pet_options">
@@ -169,12 +169,55 @@
                                 </div>
                             </div>
                             <!-- /.tab-pane -->
-                            <div class="tab-pane" id="hearing">
+                            <div class="tab-pane" id="hearings">
+                                <div class="" v-for="(obj, index) in hearings" key="obj.id" :id="'hearing_'+obj.id">
+                                    <div class="hearings_div caseinfo">
+                                        <hr v-if="index !== 0"></hr>
+                                        <div id="hearing_">
+                                            <div class="pet_title">
+                                                <div class="pet_number"><h4>Hearing {{index+1}}</h4> </div>
+                                                <div class="pet_options">
+                                                    <div class="btn btn-primary btn-sm pet_edit_btn" @click='editHearing(obj)'><i class="fa fa-pencil"></i></div>
+                                                    <div class="btn btn-danger btn-sm pet_delete_btn" @click="removeHearing(obj.id)"><i class="fa fa-trash"></i></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div>
+                                                    <label>Title</label>
+                                                    <span :title="obj.mpno">{{obj.title}}</span>
+                                                </div>
+                                                <div>
+                                                    <label>Date</label>
+                                                    <span :title="obj.date">{{obj.date}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div>
+                                                    <label>Description</label>
+                                                    <span :title="obj.description">{{obj.description}}</span>
+                                                </div>
+                                                <div>
+                                                    <label>Created date</label>
+                                                    <span :title="obj.created_at">{{obj.created_at}}</span>
+                                                </div>
+                                            </div>
 
+                                            <div class="col-sm-4">
+                                                <div>
+                                                    <label>Judges</label>
+                                                    <span :title="obj.judges">{{obj.judges}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button class="btn btn-primary" @click='addHearing'>Add Petition</button>
+                                </div>
                             </div>
                             <!-- /.tab-pane -->
                             <div class="tab-pane" id="connected">
-                                <div class="" v-for="(obj, index) in connected" key="obj.id">
+                                <div class="" v-for="(obj, index) in connected" key="obj.id" :id="'con_case_'+obj.id">
                                     <div class="con_case_div caseinfo">
                                         <hr v-if="index !== 0"></hr>
                                         <div id="con_case">
@@ -255,15 +298,16 @@
                                     <div class="col-md-12">
                                         <div class="timeline">
                                         <!-- timeline time label -->
-                                        <div v-for="(activityObj, index) in activities">
-                                            <div v-for="(activity, index) in activityObj">
+                                        <div v-for="(value, key, index) in activities">
+                                            
                                             <li class="time-label">
                                                 <span class="bg-red">
-                                                    {{activity['act_date']}}
+                                                    {{key}}
                                                 </span>
                                             </li>
                                             <!-- /.timeline-label -->
 
+                                            <div v-for="(activity, index) in value">
                                             <!-- timeline item -->
                                             <li>
                                                 <!-- timeline icon -->
@@ -299,7 +343,7 @@
             </div>
         </div>
         <spopup>
-            <component :is='currentView' :data='pop_data' :length='0'></component>
+            <component :is='currentView' :data='pop_data' :mode='pop_mode' :parent='parent_data' :length='0'></component>
         </spopup>
     </div>
 </template>
@@ -307,6 +351,7 @@
     import spopup from '../../components/SmallPopUp.vue'
     import petitionForm from '../caselist/petitionForm.vue'
     import connectedCaseForm from '../caselist/connectedCaseForm.vue'
+    import hearingForm from '../caselist/Hearing/form.vue'
     import axios from 'axios'
     export default {
         name: 'CategoryShow',
@@ -314,6 +359,7 @@
         components: {
             petitionForm,
             connectedCaseForm,
+            hearingForm,
             spopup
         },
         data() {
@@ -325,12 +371,15 @@
                 method: 'post',
                 currentView: 'petitionForm',
                 petition: [],
-                hearing: [],
+                hearings: [],
                 connected: [],
                 activities: [],
                 connected_case: [{con_no : '', sno : '', cid : ''}],
                 misc_pet: [{'cid': '', 'sno': '', 'mpno' : '', 'mpprayer' : '', 'mpdisposal' : '', 'mpreturn' : '', 'mprepresent' : ''}],
+                case_hearing : [{'case_id': '', 'case_title': '', 'title': '', 'date' : '', 'description' : '', 'judges' : ''}],
                 pop_data: [],
+                pop_mode: '',
+                parent_data: [],
             }
         },
         beforeMount() {
@@ -370,9 +419,9 @@
                 var vm = this;
                 axios.delete(`api/caseinfo/petition/${id}`)
                     .then(function(response) {
-                        if (response.deleted) {
-                            //vm.$router.push(vm.redirect)
-                            //this.closeSmallPopUp();
+                        if (response.data.deleted) {
+                            var child_div = document.getElementById("petition_"+id);
+                            child_div.parentNode.removeChild(child_div);
                         }
                     })
                     .catch(function(error) {
@@ -384,9 +433,9 @@
                 var vm = this;
                 axios.delete(`api/caseinfo/connected/${id}`)
                     .then(function(response) {
-                        if (response.deleted) {
-                            //vm.$router.push(vm.redirect)
-                            //this.closeSmallPopUp();
+                        if (response.data.deleted) {
+                            var child_div = document.getElementById("con_case_"+id);
+                            child_div.parentNode.removeChild(child_div);
                         }
                     })
                     .catch(function(error) {
@@ -416,6 +465,8 @@
                 this.misc_pet[0].cid = this.model.id;
                 this.misc_pet[0].sno = this.model.sno;
                 this.pop_data = this.misc_pet;
+                this.pop_mode = 'add';
+                this.parent_data = this.petition;
                 this.currentView = 'petitionForm';
                 this.showSmallPopUp();
             },
@@ -423,6 +474,8 @@
             addConnectedCase(){
                 this.connected_case = [{'con_no' : '', 'sno' : this.model.sno, 'cid' : this.model.id}];
                 this.pop_data = this.connected_case;
+                this.pop_mode = 'add';
+                this.parent_data = this.connected;
                 this.currentView = 'connectedCaseForm';
                 this.showSmallPopUp();
                 
@@ -431,6 +484,7 @@
             editPetition(obj){
                 this.misc_pet[0] = obj;
                 this.pop_data = this.misc_pet;
+                this.pop_mode = 'edit';
                 this.currentView = 'petitionForm';
                 this.showSmallPopUp();
             },
@@ -438,9 +492,40 @@
             editConCase(obj){
                 this.connected_case[0] = obj;
                 this.pop_data = this.connected_case;
+                this.pop_mode = 'edit';
                 this.currentView = 'connectedCaseForm';
                 this.showSmallPopUp();
             },
+            addHearing(){
+                this.case_hearing = [{'case_id': '', 'case_title': '' , 'title': '', 'date' : '', 'description' : '', 'judges' : ''}];
+                this.case_hearing[0].case_id = this.model.id;
+                //this.case_hearing[0].case_title = this.model.case_title;
+                this.pop_data = this.case_hearing;
+                this.pop_mode = 'add';
+                this.parent_data = this.hearings;
+                this.currentView = 'hearingForm';
+                this.showSmallPopUp();
+            },
+            editHearing(obj){
+                this.case_hearing[0] = obj;
+                this.pop_data = this.case_hearing;
+                this.pop_mode = 'edit';
+                this.currentView = 'hearingForm';
+                this.showSmallPopUp();
+            },
+            removeHearing(id){
+                var vm = this;
+                axios.delete(`api/caseinfo/hearings/${id}`)
+                    .then(function(response) {
+                        if (response.data.deleted) {
+                            var child_div = document.getElementById("hearing_"+id);
+                            child_div.parentNode.removeChild(child_div);
+                        }
+                    })
+                    .catch(function(error) {
+                        console.log(error)
+                    })
+            }
         }
     }
 
@@ -469,7 +554,7 @@
         content: ":";
         float: right;
     }
-    .petition_div, .con_case_div{
+    .petition_div, .con_case_div, .hearings_div{
         display: inline-block;
         width: 100%;
         margin-bottom: 20px;

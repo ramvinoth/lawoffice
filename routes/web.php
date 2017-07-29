@@ -15,6 +15,7 @@ Route::group(['prefix' => 'api/', 'middleware' => 'auth'], function(){
     Route::resource('calendar', 'CalendarController');
     Route::resource('event', 'EventController');
     Route::resource('eventtype', 'EventTypeController');
+    Route::resource('hearing', 'HearingsController');
     
     Route::get('/dashboard', [
         'uses' => 'DashboardController@index',
@@ -36,6 +37,11 @@ Route::group(['prefix' => 'api/', 'middleware' => 'auth'], function(){
         'as' => 'savepetition'
     ]);
     
+    Route::put('/caseinfo/petition/update', [
+        'uses' => 'CaseListController@updateCasePetition',
+        'as' => 'updatepetition'
+    ]);
+    
     Route::delete('/caseinfo/petition/{id}', [
         'uses' => 'CaseListController@deleteCasePetition',
         'as' => 'delete_petition'
@@ -50,6 +56,12 @@ Route::group(['prefix' => 'api/', 'middleware' => 'auth'], function(){
         'uses' => 'CaseListController@saveConnectedCase',
         'as' => 'save_connected_case'
     ]);
+    
+    Route::put('/caseinfo/connected/update', [
+        'uses' => 'CaseListController@updateConnectedCase',
+        'as' => 'update_connected_case'
+    ]);
+    
     Route::delete('/caseinfo/connected/{id}', [
         'uses' => 'CaseListController@deleteConnectedCase',
         'as' => 'delete_petition'
@@ -60,6 +72,15 @@ Route::group(['prefix' => 'api/', 'middleware' => 'auth'], function(){
         'as' => 'activities'
     ]);
     
+    Route::get('/caseinfo/hearings/show', [
+        'uses' => 'HearingsController@getHearings',
+        'as' => 'getHearings'
+    ]);
+    
+    Route::delete('/caseinfo/hearings/{id}', [
+        'uses' => 'HearingsController@deleteHearings',
+        'as' => 'deleteHearings'
+    ]);
 });
 
 Route::group(['middleware' => 'auth'], function(){

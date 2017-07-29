@@ -19,7 +19,7 @@ class EventTypeController extends Controller
     public function index()
     {
         //
-        $data = EventType::select('name','color')->get();
+        $data = EventType::select('id','name','color')->get();
         return response()->json($data); 
     }
 
@@ -113,9 +113,14 @@ class EventTypeController extends Controller
      * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Event $event)
+    public function destroy(EventType $eventtype)
     {
         //
+        $status = $eventtype->delete();
+        return response()
+            ->json([
+                'deleted' => $status,
+            ]);
     }
     
     public function getEventTypes(Request $request){

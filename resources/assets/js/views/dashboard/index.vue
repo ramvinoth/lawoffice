@@ -143,12 +143,8 @@
                 <section class="col-lg-7 connectedSortable">
                     <!-- Custom tabs (Charts with tabs)-->
                     
-                    <!-- Main row -->
-                    <div class="row">
-                        <!-- Left col -->
-                        <div class="col-md-12">
                             <div class="box box-info">
-                                <div class="box-header with-border">
+                                <div class="box-header">
                                     <h3 class="box-title">Latest Cases</h3>
 
                                     <div class="box-tools pull-right">
@@ -158,7 +154,7 @@
                                 </div>
                                 <!-- /.box-header -->
                                 <div class="box-body">
-                                    <div class="table-responsive h300px">
+                                    <div v-if="latest_cases.length > 0" class="table-responsive h300px">
                                         <table class="table no-margin">
                                             <thead>
                                                 <tr>
@@ -180,6 +176,13 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                    <div v-else class="text-center h300px">
+                                        <div class="emptycont">
+                                            <i class="ion ion-android-clipboard fs5em"></i>
+                                            <div class="mt5 mb5">There are no new case. Go ahead and add some</div>
+                                            <button class="btn btn-success"><a href="#/caselist/create" class="" style="color:#fff">Create Case</a></button>
+                                        </div>
+                                    </div>
                                     <!-- /.table-responsive -->
                                 </div>
                                 <!-- /.box-body -->
@@ -190,8 +193,53 @@
                                 <!-- /.box-footer -->
                             </div>
                             <!-- /.box -->
-                        </div>
-                    </div>
+                            <div class="box box-info">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Today's Events</h3>
+
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-toggle="tooltip" data-original-title="Collapse" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <div v-if="todays_events.length > 0" class="table-responsive h300px">
+                                        <table class="table no-margin">
+                                            <thead>
+                                                <tr>
+                                                    <th>Event title</th>
+                                                    <th>Start</th>
+                                                    <th>End</th>
+                                                    <th>Type</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(event, index) in todays_events">
+                                                    <td>{{event.title}}</td>
+                                                    <td>{{event.start}}</td>
+                                                    <td>{{event.end}}</td>
+                                                    <td>{{event.type_name}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div v-else class="text-center h300px">
+                                        <div class="emptycont">
+                                            <i class="ion ion-ios-calendar-outline fs5em"></i>
+                                            <div>There are no Events for today</div>
+                                        </div>
+                                    </div>
+                                    <!-- /.table-responsive -->
+                                </div>
+                                <!-- /.box-body -->
+                                <div class="box-footer clearfix">
+                                    <a href="#/caselist/create" class="btn btn-sm btn-info btn-flat pull-left">Add New Event</a>
+                                    <a href="#/calendar/" class="btn btn-sm btn-default btn-flat pull-right">View All Events</a>
+                                </div>
+                                <!-- /.box-footer -->
+                            </div>
+                            <!-- /.box -->
                 </section>
                 <section class="col-lg-5 connectedSortable">
                     <!-- Calendar -->
@@ -223,6 +271,32 @@
                             </div>
                             <!-- /.box-body -->
                         </div>
+                        <div class="box box-info">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Case Status</h3>
+
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-toggle="tooltip" data-original-title="Collapse" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                </div>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div v-if="count_data['all_cases'] > 0" id="chartdiv" class="">
+                                    
+                                </div>
+                                <div v-else class="text-center h300px">
+                                    <div class="emptycont">
+                                        <i class="ion ion-ios-calendar-outline fs5em"></i>
+                                        <div>No Available Data</div>
+                                    </div>
+                                </div>
+                                <!-- /.table-responsive -->
+                            </div>
+                            <!-- /.box-body -->
+                            <!-- /.box-footer -->
+                        </div>
+                            <!-- /.box -->
                 </section>
                 </div>
         </section>
@@ -243,6 +317,8 @@
                 latest_cases: [],
                 case_data: [],
                 count_data: [],
+                todays_events: [],
+                chartData:{},
             }
         },
         components:{
@@ -250,6 +326,7 @@
             viewcase
         },
         mounted(){
+            var vm =this;
             $(function(){
                 $(".connectedSortable").sortable({
                     placeholder: "sort-highlight",
@@ -263,18 +340,54 @@
                 }); 
             });
             this.fetchData('api/dashboard','action=getlatestcases','latest_cases');
-            this.fetchData('api/dashboard','action=getcount','count_data');
+            
+            this.fetchData('api/dashboard','action=gettodaysevents','todays_events');
+            let myFirstPromise = this.fetchData('api/dashboard','action=getcount','count_data');
+            myFirstPromise.then(function(successMsg){
+            vm.chartData = {
+                    "type": "pie",
+                    "theme": "light",
+                    "dataProvider": [
+                        {
+                            "title": "Pending Case",
+                            "value": vm.count_data['all_pending']
+                        },
+                        {
+                            "title": "Closed",
+                            "value": (vm.count_data['all_cases'] - vm.count_data['all_pending'])
+                        },
+                    ],
+                    "valueField": "value",
+                    "titleField": "title",
+                    "outlineAlpha": 0.4,
+                    "depth3D": 15,
+                    "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+                    "angle": 30,
+                    "export": {
+                        "enabled": true
+                    }
+                }
+                var chart = AmCharts.makeChart( "chartdiv", vm.chartData);
+            });
+            /*
+            $(document).ready(function() { 
+                var chart = AmCharts.makeChart( "chartdiv", vm.chartData);
+            });
+            */
         },
         methods:{
             fetchData(url, params, data_var) {
                 var vm = this
-                axios.get(url + "?" + params)
-                    .then(function(response) {
-                        Vue.set(vm.$data, data_var, response.data)
-                    })
-                    .catch(function(error) {
-                        console.log(error)
-                    })
+                return new Promise( /* executor */ function(resolve, reject) {
+                    axios.get(url + "?" + params)
+                        .then(function(response) {
+                            Vue.set(vm.$data, data_var, response.data);
+                            resolve('success');
+                        })
+                        .catch(function(error) {
+                            console.log(error)
+                        })
+                });
             },
             loadCase(caseId){
                 //this.$router.push('/caselist/' + caseId);
@@ -288,8 +401,12 @@
     }
 </script>
 <style src="../../../../../public/plugins/datepicker/datepicker3.css"></style>
+
 <style>
     .ui-sortable-handle{
         cursor: move;
+    }
+    #chartdiv {
+        height: 300px;
     }
 </style>
