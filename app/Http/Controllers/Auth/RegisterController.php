@@ -63,18 +63,12 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        if($data['gender'])
-        {
-            $avatar = 'public/defaults/avatars/male.jpg';
-        }
-        else
-        {
-            $avatar = 'public/defaults/avatars/female.png';
-        }
+        $avatar = 'public/defaults/avatars/male.jpg';
         $user =  User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'gender' => $data['gender'],
+            'org_id' => '1',
+            'gender' => '1',
             'password' => bcrypt($data['password']),
             'slug' => str_slug($data['name']),
             'avatar' => $avatar

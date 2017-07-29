@@ -54,20 +54,11 @@
             </span>
           </a>
         </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-pie-chart"></i>
-            <span>Reports</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+          
+        <li>
+          <a href="#/users">
+            <i class="fa fa-users"></i> <span>Users</span>
           </a>
-          <ul class="treeview-menu">
-            <li><a href="#/"><i class="fa fa-circle-o"></i> ChartJS</a></li>
-            <li><a href="#/"><i class="fa fa-circle-o"></i> Morris</a></li>
-            <li><a href="#/"><i class="fa fa-circle-o"></i> Flot</a></li>
-            <li><a href="#/"><i class="fa fa-circle-o"></i> Inline charts</a></li>
-          </ul>
         </li>
           
         <!--li class="treeview">
