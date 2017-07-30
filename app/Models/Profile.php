@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Profile extends BaseModel
+class Profile extends Model
 {
     protected $fillable = ['location','about','user_id'];
 

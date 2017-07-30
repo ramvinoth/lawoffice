@@ -318,6 +318,7 @@
                 case_data: [],
                 count_data: [],
                 todays_events: [],
+                case_status_count: [],
                 chartData:{},
             }
         },
@@ -340,34 +341,42 @@
                 }); 
             });
             this.fetchData('api/dashboard','action=getlatestcases','latest_cases');
-            
             this.fetchData('api/dashboard','action=gettodaysevents','todays_events');
-            let myFirstPromise = this.fetchData('api/dashboard','action=getcount','count_data');
+            this.fetchData('api/dashboard','action=getcount','count_data');
+            
+            let myFirstPromise = this.fetchData('api/dashboard','action=getcasestatus','case_status_count');
             myFirstPromise.then(function(successMsg){
-            vm.chartData = {
-                    "type": "pie",
-                    "theme": "light",
-                    "dataProvider": [
-                        {
-                            "title": "Pending Case",
-                            "value": vm.count_data['all_pending']
+                
+                vm.chartData = {
+                        "type": "pie",
+                        "theme": "light",
+                        "dataProvider": [
+                        ],
+                        "valueField": "value",
+                        "titleField": "title",
+                        "outlineAlpha": 0.4,
+                        "depth3D": 15,
+                        "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+                        "angle": 30,
+                        "export": {
+                            "enabled": true
                         },
-                        {
-                            "title": "Closed",
-                            "value": (vm.count_data['all_cases'] - vm.count_data['all_pending'])
-                        },
-                    ],
-                    "valueField": "value",
-                    "titleField": "title",
-                    "outlineAlpha": 0.4,
-                    "depth3D": 15,
-                    "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
-                    "angle": 30,
-                    "export": {
-                        "enabled": true
+                        "labelsEnabled": false,
+                      "autoMargins": false,
+                      "marginTop": 15,
+                      "marginBottom": 15,
+                      "marginLeft": 15,
+                      "marginRight": 15,
+                      "pullOutRadius": 15,
                     }
-                }
-                var chart = AmCharts.makeChart( "chartdiv", vm.chartData);
+                    for(var i=vm.case_status_count.length-1; i >= 0; i--){
+                        var status = vm.case_status_count[i].status;
+                        var count = vm.case_status_count[i].count; 
+                        var Obj = {'title' : status, 'value': count};
+                        vm.chartData.dataProvider.push(Obj);
+                    }
+                    console.log(vm.chartData);
+                    var chart = AmCharts.makeChart( "chartdiv", vm.chartData);
             });
             /*
             $(document).ready(function() { 

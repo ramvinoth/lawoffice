@@ -394,4 +394,9 @@ class CaseListController extends Controller
         $data = CaseList::where('status','=','Pending')->count();
         return $data;
     }
+    
+    public function getCaseStatusCount(){
+        $data = CaseList::selectRaw('status, count(*) as count')->groupBy('status')->get();
+        return $data;
+    }
 }

@@ -495,6 +495,13 @@ body.mini-navbar .navbar-default .nav > li > a {
     border: 1px solid #efefef;
     box-shadow: 1px 1px 1px #888888;
 }
+.oflowEllipsis{
+    word-wrap: break-word;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 /* Custom CSS ENDS*/
 
 /* Footer design STARTS */

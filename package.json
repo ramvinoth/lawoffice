@@ -1,4 +1,8 @@
 {
+  "name": "lawsuit-client",
+  "version": "1.0.0",
+  "description": "A Vue.js project",
+  "author": "Ram Vinoth <ramvinoth37@gmail.com>",
   "private": true,
   "scripts": {
     "prod": "gulp --production",

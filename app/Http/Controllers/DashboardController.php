@@ -32,6 +32,9 @@ class DashboardController extends Controller
         }else if($action == 'gettodaysevents'){
             $event = new EventController();
             $data = $event->getTodaysEvents();
+        }else if($action == 'getcasestatus'){
+            $caseController = new CaseListController(); 
+            $data = $caseController->getCaseStatusCount();
         }
         return response()->json($data);
     }

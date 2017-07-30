@@ -1,33 +1,41 @@
 <template>
     <div id="root">
-        <init></init>
-        <div v-if="getAuthUserData">
-            <topnav></topnav>
-            <leftnav></leftnav>
-            <div id="product-container" class="content-wrapper">
-                <router-view></router-view>
-            </div>
-        </div>
-        <div v-else>
-            <login></login>
-        </div>
+        <component :is="CurrentView"></component>
     </div>
 </template>
 
 <script>
+import login from './components/Login.vue'
+import home from './components/Home.vue'
+import register from './components/Register.vue'
 
 export default{
     components:{
-        'login' : require('./components/Login.vue')
+        login,
+        home,
+        register,
     },
     data(){
         return{
             auth_user: '',
+            CurrentView: ''
         }
+    },
+    mounted() {
+        this.getAuthUserData;
     },
     computed:{
         getAuthUserData() {
-            this.auth_user = window.Laravel.auth_user;
+            if(window.Laravel.auth_user === null){
+                if(this.$route.name && this.$route.name === 'register'){
+                    this.CurrentView = 'register';
+                }else{
+                    this.CurrentView = 'login';
+                }
+            }else{
+                this.auth_user = window.Laravel.auth_user;
+                this.CurrentView = 'home';
+            }
             return this.auth_user;
         }
     }

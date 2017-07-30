@@ -27,14 +27,14 @@
       <ul class="sidebar-menu">
         <li class="header">MAIN NAVIGATION</li>
         <li>
-          <a href="#/dashboard">
+          <router-link to="/dashboard">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-          </a>
+          </router-link>
         </li>
         <li>
-          <a href="#/caselist/create">
+          <router-link to="/caselist/create">
             <i class="fa fa-edit"></i> <span>New Case</span>
-          </a>
+          </router-link>
         </li>
         <li>
             <router-link to="/caselist">
@@ -42,23 +42,20 @@
             </router-link>
         </li>
         <li>
-          <a href="#/calendar">
+          <router-link to="/calendar">
             <i class="fa fa-calendar"></i> <span>Calendar</span>
-          </a>
+          </router-link>
         </li>
         <li>
-          <a href="#/diary">
+          <router-link to="/diary">
             <i class="fa fa-envelope"></i> <span>Diary</span>
-            <span class="pull-right-container">
-              <small class="label pull-right bg-green">12</small>
-            </span>
-          </a>
+          </router-link>
         </li>
           
         <li>
-          <a href="#/users">
+          <router-link to="/users">
             <i class="fa fa-users"></i> <span>Users</span>
-          </a>
+          </router-link>
         </li>
           
         <!--li class="treeview">

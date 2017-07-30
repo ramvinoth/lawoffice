@@ -7,23 +7,26 @@
         <div class="register-box-body">
             <p class="login-box-msg">Register a new membership</p>
 
-            <form action="/register" method="POST">
-                <input type="hidden" name="_token" :value="csrf">
+            <form>
                 <div class="form-group has-feedback">
-                    <input type="text" name="name" class="form-control" placeholder="Full name">
+                    <input type="text" name="name" v-model="form.name" class="form-control" placeholder="Full name">
                     <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                    <small class="text-danger" v-if="errors.name">{{errors.name[0]}}</small>
                 </div>
                 <div class="form-group has-feedback">
-                    <input type="email" name="email" class="form-control" placeholder="Email">
+                    <input type="email" name="email" v-model="form.email" class="form-control" placeholder="Email">
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                    <small class="text-danger" v-if="errors.email">{{errors.email[0]}}</small>
                 </div>
                 <div class="form-group has-feedback">
-                    <input type="password" name="password" class="form-control" placeholder="Password">
+                    <input type="password" name="password" v-model="form.password" class="form-control" placeholder="Password">
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    <small class="text-danger" v-if="errors.email">{{errors.password[0]}}</small>
                 </div>
                 <div class="form-group has-feedback">
-                    <input type="password" name="password_confirmation" class="form-control" placeholder="Retype password">
+                    <input type="password" name="password_confirmation" v-model="form.password_confirmation" class="form-control" placeholder="Retype password">
                     <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+                    <small class="text-danger" v-if="errors.email">{{errors.password_confirmation[0]}}</small>
                 </div>
                 <div class="row">
                     <div class="col-xs-8">
@@ -35,19 +38,19 @@
                     </div>
                     <!-- /.col -->
                     <div class="col-xs-4">
-                        <button type="submit" class="btn btn-primary btn-block btn-flat">Register</button>
+                        <button type="button" @click="register" class="btn btn-primary btn-block btn-flat">Register</button>
                     </div>
                     <!-- /.col -->
                 </div>
             </form>
 
-            <div class="social-auth-links text-center">
+            <div class="social-auth-links text-center hide">
                 <p>- OR -</p>
                 <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign up using Facebook</a>
                 <a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign up using Google+</a>
             </div>
 
-            <a href="#/login" class="text-center">I already have an account</a>
+            <a href="/login" class="text-center">I already have an account</a>
         </div>
         <!-- /.form-box -->
     </div>
@@ -55,16 +58,29 @@
 </template>
 
 <script>
+    import axios from 'axios'
     export default{
         data() {
                 return {
                     csrf: "",
+                    form: {name: 'ramvinoth33', email: 'ramvinoth33@gmail.com', password: 'viyaadmin', password_confirmation: 'viyaadmin'},
+                    errors: {},
                 } 
             },
         methods: {
             logout(e) {
                 e.preventDefault();
                 document.getElementById('logout-form').submit()
+            },
+            register(){
+                var vm = this;
+                axios.post('/register',this.form)
+                    .then(response =>{
+                        console.log(response);
+                    })
+                    .catch(function(error) {
+                        Vue.set(vm.$data, 'errors', error.response.data)
+                    })
             }
         },
         mounted() {
