@@ -24,16 +24,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        return view('layouts.app');
     }
     
     public function welcome()
     {
-        if(Auth::user()){
-            return view('welcome');
-        }else{
-            return view('welcome');
-        }
+        return view('layouts.app');
     }
     
     public function notifications()
