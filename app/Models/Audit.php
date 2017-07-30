@@ -9,7 +9,7 @@ use Auth;
 
 class Audit extends BaseModel
 {
-    //protected $table="AUDIT";
+    protected $table="AUDITS";
     /**
      * The "booting" method of the model.
      *

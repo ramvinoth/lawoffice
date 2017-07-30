@@ -187,8 +187,8 @@
                                 </div>
                                 <!-- /.box-body -->
                                 <div class="box-footer clearfix">
-                                    <a href="#/caselist/create" class="btn btn-sm btn-info btn-flat pull-left">Add New Case</a>
-                                    <a href="#/caselist/" class="btn btn-sm btn-default btn-flat pull-right">View All Cases</a>
+                                    <router-link to="caselist/create" class="btn btn-sm btn-info btn-flat pull-left">Add New Case</router-link>
+                                    <router-link to="/caselist" class="btn btn-sm btn-default btn-flat pull-right">View All Cases</router-link>
                                 </div>
                                 <!-- /.box-footer -->
                             </div>
@@ -234,8 +234,8 @@
                                 </div>
                                 <!-- /.box-body -->
                                 <div class="box-footer clearfix">
-                                    <a href="#/caselist/create" class="btn btn-sm btn-info btn-flat pull-left">Add New Event</a>
-                                    <a href="#/calendar/" class="btn btn-sm btn-default btn-flat pull-right">View All Events</a>
+                                    <router-link to="/create" class="btn btn-sm btn-info btn-flat pull-left hide">Add New Event</router-link>
+                                    <router-link to="/calendar" class="btn btn-sm btn-default btn-flat pull-right">View All Events</router-link>
                                 </div>
                                 <!-- /.box-footer -->
                             </div>
