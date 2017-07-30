@@ -1,1 +1,1 @@
-@include('welcome')
+@include('layouts.app')
