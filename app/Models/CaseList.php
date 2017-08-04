@@ -60,16 +60,6 @@ class CaseList extends BaseModel
         return $this->convertLongToDate($updated_at, 'd-m-Y H:i:s', 'Asia/Calcutta');
     }
     
-    public function setCreatedAtAttribute($created_at)
-    {
-        return $this->getCurrentLongTime();
-    }
-    
-    public function setUpdatedAtAttribute($updated_at)
-    {
-        return $this->getCurrentLongTime();
-    }
-    
     public static function initialize()
     {
         $cases_table = [

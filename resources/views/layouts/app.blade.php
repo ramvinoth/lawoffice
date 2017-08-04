@@ -73,7 +73,7 @@
     <!-- SlimScroll -->
     <script src="../../plugins/slimScroll/jquery.slimscroll.min.js"></script>
     <!-- datepicker -->
-    <script src="plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script src="../../plugins/datepicker/bootstrap-datepicker.js"></script>
     <script>
       $.widget.bridge('uibutton', $.ui.button);
     </script>
