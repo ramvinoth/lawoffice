@@ -42,10 +42,6 @@
 <script>
     import Vue from 'vue'
     import axios from 'axios'
-
-    var state = {
-        date1: new Date()
-    }
     
     export default {
         name: 'EventTypeForm',
@@ -65,7 +61,6 @@
                 format: 'dd/MM/yyyy',
                 disabled: {},
                 eventMsg: null,
-                state: state,
             }
         },
         beforeMount() {

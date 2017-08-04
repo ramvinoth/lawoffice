@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Support\FilterPaginateOrder;
 use App\Scopes\CompanyScope;
 use App\Traits\Audit;
+use App\Traits\CommonTrait;
 use Auth;
 
 class CaseList extends BaseModel
@@ -24,8 +25,10 @@ class CaseList extends BaseModel
     
     use FilterPaginateOrder;
     use Audit;
+    use CommonTrait;
     
     protected $table = 'cases';
+    public $timestamps = false;
     //protected $attributes = ['org_id' => Auth::user()->org_id];
     
     protected $fillable = [
@@ -45,6 +48,26 @@ class CaseList extends BaseModel
     public function petition()
     {
         return $this->hasMany(Petition::class);
+    }
+    
+    public function getCreatedAtAttribute($created_at)
+    {
+        return $this->convertLongToDate($created_at, 'd-m-Y H:i:s', 'Asia/Calcutta');
+    }
+    
+    public function getUpdatedAtAttribute($updated_at)
+    {
+        return $this->convertLongToDate($updated_at, 'd-m-Y H:i:s', 'Asia/Calcutta');
+    }
+    
+    public function setCreatedAtAttribute($created_at)
+    {
+        return $this->getCurrentLongTime();
+    }
+    
+    public function setUpdatedAtAttribute($updated_at)
+    {
+        return $this->getCurrentLongTime();
     }
     
     public static function initialize()

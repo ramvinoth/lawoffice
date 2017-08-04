@@ -63,7 +63,7 @@
         data() {
                 return {
                     csrf: "",
-                    form: {name: 'ramvinoth33', email: 'ramvinoth33@gmail.com', password: 'viyaadmin', password_confirmation: 'viyaadmin'},
+                    form: {name: '', email: '', password: '', password_confirmation: ''},
                     errors: {},
                 } 
             },

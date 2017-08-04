@@ -33,11 +33,23 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public static function initialize()
+    {
+        $hearings_table = ['org_id' => '', 'name' => '', 'email' => '', 'password' => '', 'password_confirmation' => ''];
+        
+        return $hearings_table;
+    }
+    
     public function profile()
     {
         return $this->hasOne('App\Models\Profile');
     }
 
+    public function role()
+    {
+        return $this->hasOne('App\Models\UserCompanyMapping','user_id');
+    }
+    
     public function posts()
     {
         return $this->hasMany('App\Models\Post')

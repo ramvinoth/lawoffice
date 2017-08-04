@@ -1,3 +1,6 @@
+body{
+    cursor: default;
+}
 input, select, textarea {
     border: 0 none;
     font-family: 'ProximaNovaRegular',Arial,Helvetica,sans-serif;

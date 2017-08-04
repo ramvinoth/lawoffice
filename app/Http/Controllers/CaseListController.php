@@ -72,7 +72,7 @@ class CaseListController extends Controller
         unset($case_array['connected']);
         unset($case_array['misc_pet']);
         
-        $case_array['created_at'] = (new DateTime())->getTimestamp();
+        $case_array['created_at'] = new DateTime();
         
         $court_case = CaseList::create($case_array);
         foreach ($miscpet_arr as $key => $misc_pet){
