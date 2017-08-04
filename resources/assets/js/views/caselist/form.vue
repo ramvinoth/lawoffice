@@ -547,12 +547,12 @@
                 {
                     document.getElementById("state_div").style.display = 'block';
                     document.getElementById("district_div").style.display = 'block';
-                    this.getData('api/court/getdata','type=state','states');
-                    this.getData('api/court/getdata','type=district&code=31','districts');
+                    this.getData('/api/court/getdata','type=state','states');
+                    this.getData('/api/court/getdata','type=district&code=31','districts');
                 }else if(this.form.court_type_id == "4") //Consumer Court
                 {
                     document.getElementById("state_div").style.display = 'block';
-                    this.getData('api/court/getdata','type=state','states');
+                    this.getData('/api/court/getdata','type=state','states');
                     this.getListOfCourts();
                 }else if(this.form.court_type_id == "5") //Tribunal
                 {
@@ -561,15 +561,15 @@
             },
             getListOfDistricts(){
                 document.getElementById("district").style.display = 'block';
-                this.getData('api/court/getdata','type=district&code='+this.form.court_type_id);
+                this.getData('/api/court/getdata','type=district&code='+this.form.court_type_id);
             },
             getListOfCourts(){
                 document.getElementById("court_div").style.display = 'block';
-                this.getData('api/court/getdata','type=court&court_type='+this.form.court_type_id+'&district_code='+this.form.district,'courts');
+                this.getData('/api/court/getdata','type=court&court_type='+this.form.court_type_id+'&district_code='+this.form.district,'courts');
             },
             getCaseTypes(){
                 document.getElementById("casetype_div").style.display = 'block';
-                this.getData('api/court/getdata','type=case_type&court_type='+this.form.court_type_id+'&code='+this.form.court_id,'casetypes');
+                this.getData('/api/court/getdata','type=case_type&court_type='+this.form.court_type_id+'&code='+this.form.court_id,'casetypes');
             },
             filesChange: function(name, files){
                 
