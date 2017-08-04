@@ -125,7 +125,9 @@ class CaseList extends BaseModel
             'present' => '',
             'return_expiry' => '',
             'result' => '',
-            'priority' => ''
+            'priority' => '',
+            'created_at' => '',
+            'updated_at' => ''
         ];
         $connected_table = ["connected" => ''];
         
