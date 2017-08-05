@@ -201,6 +201,12 @@
                                                     <span :title="obj.created_at">{{obj.created_at}}</span>
                                                 </div>
                                             </div>
+                                            <div class="col-sm-4">
+                                                <div>
+                                                    <label>Updated date</label>
+                                                    <span :title="obj.created_at">{{obj.updated_at}}</span>
+                                                </div>
+                                            </div>
 
                                             <div class="col-sm-4">
                                                 <div>
@@ -212,7 +218,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <button class="btn btn-primary" @click='addHearing'>Add Petition</button>
+                                    <button class="btn btn-primary" @click='addHearing'>Add Hearing</button>
                                 </div>
                             </div>
                             <!-- /.tab-pane -->
@@ -376,7 +382,7 @@
                 activities: [],
                 connected_case: [{con_no : '', sno : '', cid : ''}],
                 misc_pet: [{'cid': '', 'sno': '', 'mpno' : '', 'mpprayer' : '', 'mpdisposal' : '', 'mpreturn' : '', 'mprepresent' : ''}],
-                case_hearing : [{'case_id': '', 'case_title': '', 'title': '', 'date' : '', 'description' : '', 'judges' : ''}],
+                case_hearing : [{'case_id': '', 'title': '', 'date' : '', 'description' : '', 'judges' : ''}],
                 pop_data: [],
                 pop_mode: '',
                 parent_data: [],
@@ -503,7 +509,7 @@
                 this.showSmallPopUp();
             },
             addHearing(){
-                this.case_hearing = [{'case_id': '', 'case_title': '' , 'title': '', 'date' : '', 'description' : '', 'judges' : ''}];
+                this.case_hearing = [{'case_id': '', 'title': '', 'date' : '', 'description' : '', 'judges' : ''}];
                 this.case_hearing[0].case_id = this.model.id;
                 //this.case_hearing[0].case_title = this.model.case_title;
                 this.pop_data = this.case_hearing;

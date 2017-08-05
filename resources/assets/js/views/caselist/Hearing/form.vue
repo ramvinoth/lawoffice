@@ -48,7 +48,7 @@
         data() {
             return{
                 resource: 'caselist',
-                initialize: '/api/hearing/create',
+                initialize: '/api/hearing/',
                 redirect: '/',
                 store: '/api/caselist',
                 method: 'post',
@@ -58,13 +58,11 @@
             saveHearing(){
                 var vm = this;
                 if(this.mode == 'edit'){
-                    console.log(this.data[0].id)
                     this.initialize = '/api/hearing/'+this.data[0].id;
                     this.method = 'put';
                 }
-                axios[this.method]('/api/hearing/', this.data[0])
+                axios[this.method](this.initialize, this.data[0])
                     .then(function(response) {
-                        console.log(response.data.saved);
                         if(response.data.updated) {
                             vm.data.push(response.data.hearing);
                             vm.closeSmallPopUp();

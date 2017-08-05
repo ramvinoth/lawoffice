@@ -6,6 +6,7 @@ use Auth;
 
 class BaseModel extends Eloquent{
     
+    public $timestamps = false;
     protected static function boot()
     {
         parent::boot();

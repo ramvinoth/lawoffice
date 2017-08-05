@@ -49,8 +49,8 @@ class HearingsController extends Controller
         //
         $hearing_array = $request->all();
         $date = new DateTime();
-        $hearing_array['created_at'] = $date->getTimeStamp();
-        $hearing_array['updated_at'] = $date->getTimeStamp();
+        $hearing_array['created_at'] = $date->getTimeStamp()."000";
+        $hearing_array['updated_at'] = $date->getTimeStamp()."000";
         $eventController = new EventController();
         $hearing_array['date'] = $eventController->convertDateToLong($hearing_array['date']);
         
@@ -106,6 +106,7 @@ class HearingsController extends Controller
     {
         //
         $hearing_array = $request->all();
+        $hearing_array['updated_at'] = (new DateTime())->getTimeStamp()."000";
         $status = $hearing->update($hearing_array);
         return response()
             ->json([
