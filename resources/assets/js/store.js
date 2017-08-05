@@ -34,6 +34,9 @@ export const store = new Vuex.Store({
             is_spopshow(state){
                 return state.popup.is_spopshow;  
             },
+            is_loading(state){
+                return state.ajax.isLoading;
+            }
       },
       mutations: {
             add_not(state, not) {

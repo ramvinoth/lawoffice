@@ -375,7 +375,6 @@
                         var Obj = {'title' : status, 'value': count};
                         vm.chartData.dataProvider.push(Obj);
                     }
-                    console.log(vm.chartData);
                     var chart = AmCharts.makeChart( "chartdiv", vm.chartData);
             });
             /*

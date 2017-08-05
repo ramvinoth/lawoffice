@@ -261,6 +261,13 @@
         </ul>
       </div>
     </nav>
+    <div id="progressbar" class="lprogress">
+        <div class="loading_line"></div>
+        <div class="loading_break dot1"></div>
+        <div class="loading_break dot2"></div>
+        <div class="loading_break dot3"></div>
+        <div class="loading_break dot4"></div>
+    </div>
   </header>
 </template>
 
@@ -269,11 +276,18 @@ export default{
     components:{
         'logout': require('../Logout.vue')
     },
+    data(){
+        return {
+            isAjaxLoading : false,  
+        }
+    },
     computed: {
-            getAuthUserData() {
-                return this.$store.getters.auth_user_data
-            },
-            
+        getAuthUserData() {
+            return this.$store.getters.auth_user_data
+        },
+        getAjaxLoading() {
+            this.isAjaxLoading =  this.$store.getters.is_loading;
+        },
     },
     mounted() {
         this.load();

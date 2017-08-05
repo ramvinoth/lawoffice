@@ -54,18 +54,26 @@ import router from './router'
 import axios from 'axios'
 
 axios.interceptors.request.use(function (config) {
-    store.state.ajax.is_loading = true;
+    if(!store.getters.is_loading){
+        store.commit("set_loading", true);
+        jQuery("#progressbar").addClass('active');
+    }
     return config;
 }, function (error) {
-    store.state.ajax.is_loading = false;
+    store.commit("set_loading", false);
+    jQuery("#progressbar").removeClass('active');
     return Promise.reject(error);
 });
 
 axios.interceptors.response.use(function (response) {
-    store.state.ajax.is_loading = false;
+    if(store.getters.is_loading){
+        store.commit("set_loading", false);
+        jQuery("#progressbar").removeClass('active');
+    }
     return response;
 }, function (error) {
-    store.state.ajax.is_loading = false;
+    store.commit("set_loading", false);
+    jQuery("#progressbar").removeClass('active');
     return Promise.reject(error);
 });
 

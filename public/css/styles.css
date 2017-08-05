@@ -867,3 +867,123 @@ span.required_label {
     position: relative;
     top: 25%;
 }   
+/*Loading Style Starts*/
+.loader {
+  height: 4px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: #ddd;
+}
+.loader:before{
+  display: block;
+  position: absolute;
+  content: "";
+  left: -200px;
+  width: 200px;
+  height: 4px;
+  background-color: #2980b9;
+  animation: loading 2s linear infinite;
+}
+
+@keyframes loading {
+    from {left: -200px; width: 30%;}
+    50% {width: 30%;}
+    70% {width: 70%;}
+    80% { left: 50%;}
+    95% {left: 120%;}
+    to {left: 100%;}
+}
+/*Loading style Ends*/
+/*Loading New Dots Starts*/
+.lprogress.active{
+    display: block;
+}
+.lprogress {
+    position: fixed;
+    width: 100%;
+    height: 3px;
+    overflow: hidden;
+    top: 48px;
+    z-index: 10001;
+    display: none;
+}
+.lprogress .loading_line {
+    position: absolute;
+    background: #e96454;
+    width: 100%;
+    height: 2px;
+}
+.loading_break {
+    position: absolute;
+    background: #fff;
+    width: 20px;
+    height: 2px;
+    left: -21px;
+}
+.dot1 {
+    -ms-animation: loadingbar 3s infinite;
+    -webkit-animation: loadingbar 3s infinite;
+    -moz-animation: loadingbar 3s infinite;
+    -o-animation: loadingbar 3s infinite;
+    animation: loadingbar 3s infinite;
+}
+.dot2 {
+    -ms-animation: loadingbar 3s .5s infinite;
+    -webkit-animation: loadingbar 3s .5s infinite;
+    -moz-animation: loadingbar 3s .5s infinite;
+    -o-animation: loadingbar 3s .5s infinite;
+    animation: loadingbar 3s .5s infinite;
+}
+.dot3 {
+    -ms-animation: loadingbar 3s 1s infinite;
+    -webkit-animation: loadingbar 3s 1s infinite;
+    -moz-animation: loadingbar 3s 1s infinite;
+    -o-animation: loadingbar 3s 1s infinite;
+    animation: loadingbar 3s 1s infinite;
+}
+.dot4 {
+    -ms-animation: loadingbar 3s 1.5s infinite;
+    -webkit-animation: loadingbar 3s 1.5s infinite;
+    -moz-animation: loadingbar 3s 1.5s infinite;
+    -o-animation: loadingbar 3s 1.5s infinite;
+    animation: loadingbar 3s 1.5s infinite;
+}
+@-webkit-keyframes loadingbar {
+    from {
+        left: 0
+    }
+
+    to {
+        left: 100%
+    }
+}
+@-moz-keyframes loadingbar {
+    from {
+        left: 0
+    }
+
+    to {
+        left: 100%
+    }
+}
+@-o-keyframes loadingbar {
+    from {
+        left: 0
+    }
+
+    to {
+        left: 100%
+    }
+}
+@keyframes loadingbar {
+    from {
+        left: 0
+    }
+
+    to {
+        left: 100%
+    }
+}
+
+/*Loading New Dots Ends*/
