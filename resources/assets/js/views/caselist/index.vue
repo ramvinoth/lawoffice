@@ -6,7 +6,7 @@
                     <td>{{props.item.id}}</td>
                     <td>{{props.item.sno}}</td>
                     <td>{{props.item.case_type}}</td>
-                    <td>{{props.item.vno}}</td>
+                    <td>{{props.item.case_no}}</td>
                     <td>{{props.item.petitioner}}</td>
                     <td>{{props.item.respondant}}</td>
                     <td>{{props.item.refer_by}}</td>

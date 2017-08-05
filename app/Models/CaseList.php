@@ -7,6 +7,7 @@ use App\Support\FilterPaginateOrder;
 use App\Scopes\CompanyScope;
 use App\Traits\Audit;
 use App\Traits\CommonTrait;
+use App\Traits\CaseListTrait;
 use Auth;
 
 class CaseList extends BaseModel
@@ -26,10 +27,13 @@ class CaseList extends BaseModel
     use FilterPaginateOrder;
     use Audit;
     use CommonTrait;
+    use CaseListTrait;
     
     protected $table = 'cases';
     public $timestamps = false;
     //protected $attributes = ['org_id' => Auth::user()->org_id];
+    
+    protected $hidden = ['created_at'];
     
     protected $fillable = [
         'case_title', 'court_type_id', 'court_id', 'state_id', 'bench', 'sno', 'vno', 'case_type', 'filing_date', 'admission', 'petitioner', 'respondant', 'appear', 'contact', 'no_of', 'refer_by', 'refer_contact', 'refer_to', 'to_contact', 'district', 'c_prayer', 'citation', 'status', 's_text', 'disposal', 'expiry_date', 'by_whom', 'category', 'case_no', 'against', 'against1', 'mcdisposal', 'mcjudge', 'judge', 'main_petitioner', 'posted_date', 'mpno', 'other', 'crime_no', 'police_st', 'loan', 'bank', 'branch', 'loan_cat', 'possession', 'sale', 'upload', 'returned', 'represent', 'present', 'return_expiry', 'result', 'priority', 'created_at', 'updated_at'
@@ -116,8 +120,6 @@ class CaseList extends BaseModel
             'return_expiry' => '',
             'result' => '',
             'priority' => '',
-            'created_at' => '',
-            'updated_at' => ''
         ];
         $connected_table = ["connected" => ''];
         

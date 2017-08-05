@@ -114,7 +114,7 @@ class CaseListController extends Controller
         
         $data['other'] = json_decode($data['other'], true);
         $data['against'] = json_decode($data['against'], true);
-        $data['against1'] = json_decode($data['against1'], true); 
+        $data['against1'] = json_decode($data['against1'], true);
         
         return response()->json($data);
     }
@@ -200,7 +200,7 @@ class CaseListController extends Controller
         unset($case_array['connected']);
         unset($case_array['misc_pet']);
         
-        $case_array['updated_at'] = new DateTime();
+        $case_array['updated_at'] = (new DateTime())->getTimestamp()."000";
         
         $court_case = $caselist->update($case_array);
         foreach ($miscpet_arr as $key => $misc_pet){
