@@ -2,6 +2,13 @@
     <transition name="mpopup" v-on:before-enter="beforeEnter" v-on:after-leave="afterLeave">
         <div v-if="getIsMainPopShow" class="overlay">
             <div class="main-popup">
+                <div id="pop_progressbar" class="lprogress">
+                    <div class="loading_line"></div> 
+                    <div class="loading_break dot1"></div> 
+                    <div class="loading_break dot2"></div> 
+                    <div class="loading_break dot3"></div> 
+                    <div class="loading_break dot4"></div>
+                </div>
                 <div class="topHeader"><i class="fa fa-close fr pointer" @click="closePopUp"></i></div>
                 <slot name="header"></slot>
                 <slot></slot>

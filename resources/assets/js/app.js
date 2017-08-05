@@ -56,24 +56,24 @@ import axios from 'axios'
 axios.interceptors.request.use(function (config) {
     if(!store.getters.is_loading){
         store.commit("set_loading", true);
-        jQuery("#progressbar").addClass('active');
+        jQuery("#progressbar, #pop_progressbar").addClass('active');
     }
     return config;
 }, function (error) {
     store.commit("set_loading", false);
-    jQuery("#progressbar").removeClass('active');
+    jQuery("#progressbar, #pop_progressbar").removeClass('active');
     return Promise.reject(error);
 });
 
 axios.interceptors.response.use(function (response) {
     if(store.getters.is_loading){
         store.commit("set_loading", false);
-        jQuery("#progressbar").removeClass('active');
+        jQuery("#progressbar, #pop_progressbar").removeClass('active');
     }
     return response;
 }, function (error) {
     store.commit("set_loading", false);
-    jQuery("#progressbar").removeClass('active');
+    jQuery("#progressbar, #pop_progressbar").removeClass('active');
     return Promise.reject(error);
 });
 

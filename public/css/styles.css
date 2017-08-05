@@ -908,6 +908,11 @@ span.required_label {
     z-index: 10001;
     display: none;
 }
+.main-popup .lprogress{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
 .lprogress .loading_line {
     position: absolute;
     background: #e96454;
