@@ -52,6 +52,11 @@ class Hearing extends BaseModel
         return $this->convertLongToDate($updated_at, 'd-m-Y H:i:s', 'Asia/Calcutta');
     }
     
+    public function getDateAttribute($updated_at)
+    {
+        return $this->convertLongToDate($updated_at, 'd-m-Y', 'Asia/Calcutta');
+    }
+    
     public static function initialize()
     {
         $hearings_table = ['case_id' => '', 'title' => '', 'date' => '', 'description' => '', 'judges' => ''];
