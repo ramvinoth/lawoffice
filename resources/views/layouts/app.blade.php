@@ -36,6 +36,14 @@
     </script>
 </head>
 <body class="hold-transition fixed skin-blue sidebar-mini sidebar-collapse">
+    <div id="opening_loader">
+        <div class="loader">
+            <h1>LOADING</h1>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
     <div id="root" class="wrapper">
         <div id="wrapper">
         @if(Auth::check())

@@ -16,7 +16,12 @@ export default{
         return{
             
         }
-    }
+    },
+    mounted(){
+        jQuery("#opening_loader").fadeOut(1000, 'linear', function(){
+            document.getElementById('opening_loader').style.display= "none"; 
+        });
+    },
 }
     
 </script>
