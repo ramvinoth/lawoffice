@@ -11,6 +11,7 @@ export const store = new Vuex.Store({
             popup: {ispopshow: false,is_spopshow: false},
             ajax: {isLoading: false},
             slide: {isslide: false},
+            current_view: '',
       },
       getters: {
             all_nots(state) {
@@ -35,6 +36,9 @@ export const store = new Vuex.Store({
                 return state.popup.is_spopshow;  
             },
             is_loading(state){
+                return state.ajax.isLoading;
+            },
+            get_current_view(state){
                 return state.ajax.isLoading;
             }
       },
@@ -81,6 +85,9 @@ export const store = new Vuex.Store({
             },
             set_spopshow(state, status){
                 state.popup.is_spopshow = status;  
+            },
+            set_current_view(state, status){
+                state.current_view = status;  
             },
       }
 })

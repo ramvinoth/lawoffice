@@ -2,8 +2,10 @@
     <transition name="spopup" v-on:before-enter="beforeEnter" v-on:after-leave="afterLeave">
         <div v-if="getIsSmallPopShow" class="spop_overlay">
             <div class="small-popup">
-                <div class="topHeader"><i class="fa fa-close fr pointer" @click="closeSmallPopUp"></i></div>
-                <slot name="header"></slot>
+                <div class="topHeader">
+                    <slot name="header">{{title}}</slot>
+                    <i class="fa fa-close fr pointer" @click="closeSmallPopUp"></i>
+                </div>
                 <slot></slot>
                 <slot name="footer"></slot>
             </div>
@@ -16,6 +18,11 @@
         computed:{
             getIsSmallPopShow(){
                 return this.$store.getters.is_spopshow;
+            }
+        },
+        data(){
+            return{
+                title: '',      
             }
         },
         methods:{
@@ -73,5 +80,8 @@
     .topHeader{
         width: 100%;
         height: 40px;
+    }
+    .small-popup .pop-title{
+        font-size: 1.4em;
     }
 </style>

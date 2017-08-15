@@ -78,6 +78,16 @@ Route::group(['prefix' => 'api/', 'middleware' => 'auth'], function(){
         'uses' => 'HearingsController@deleteHearings',
         'as' => 'deleteHearings'
     ]);
+    
+    Route::get('/calendar/event/list', [
+        'uses' => 'EventController@getEventsList',
+        'as' => 'getEventsForCalendar'
+    ]);
+    
+    Route::get('/calendar/hearings/list', [
+        'uses' => 'HearingsController@getHearingsList',
+        'as' => 'getHearingsForCalendar'
+    ]);
 });
 
 Route::group(['middleware' => 'auth'], function(){

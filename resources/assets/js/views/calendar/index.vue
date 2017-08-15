@@ -2,7 +2,7 @@
     <div id="calendar_div" class="" style="height:100vh">
         <section class="content">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-3 hide">
                     <div class="box box-solid">
                         <div class="box-header with-border">
                             <h4 class="box-title">Draggable Events</h4>
@@ -67,7 +67,7 @@
                     </div>
                 </div>
                 <!-- /.col -->
-                <div class="col-md-9">
+                <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-body no-padding">
                             <!-- THE CALENDAR -->
@@ -83,6 +83,7 @@
             <slide>
                 <component :is="currentView" :data="compdata"></component>
             </slide>
+            <mpopup><viewcase :model="case_data"></viewcase></mpopup>
         </section>
         <!-- /.content -->
     </div>
@@ -90,19 +91,25 @@
 
 <script>    
 import axios from "axios"
+import mixin from '../../mixins/mixin'
 import fullCalendar from "fullcalendar"
 import createEvent from "../event/form.vue"
 import createEventType from "../eventType/form.vue"
 import slide from "../../components/Slide.vue"
+import mpopup from '../../components/PopUp.vue'
+import viewcase from '../caselist/show.vue'
+import hub from '../../events/Hub'
     
 export default{
     name: 'CalendarIndex',
     components:{
         'create-event': createEvent,
         'eventtype_form': createEventType,
-        //mpopup,
-        slide
+        slide,
+        mpopup,
+        viewcase,
     },
+    mixins: [ mixin ],
     data(){
         return{
             initialize: '/api/calendar/',
@@ -110,11 +117,12 @@ export default{
             events: [],
             currentView: 'create-event',
             compdata: {'mode' : '', 'id' : ''},
+            case_data: [],
         }
     },
     watch:{
         events: function(){
-            $('#calendar').fullCalendar('addEventSource', this.events, true);
+            $('#calendar').fullCalendar('addEventSource', this.events);
         }
     },
     beforeMount() {
@@ -124,8 +132,9 @@ export default{
             this.store = '/api/event/' + this.$route.params.id
             this.method = 'put'
         }
-        this.fetchData('/api/event/','events');
-        this.fetchData('/api/eventtype/','eventTypes').then((response) => {
+        //this.fetchData('/api/event/list', '', 'events');
+        //this.fetchData('/api/hearings/list', '', 'events');
+        this.fetchData('/api/eventtype/', '', 'eventTypes').then((response) => {
             this.ini_events($('#external-events div.external-event')); // gets here when the promise is resolved
         }, (error) => {
             console.error(error); // gets here when the promise is rejected
@@ -156,6 +165,29 @@ export default{
               },
               //Random default events
               events: vm.events,
+              viewRender: function (view, element) {
+                var b = $('#calendar').fullCalendar('getDate');
+                var sdate = b.format('L');
+                //vm.events = [];
+                $('#calendar').fullCalendar('removeEventSources', this.events);
+                vm.fetchData('/api/calendar/event/list', 'sdate='+sdate, 'events');
+                vm.fetchData('/api/calendar/hearings/list', 'sdate='+sdate, 'events');
+              },
+              eventClick: function(calEvent, jsEvent, view) {
+                /*alert('Event: ' + calEvent.title);
+                alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+                alert('View: ' + view.name);
+                
+                // change the border color just for fun
+                $(this).css('border-color', 'red');
+                */
+                  if(calEvent.id == 0){
+                      var data = {body: 'Case ID not linked'};
+                      vm.openAlertBox(data,'Warning')
+                  }else{
+                    vm.loadCase(calEvent.id);
+                  }
+              },
               editable: true,
               droppable: true, // this allows things to be dropped onto the calendar !!!
               drop: function (date, allDay) { // this function is called when something is dropped
@@ -251,10 +283,10 @@ export default{
                         console.log(error)
                     })
         },
-        fetchData(url, data_var) {
+        fetchData(url, params, data_var) {
             return new Promise((resolve, reject) => {
                 var vm = this
-                axios.get(url)
+                axios.get(url+"?"+params)
                     .then(function(response) {
                         Vue.set(vm.$data, data_var , response.data);
                         resolve(response); // the request was successfull

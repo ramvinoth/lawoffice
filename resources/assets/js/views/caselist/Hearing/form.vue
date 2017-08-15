@@ -5,24 +5,35 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Hearing Case" v-model="data[length].case_id" :value="data[length].case_id" disabled>
+                    <input type="text" class="form-control" placeholder="Hearing Case" v-model="data[length].case_no" :value="data[length].case_no" disabled>
                 </div>
             </div>
             <div class="col-sm-12">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Hearing Title" v-model="data[length].title">
+                    <input type="text" class="form-control" placeholder="Item no" v-model="data[length].item">
                 </div>
             </div>
             <div class="col-sm-12">
                 <div class="form-group">
-                    <datepicker class="form-control" placeholder="Hearing Date" v-model="data[length].date" :value="data[length].date"></datepicker>
+                    <datepicker class="form-control" placeholder="Hearing Date" v-model="data[length].posted" :value="data[length].posted"></datepicker>
                 </div>
             </div>
             <div class="col-sm-12">
                 <div class="form-group">
-                    <textarea class="form-control" placeholder="Hearing Description" v-model="data[length].description"></textarea>
+                    <textarea class="form-control" placeholder="Remarks" v-model="data[length].what"></textarea>
                 </div>
             </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <input class="form-control" placeholder="To Whom" v-model="data[length].to_whom">
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <input class="form-control" placeholder="Status" v-model="data[length].status">
+                </div>
+            </div>
+    
             <div class="col-sm-12">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Judges" v-model="data[length].judges">
@@ -42,9 +53,9 @@
     export default {
         name: 'HearingForm',
         components:{
-            Datepicker,
+            Datepicker
         },
-        props: ['data', 'length', 'mode', 'parent'],
+        props: ['data', 'option', 'length', 'mode', 'parent'],
         data() {
             return{
                 resource: 'caselist',

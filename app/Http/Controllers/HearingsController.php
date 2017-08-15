@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DateTime;
 use DateTimeZone;
 use Auth;
+use Session;
 use App\Models\Hearing;
 use Illuminate\Http\Request;
 use App\Util\CommonUtil;
@@ -48,13 +49,8 @@ class HearingsController extends Controller
     {
         //
         $hearing_array = $request->all();
-        $date = new DateTime();
-        $hearing_array['created_at'] = $date->getTimeStamp()."000";
-        $hearing_array['updated_at'] = $date->getTimeStamp()."000";
-        $eventController = new EventController();
-        $hearing_array['date'] = $eventController->convertDateToLong($hearing_array['date']);
         
-        $hearing = Hearing::insert($hearing_array);
+        $hearing = Hearing::create($hearing_array);
         
         return response()->json([
             'saved' => true,
@@ -108,6 +104,7 @@ class HearingsController extends Controller
         $hearing_array = $request->all();
         $hearing_array['updated_at'] = (new DateTime())->getTimeStamp()."000";
         $status = $hearing->update($hearing_array);
+        Session::flash('success', 'Hearing updated.');
         return response()
             ->json([
                 'updated' => $status
@@ -156,5 +153,56 @@ class HearingsController extends Controller
         return response()->json($data);
     }
     */
+    public function getHearingsList(Request $request)
+    {
+        $stDate = $request->sdate;
+        $sdate = new DateTime('now');
+        $edate = new DateTime('now');
+        if($stDate != 'undefined' && $stDate != ''){
+            $sdate = new DateTime($stDate);
+            $edate = clone $sdate;
+        }
+        
+        // First day of this month
+        $sdate = $sdate->modify('first day of this month');
+        $edate = $edate->modify('last day of this month');
+        
+        $isMonthView = true;
+        $data = $this->getHearingsArr($sdate, $edate, $isMonthView);
+        
+        return response()->json($data);
+        
+    }
+    
+    public function getHearingsArr($sdate, $edate, $isMonthView){
+        date_modify($sdate,'-10 day');
+        date_modify($edate,'+10 day');
+        $sd = $sdate->getTimestamp()."000";
+        $ed = $edate->getTimestamp()."000";
+        
+        $query = Hearing::select('diary.id','diary.case_no as title','diary.posted as start', 'diary.case_id');
+        
+        if($isMonthView){
+            $query->where([
+                ['diary.posted','>=',$sd],
+                ['diary.posted','<=',$ed]
+            ]);
+        }else{
+            $query->where('EVENTS.start','>=',$sd)->orWhere('EVENTS.end','<',$ed);
+        }
+        
+        $data = $query->get();
+        $commonUtil = new CommonUtil();
+        foreach ($data as $key => $event){
+            $data[$key]['start'] = $commonUtil->convertLongToDate($data[$key]['start'], 'Y-m-d');
+            $data[$key]['end'] = $data[$key]['start'];
+            $data[$key]['id'] = $data[$key]['case_id'];
+            $data[$key]['type'] = 'hearings';
+            $data[$key]['borderColor'] = '#00a65a';
+            $data[$key]['name'] = 'Hearing';
+            $data[$key]['backgroundColor'] = '#00a65a';
+        }
+        return $data;
+    }
 }
 ?>

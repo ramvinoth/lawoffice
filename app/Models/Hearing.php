@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Support\FilterPaginateOrder;
 use App\Scopes\CompanyScope;
 use App\Traits\CommonTrait;
+use DateTime;
 
 class Hearing extends BaseModel
 {
@@ -20,31 +21,40 @@ class Hearing extends BaseModel
     use FilterPaginateOrder;
     use CommonTrait;
     
-    protected $table = 'HEARINGS';
+    protected $table = 'diary';
     
-    protected $fillable = ['case_id', 'title', 'date', 'description', 'judges', 'created_at', 'updated_at'];
+    public $timestamps = false;
     
-    protected $filter = ['id', 'case_id', 'title', 'date', 'description', 'judges', 'created_at', 'updated_at'];
+    protected $fillable = ['org_id', 'case_id', 'case_no', 'item', 'to_whom', 'status', 'what', 'posted', 'judges', 'created_at', 'updated_at'];
+    
+    protected $filter = ['id','case_id', 'mpno', 'srno', 'case_no', 'cdate', 'item', 'to_whom', 'status', 'what', 'posted', 'created_at', 'updated_at'];
     
     
-    public function setDateAttribute($date)
+    public function setPostedAttribute($posted)
     {
-        return $this->convertDateToLong($date);
+        $this->attributes['posted'] = $this->convertDateToLong($posted);
     }
     
     public function setCreatedAtAttribute($created_at)
     {
-        return $this->convertDateToLong($created_at);
+        $created_at = (new DateTime())->format('d-m-Y');
+        $this->attributes['created_at'] = $this->convertDateToLong($created_at);
     }
     
     public function setUpdatedAtAttribute($updated_at)
     {
-        return $this->convertDateToLong($updated_at);
+        $updated_at = (new DateTime())->format('d-m-Y');
+        $this->attributes['updated_at'] = $this->convertDateToLong($updated_at);
     }
     
     public function getCreatedAtAttribute($created_at)
     {
         return $this->convertLongToDate($created_at, 'd-m-Y H:i:s', 'Asia/Calcutta');
+    }
+    
+    public function getPostedAttribute($posted)
+    {
+        return $this->convertLongToDate($posted, 'd-m-Y', 'Asia/Calcutta');
     }
     
     public function getUpdatedAtAttribute($updated_at)
@@ -59,7 +69,7 @@ class Hearing extends BaseModel
     
     public static function initialize()
     {
-        $hearings_table = ['case_id' => '', 'title' => '', 'date' => '', 'description' => '', 'judges' => ''];
+        $hearings_table = ['case_id' => '', 'mpno' => '', 'srno' => '', 'case_no' => '', 'cdate' => '', 'item' => '', 'to_whom' => '', 'status' => '', 'what' => '', 'posted' => ''];
         
         return $hearings_table;
     }

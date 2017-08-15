@@ -7,6 +7,7 @@ use DateTimeZone;
 use Auth;
 use App\Models\Event;
 use App\Models\EventType;
+use App\Http\Controllers\HearingsController;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -182,18 +183,20 @@ class EventController extends Controller
         return $date->format($format);
     }
     public function getEventsArr($sdate, $edate, $isMonthView){
+        date_modify($sdate,'-10 day');
+        date_modify($edate,'+10 day');
         $sd = $sdate->getTimestamp()."000";
         $ed = $edate->getTimestamp()."000";
         
         $query = Event::select('EVENTS.id','title','start','end','EVENTTYPES.name as type_name','EVENTTYPES.color as backgroundColor')->join('EVENTTYPES','EVENTTYPES.id','=','EVENTS.type_id');
         
         if($isMonthView){
-            $query->where('EVENTS.start','>=',$sd)->orWhere('EVENTS.end','<',$ed);
-        }else{
             $query->where([
                 ['EVENTS.start','>=',$sd],
                 ['EVENTS.end','<',$ed]
             ]);
+        }else{
+            $query->where('EVENTS.start','>=',$sd)->orWhere('EVENTS.end','<',$ed);
         }
         
         $data = $query->get();
@@ -219,6 +222,26 @@ class EventController extends Controller
         $isMonthView = false;
         $data = $this->getEventsArr($sdate, $edate, $isMonthView);
         return $data;
+    }
+    
+    public function getEventsList(Request $request)
+    {
+        $stDate = $request->sdate;
+        $sdate = new DateTime('now');
+        $edate = new DateTime('now');
+        if($stDate != 'undefined' && $stDate != ''){
+            $sdate = new DateTime($stDate);
+            $edate = clone $sdate;
+        }
+        
+        // First day of this month
+        $sdate = $sdate->modify('first day of this month');
+        $edate = $edate->modify('last day of this month');
+        
+        $isMonthView = true;
+        $data = $this->getEventsArr($sdate, $edate, $isMonthView);
+        return response()->json($data);
+        
     }
 }
 ?>

@@ -1110,3 +1110,11 @@ span.required_label {
 }
 
 /*Loading Opening page Ends*/
+
+.span-label{
+    font-size: 1em;
+    color: #a4a4a4;
+}
+.spopview-content{
+    font-size: 1.2em;   
+}

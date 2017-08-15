@@ -6,12 +6,16 @@
         <div id="product-container" class="content-wrapper">
             <router-view></router-view>
         </div>
+        <alertBox></alertBox>
     </div>
 </template>
 <script>
+    import mixin from '../mixins/mixin'
+    import alertBox from '../components/AlertBox.vue'
 export default{
     name: 'Home',
-    components: {},
+    components: { alertBox },
+    mixins: [ mixin ],
     data(){
         return{
             

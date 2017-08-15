@@ -177,28 +177,29 @@
                                             <div class="pet_title">
                                                 <div class="pet_number"><h4>Hearing {{index+1}}</h4> </div>
                                                 <div class="pet_options">
+                                                    <div class="btn btn-success btn-sm pet_delete_btn" @click="viewHearing(obj)"><i class="fa fa-eye"></i></div>
                                                     <div class="btn btn-primary btn-sm pet_edit_btn" @click='editHearing(obj)'><i class="fa fa-pencil"></i></div>
                                                     <div class="btn btn-danger btn-sm pet_delete_btn" @click="removeHearing(obj.id)"><i class="fa fa-trash"></i></div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div>
-                                                    <label>Title</label>
-                                                    <span :title="obj.mpno">{{obj.title}}</span>
+                                                    <label>Item no.</label>
+                                                    <span :title="obj.item">{{obj.item}}</span>
                                                 </div>
                                                 <div>
-                                                    <label>Date</label>
-                                                    <span :title="obj.date">{{obj.date}}</span>
+                                                    <label>Posted</label>
+                                                    <span :title="obj.posted">{{obj.posted}}</span>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div>
-                                                    <label>Description</label>
-                                                    <span :title="obj.description">{{obj.description}}</span>
+                                                    <label>Remarks</label>
+                                                    <span :title="obj.what">{{obj.what}}</span>
                                                 </div>
                                                 <div>
-                                                    <label>Created date</label>
-                                                    <span :title="obj.created_at">{{obj.created_at}}</span>
+                                                    <label>Status</label>
+                                                    <span :title="obj.status">{{obj.status}}</span>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
@@ -206,14 +207,12 @@
                                                     <label>Updated date</label>
                                                     <span :title="obj.created_at">{{obj.updated_at}}</span>
                                                 </div>
-                                            </div>
-
-                                            <div class="col-sm-4">
                                                 <div>
-                                                    <label>Judges</label>
-                                                    <span :title="obj.judges">{{obj.judges}}</span>
+                                                    <label>Created date</label>
+                                                    <span :title="obj.created_at">{{obj.created_at}}</span>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -349,7 +348,8 @@
             </div>
         </div>
         <spopup>
-            <component :is='currentView' :data='pop_data' :mode='pop_mode' :parent='parent_data' :length='0'></component>
+            <span class="pop-title" slot="header">{{pop_title}}</span>
+            <component :is='currentView' :data='pop_data' :options='pop_option' :mode='pop_mode' :parent='parent_data' :length='0'></component>
         </spopup>
     </div>
 </template>
@@ -358,6 +358,7 @@
     import petitionForm from '../caselist/petitionForm.vue'
     import connectedCaseForm from '../caselist/connectedCaseForm.vue'
     import hearingForm from '../caselist/Hearing/form.vue'
+    import viewHearing from '../caselist/Hearing/show.vue'
     import axios from 'axios'
     export default {
         name: 'CategoryShow',
@@ -366,6 +367,7 @@
             petitionForm,
             connectedCaseForm,
             hearingForm,
+            viewHearing,
             spopup
         },
         data() {
@@ -376,13 +378,15 @@
                 store: '/api/caselist',
                 method: 'post',
                 currentView: 'petitionForm',
+                pop_title: '',
+                pop_option: [],
                 petition: [],
                 hearings: [],
                 connected: [],
                 activities: [],
                 connected_case: [{con_no : '', sno : '', cid : ''}],
                 misc_pet: [{'cid': '', 'sno': '', 'mpno' : '', 'mpprayer' : '', 'mpdisposal' : '', 'mpreturn' : '', 'mprepresent' : ''}],
-                case_hearing : [{'case_id': '', 'title': '', 'date' : '', 'description' : '', 'judges' : ''}],
+                case_hearing : [{'case_id': '', 'title': '', 'item' : '', 'cdate' : '', 'posted' : '', 'what' : '', 'to_whom' : '', 'status' : '', 'what' : '', 'judges' : ''}],
                 pop_data: [],
                 pop_mode: '',
                 parent_data: [],
@@ -509,9 +513,9 @@
                 this.showSmallPopUp();
             },
             addHearing(){
-                this.case_hearing = [{'case_id': '', 'title': '', 'date' : '', 'description' : '', 'judges' : ''}];
+                this.case_hearing = [{'case_id': '', 'item' : '', 'cdate' : '', 'posted' : '', 'what' : '', 'to_whom' : '', 'status' : '', 'judges' : '', 'created_at' : '', 'updated_at' : ''}];
                 this.case_hearing[0].case_id = this.model.id;
-                //this.case_hearing[0].case_title = this.model.case_title;
+                this.case_hearing[0].case_no = this.model.case_no;
                 this.pop_data = this.case_hearing;
                 this.pop_mode = 'add';
                 this.parent_data = this.hearings;
@@ -523,6 +527,15 @@
                 this.pop_data = this.case_hearing;
                 this.pop_mode = 'edit';
                 this.currentView = 'hearingForm';
+                this.showSmallPopUp();
+            },
+            viewHearing(obj){
+                this.case_hearing[0] = obj;
+                this.case_hearing[0].title = this.model.petitioner+" Vs "+ this.model.respondant;
+                this.pop_data = this.case_hearing;
+                this.pop_title = 'View hearing';
+                this.pop_mode = 'edit';
+                this.currentView = 'viewHearing';
                 this.showSmallPopUp();
             },
             removeHearing(id){
