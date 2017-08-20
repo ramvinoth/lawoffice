@@ -9,7 +9,8 @@ use Session;
 use App\Models\Hearing;
 use Illuminate\Http\Request;
 use App\Util\CommonUtil;
-
+use App\Mail\Reminder;
+use Mail;
 class HearingsController extends Controller
 {
     /**
@@ -153,8 +154,29 @@ class HearingsController extends Controller
         return response()->json($data);
     }
     */
+    public function getTomorrowsHearingsList()
+    {
+        //Mail::to(\App\Models\User::find(1))->send(new Reminder());
+        
+        $sdate = new DateTime('tomorrow');
+        $edate = new DateTime('tomorrow');
+        
+        //date_modify($sdate,'+2 day');
+        //date_modify($edate,'+2 day');
+        // First day of this month
+        $sdate = $sdate->setTime(00, 00, 00);
+        $edate = $edate->setTime(23, 59, 59);
+        
+        $isMonthView = true;
+        $data = $this->getHearingsArr($sdate, $edate, $isMonthView);
+        
+        return response()->json($data);
+        
+    }
+    
     public function getHearingsList(Request $request)
     {
+        //Mail::to(\App\Models\User::find(1))->send(new Reminder());
         $stDate = $request->sdate;
         $sdate = new DateTime('now');
         $edate = new DateTime('now');
@@ -168,6 +190,10 @@ class HearingsController extends Controller
         $edate = $edate->modify('last day of this month');
         
         $isMonthView = true;
+        
+        date_modify($sdate,'-10 day');
+        date_modify($edate,'+10 day');
+        
         $data = $this->getHearingsArr($sdate, $edate, $isMonthView);
         
         return response()->json($data);
@@ -175,8 +201,6 @@ class HearingsController extends Controller
     }
     
     public function getHearingsArr($sdate, $edate, $isMonthView){
-        date_modify($sdate,'-10 day');
-        date_modify($edate,'+10 day');
         $sd = $sdate->getTimestamp()."000";
         $ed = $edate->getTimestamp()."000";
         
@@ -188,7 +212,7 @@ class HearingsController extends Controller
                 ['diary.posted','<=',$ed]
             ]);
         }else{
-            $query->where('EVENTS.start','>=',$sd)->orWhere('EVENTS.end','<',$ed);
+            $query->where('diary.posted','>=',$sd)->orWhere('diary.posted','<=',$ed);
         }
         
         $data = $query->get();

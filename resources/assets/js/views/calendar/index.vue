@@ -172,6 +172,7 @@ export default{
                 $('#calendar').fullCalendar('removeEventSources', this.events);
                 vm.fetchData('/api/calendar/event/list', 'sdate='+sdate, 'events');
                 vm.fetchData('/api/calendar/hearings/list', 'sdate='+sdate, 'events');
+                vm.fetchData('/api/calendar/hearings/today', 'sdate=', 'events');
               },
               eventClick: function(calEvent, jsEvent, view) {
                 /*alert('Event: ' + calEvent.title);

@@ -88,6 +88,11 @@ Route::group(['prefix' => 'api/', 'middleware' => 'auth'], function(){
         'uses' => 'HearingsController@getHearingsList',
         'as' => 'getHearingsForCalendar'
     ]);
+    
+    Route::get('/calendar/hearings/today', [
+        'uses' => 'HearingsController@getTomorrowsHearingsList',
+        'as' => 'getHearingsForCalendar'
+    ]);
 });
 
 Route::group(['middleware' => 'auth'], function(){
