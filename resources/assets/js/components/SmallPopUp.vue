@@ -81,7 +81,15 @@
         width: 100%;
         height: 40px;
     }
+    .spop-header{
+        width: 90%;
+        display: inline-block;
+    }
     .small-popup .pop-title{
         font-size: 1.4em;
+    }
+    .small-popup .pop-title-action{
+        position: relative;
+        padding-left: 5px;
     }
 </style>

@@ -25,14 +25,16 @@ class HearingReminder extends Command
      */
     protected $description = 'Send Reminder for the next day\'s hearing';
 
+    protected $hearing;
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(HearingsController $hearing)
     {
         parent::__construct();
+        $this->hearing = $hearing;
     }
 
     /**
@@ -42,12 +44,15 @@ class HearingReminder extends Command
      */
     public function handle()
     {
-        //
+        /*
         $hearing = new HearingsController();
         $data = $hearing->getTomorrowsHearingsList();
         $user = \App\Models\User::find(1);
         Log::info('This is some useful information.'.$user->email);
         Mail::to(\App\Models\User::find(1))->send(new Reminder());
         Log::info('This is some useful information.1111');
+        */
+        //Mail::to('ramvinoth37@gmail.com')->send(new Reminder);
+        $this->hearing->send('ramvinoth37@gmail.com');
     }
 }

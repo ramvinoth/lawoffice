@@ -42,11 +42,14 @@ module.exports = {
             Hub.$emit('open-modal');
             Hub.$emit('set-modal-data', data, compTitle);
         },
-        sendAjax(url, params, method, data_var) {
+        sendAjax(url, url_params, payload, method, data_var, callback) {
             var vm = this;
-            axios[method](url + "?" + params)
+            axios[method](url + "?" + url_params, payload)
                 .then(function(response) {
                     Vue.set(vm.$data, data_var, response.data);
+                    if(typeof callback === 'function'){
+                        callback(response);
+                    }
                 })
                 .catch(function(error) {
                     console.log(error)
@@ -54,9 +57,38 @@ module.exports = {
         },
         loadCase(caseId){
             //this.$router.push('/caselist/' + caseId);
-            this.sendAjax('/api/caselist/' + caseId, '', 'get', 'case_data');
+            this.sendAjax('/api/caselist/' + caseId, '', '', 'get', 'case_data');
             this.setPopCurrentView('viewcase');
             this.showPopUp();
+        },
+        loadHearing(hearingId){
+            //this.$router.push('/caselist/' + caseId);
+            var vm =this;
+            this.sendAjax('/api/hearing/' + hearingId, '', '', 'get', 'case_data', function(){
+                vm.setPopCurrentView('viewHearing');
+                //this.showPopUp();
+
+                //this.case_hearing[0] = obj;
+                //this.case_hearing[0].title = this.model.petitioner+" Vs "+ this.model.respondant;
+                vm.pop_data = vm.case_data;
+                vm.pop_title = 'View hearing';
+                vm.pop_mode = 'edit';
+                vm.currentView = 'viewHearing';
+                vm.showSmallPopUp(); 
+            });
+        },
+        updateHearing(data){
+            var vm =this;
+            this.sendAjax('/api/hearing/'+data.id, '', data, 'put', '', function(response){
+                console.log("res", response);
+                if(response.data.updated) {
+                    notify('Hearings Updated');
+                }
+            });
+        },
+        editHearingInline(){
+            this.pop_mode = 'edit';
+            this.currentView = 'hearingForm';
         },
     }
 }

@@ -46,8 +46,8 @@
             }  
         },
         beforeMount(){
-            this.sendAjax('api/users','','get','users');
-            this.sendAjax('get_auth_user_data','','get','authuser');
+            this.sendAjax('api/users','', '', 'get','users');
+            this.sendAjax('get_auth_user_data','', '', 'get','authuser');
         },
         methods:{
             createUser() {

@@ -68,10 +68,8 @@ class HearingsController extends Controller
     public function show($id)
     {
         //
-        $data = Hearing::where([['id','=',$id]])->get();
-        return response()->json([
-            'model' => $data
-            ]);
+        $data = Hearing::where([['diary.id','=',$id]])->get();
+        return response()->json($data);
     }
 
     /**
@@ -220,13 +218,19 @@ class HearingsController extends Controller
         foreach ($data as $key => $event){
             $data[$key]['start'] = $commonUtil->convertLongToDate($data[$key]['start'], 'Y-m-d');
             $data[$key]['end'] = $data[$key]['start'];
-            $data[$key]['id'] = $data[$key]['case_id'];
+            $data[$key]['id'] = $data[$key]['id'];
+            $data[$key]['case_id'] = $data[$key]['case_id'];
             $data[$key]['type'] = 'hearings';
             $data[$key]['borderColor'] = '#00a65a';
             $data[$key]['name'] = 'Hearing';
             $data[$key]['backgroundColor'] = '#00a65a';
         }
         return $data;
+    }
+    
+    public function send($email){
+        \Log::info("Sending Email... to ".$email);
+        Mail::to($email)->send(new Reminder);
     }
 }
 ?>

@@ -84,6 +84,14 @@
                 <component :is="currentView" :data="compdata"></component>
             </slide>
             <mpopup><viewcase :model="case_data"></viewcase></mpopup>
+            <spopup>
+                <div class="spop-header" slot="header">
+                    <span class="pop-title">{{pop_title}}</span>
+                    <span class="btn btn-primary btn-sm pet_edit_btn" @click="editHearingInline(pop_data)"><i class="fa fa-pencil"></i></span>
+                </div>
+                <component :is='currentView' :data='pop_data' :options='pop_option' :mode='pop_mode' :parent='parent_data' :length='0'></component>
+                <!--component :is="sPopCurrentView" :data="sPopCompData"></component-->
+            </spopup>
         </section>
         <!-- /.content -->
     </div>
@@ -97,8 +105,11 @@ import createEvent from "../event/form.vue"
 import createEventType from "../eventType/form.vue"
 import slide from "../../components/Slide.vue"
 import mpopup from '../../components/PopUp.vue'
+import spopup from '../../components/SmallPopUp.vue'
 import viewcase from '../caselist/show.vue'
 import hub from '../../events/Hub'
+import viewHearing from '../caselist/Hearing/show.vue'
+import hearingForm from '../caselist/Hearing/form.vue'
     
 export default{
     name: 'CalendarIndex',
@@ -107,7 +118,10 @@ export default{
         'eventtype_form': createEventType,
         slide,
         mpopup,
+        spopup,
         viewcase,
+        viewHearing,
+        hearingForm,
     },
     mixins: [ mixin ],
     data(){
@@ -116,8 +130,15 @@ export default{
             eventTypes: [],
             events: [],
             currentView: 'create-event',
+            sPopCurrentView: 'viewHearing',
+            sPopCompData: {'title': ''},
             compdata: {'mode' : '', 'id' : ''},
             case_data: [],
+            pop_data: [],
+            pop_option: [],
+            pop_mode: '',
+            pop_title: '',
+            parent_data: [],
         }
     },
     watch:{
@@ -186,13 +207,13 @@ export default{
                       var data = {body: 'Case ID not linked'};
                       vm.openAlertBox(data,'Warning')
                   }else{
-                    vm.loadCase(calEvent.id);
+                    vm.loadHearing(calEvent.id);
                   }
               },
               editable: true,
               droppable: true, // this allows things to be dropped onto the calendar !!!
               drop: function (date, allDay) { // this function is called when something is dropped
-
+                  console.log('droped');
                 // retrieve the dropped element's stored Event Object
                 var originalEventObject = $(this).data('eventObject');
 
@@ -216,10 +237,20 @@ export default{
                 }
 
               },
+              eventDrop: function(event, delta, revertFunc) {
+                //alert(event.title + " was dropped on " + event.start.format());
+                if (!confirm("Are you sure about this change?")) {
+                    revertFunc();
+                }
+                  var eventData = {};
+                  eventData.id = event.id;
+                  eventData.posted = event.start.format();
+                vm.updateHearing(eventData);
+              },
               dayClick: function (date, jsEvent, view) {
                   $(".fc-state-highlight").removeClass("fc-state-highlight");
                   $(jsEvent.target).addClass("fc-state-highlight"); 
-                  vm.showSlide();
+                  //vm.showSlide();
                }
             });
             /*END-----------------------------------------------------------------*/

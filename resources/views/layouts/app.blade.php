@@ -60,13 +60,13 @@
     <!-- Scripts -->
     <script src="/js/app.js"></script>
     <script>        
-        @if(Session::has('success'))
+        function notify(msg){
             noty({
                 type: 'success',
                 layout: 'bottomLeft',
-                text: '{{ Session::get('success') }}'
+                text: msg
             });
-        @endif
+        }
     </script>
     
     

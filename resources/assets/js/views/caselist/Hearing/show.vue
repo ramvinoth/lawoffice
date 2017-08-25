@@ -3,7 +3,7 @@
     <div class="form-group form-inline-block form-box">
         <div class="row">
             <div class="col-sm-12">
-                <div class="form-group">
+                <div class="form-group" v-if="data[length].title">
                     <span class="span-label">CASE TITLE</span>
                     <div class="spopview-content" v-if="data[length].title !== ''">{{data[length].title}}</div>
                     <div class="spopview-content" v-else>-</div>

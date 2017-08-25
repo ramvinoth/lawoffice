@@ -77,9 +77,11 @@
                         if(response.data.updated) {
                             vm.data.push(response.data.hearing);
                             vm.closeSmallPopUp();
+                            notify('Hearings Updated');
                         }else if(response.data.saved){
                             vm.parent.push(response.data.hearing);
                             vm.closeSmallPopUp();
+                            notify('Hearings Saved');
                         }
                     })
                     .catch(function(error) {

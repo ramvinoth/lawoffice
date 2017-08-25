@@ -30,8 +30,6 @@
     },
     "autoload-dev": {
         "classmap": [
-            "tests/TestCase.php",
-            "App/Traits"
         ]
     },
     "scripts": {
