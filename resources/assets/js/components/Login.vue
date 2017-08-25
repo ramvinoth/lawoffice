@@ -65,7 +65,10 @@ export default{
         }
     },
     mounted() {
-        this.csrf = window.Laravel.csrfToken        
+        this.csrf = window.Laravel.csrfToken;
+        jQuery("#opening_loader").fadeOut(1000, 'linear', function(){
+            document.getElementById('opening_loader').style.display= "none"; 
+        });
     }
 }
     

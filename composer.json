@@ -46,6 +46,11 @@
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "php artisan optimize"
+            "php artisan cache:clear"
+            "php artisan view:clear"
+            "php artisan route:clear"
+            "php artisan config:cache"
+            "composer dump-autoload"
         ]
     },
     "config": {

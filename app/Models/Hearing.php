@@ -15,7 +15,7 @@ class Hearing extends BaseModel
     {
         parent::boot();
 
-        //static::addGlobalScope(new CompanyScope);
+        static::addGlobalScope(new CompanyScope);
     }
     
     use FilterPaginateOrder;
