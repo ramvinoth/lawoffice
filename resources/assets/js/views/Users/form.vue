@@ -39,6 +39,7 @@
     import Vue from 'vue'
     import axios from 'axios'
     import mixin from '../../mixins/mixin'
+    import Hub from '../../events/Hub'
     
     export default {
         name: 'UserForm',
@@ -102,9 +103,11 @@
             addUser(){
                 var vm = this;
                 this.form['org_id'] = this.getAuthUserData.org_id;
-                axios.post('/register',this.form)
+                axios.post('api/users/',this.form)
                     .then(response =>{
                         console.log(response);
+                        this.closeSlide();
+                        Hub.$emit('fetch-user-data');  
                     })
                     .catch(function(error) {
                         Vue.set(vm.$data, 'errors', error.response.data)

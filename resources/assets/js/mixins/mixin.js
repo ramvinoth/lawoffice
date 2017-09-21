@@ -12,6 +12,13 @@ module.exports = {
         alertBox,
     },
     methods: {
+        isEmpty(obj){
+            for(var key in obj) {
+                if(obj.hasOwnProperty(key))
+                    return false;
+            }
+            return true;
+        },
         showPopUp(){
             this.$store.commit('set_ispopshow',true);  
         },
@@ -29,6 +36,9 @@ module.exports = {
         showSlide() {
             this.$store.commit('set_isslide', true);
         },
+        closeSlide(){
+            this.$store.commit("set_isslide", false);
+        },
         getAuthUserData() {
             return this.$store.getters.auth_user_data;
         },
@@ -42,17 +52,21 @@ module.exports = {
             Hub.$emit('open-modal');
             Hub.$emit('set-modal-data', data, compTitle);
         },
-        sendAjax(url, url_params, payload, method, data_var, callback) {
+        sendAjax(url, url_params, payload, method, data_var, callback, config) {
             var vm = this;
-            axios[method](url + "?" + url_params, payload)
+            axios[method](url + "?" + url_params, payload, config)
                 .then(function(response) {
+                    //notify('Success');
                     Vue.set(vm.$data, data_var, response.data);
                     if(typeof callback === 'function'){
                         callback(response);
                     }
+                    return  response;
                 })
                 .catch(function(error) {
-                    console.log(error)
+                    notify('Error. Please try after sometime');
+                    console.log(error);
+                    return error;
                 })
         },
         loadCase(caseId){
@@ -89,6 +103,14 @@ module.exports = {
         editHearingInline(){
             this.pop_mode = 'edit';
             this.currentView = 'hearingForm';
+        },
+        filesChange: function(name, files, count){
+            var formData = new FormData()
+            for (var i = 0; i < files.length; i++) {
+                let file = files.item(i);
+                formData.append('files[' + i + ']', file, file.name);
+            }
+            return formData;
         },
     }
 }

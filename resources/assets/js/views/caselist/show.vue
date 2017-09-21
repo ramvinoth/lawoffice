@@ -34,6 +34,7 @@
                           <li><a href="#petition" data-toggle="tab">Petitions</a></li>
                           <li><a href="#hearings" data-toggle="tab">Hearings</a></li>
                           <li><a href="#connected" data-toggle="tab">Connected Case</a></li>
+                          <li><a href="#documents" data-toggle="tab">Documents</a></li>
                           <li><a href="#result" data-toggle="tab">Result</a></li>
                           <li><a href="#activities" data-toggle="tab">Activities</a></li>
 
@@ -251,6 +252,17 @@
                                 </div>
                             </div>
                             <!-- /.tab-pane -->
+                            <div class="tab-pane" id="documents">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Upload File</label>  
+                                            <input type="file" name="upload" @change="formData = filesChange($event.target.name, $event.target.files,$event.target.files.length);" accept="image/*" class="form-control" id="uploadFile">
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-success" @click="addDocument">Save</button>
+                                </div>
+                            </div>
                             <div class="tab-pane" id="result">
                                 <div class="row caseinfo">
                                     <div class="col-sm-4">
@@ -359,10 +371,12 @@
     import connectedCaseForm from '../caselist/connectedCaseForm.vue'
     import hearingForm from '../caselist/Hearing/form.vue'
     import viewHearing from '../caselist/Hearing/show.vue'
+    import mixin from '../../mixins/mixin'
     import axios from 'axios'
     export default {
         name: 'CategoryShow',
         props: ['model'],
+        mixins: [mixin],
         components: {
             petitionForm,
             connectedCaseForm,
@@ -384,12 +398,14 @@
                 hearings: [],
                 connected: [],
                 activities: [],
+                documents: [],
                 connected_case: [{con_no : '', sno : '', cid : ''}],
                 misc_pet: [{'cid': '', 'sno': '', 'mpno' : '', 'mpprayer' : '', 'mpdisposal' : '', 'mpreturn' : '', 'mprepresent' : ''}],
                 case_hearing : [{'case_id': '', 'title': '', 'item' : '', 'cdate' : '', 'posted' : '', 'what' : '', 'to_whom' : '', 'status' : '', 'what' : '', 'judges' : ''}],
                 pop_data: [],
                 pop_mode: '',
                 parent_data: [],
+                formData: new FormData(),
             }
         },
         beforeMount() {
@@ -550,7 +566,16 @@
                     .catch(function(error) {
                         console.log(error)
                     })
-            }
+            },
+            addDocument(){
+                const config = {
+                    headers: { 'content-type': 'multipart/form-data' }
+                }
+                this.formData.append('case_id',this.model.id);
+                this.sendAjax('/api/caselist/documents/add','',this.formData,'post', '',function(){
+                    
+                }, config);
+            },
         }
     }
 

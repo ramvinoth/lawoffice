@@ -56,7 +56,7 @@ class DiaryController extends Controller
     public function show($id)
     {
         //
-        $data = \App\Diary::where([['id','=',$id]])->get();
+        $data = Diary::where([['id','=',$id]])->get();
         return response()->json([
             'model' => $data
             ]);

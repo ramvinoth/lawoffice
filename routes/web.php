@@ -13,6 +13,7 @@ Route::group(['prefix' => 'api/', 'middleware' => 'auth'], function(){
     Route::resource('eventtype', 'EventTypeController');
     Route::resource('hearing', 'HearingsController');
     Route::resource('users', 'UsersController');
+    Route::resource('documents', 'DocumentsController');
     
     Route::get('/dashboard', [
         'uses' => 'DashboardController@index',
@@ -22,6 +23,16 @@ Route::group(['prefix' => 'api/', 'middleware' => 'auth'], function(){
     Route::get('/court/getdata', [
         'uses' => 'CourtController@getData',
         'as' => 'court'
+    ]);
+
+    Route::post('/caselist/documents/add', [
+        'uses' => 'CaseListController@addCaseDocument',
+        'as' => 'Add Case Document'
+    ]);
+    
+    Route::post('/caselist/edit/{id}', [
+        'uses' => 'CaseListController@update',
+        'as' => 'Update Case'
     ]);
     
     Route::get('/caseinfo/petition/show', [
@@ -156,10 +167,10 @@ Route::group(['middleware' => 'auth'], function(){
         'uses' => 'LikesController@unlike'
     ]);
 
-    Route::get('/storage/{path}/{file}', [
+    Route::get('/storage/{any}', [
 	'as'=>'image', 
 	'uses'=>'ImageController@getImage'
-    ]);
+    ])->where('any', '.*');
 });
 
 // Login Routes...

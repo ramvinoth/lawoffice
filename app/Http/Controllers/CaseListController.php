@@ -7,8 +7,10 @@ use DateTimeZone;
 use App\Models\CaseList;
 use App\Models\Petition;
 use App\Models\ConnectedCase;
+use App\Models\Documents;
 use Illuminate\Http\Request;
 use Auth;
+use File;
 
 class CaseListController extends Controller
 {
@@ -55,27 +57,30 @@ class CaseListController extends Controller
             'name' => 'required',
             'email' => 'required|email',
             'phone' => 'required',
-            'address' => 'required'
+            'address' => 'required',
+            'files' => 'max:255',
         ]);
         */
         $case_array = $request->all();
         
-        $miscpet_arr = $case_array['misc_pet'];
-        $case_array['other'] = json_encode($case_array['other']);
+        $miscpet_arr = json_decode($case_array['misc_pet'], true);
+        $case_array['other'] = $case_array['other'];
         if($case_array['against'] !== ''){
-            $case_array['against'] = json_encode($case_array['against']);   
+            $case_array['against'] = $case_array['against'];   
         }
         if($case_array['against1'] !== ''){
-            $case_array['against1'] = json_encode($case_array['against1']);   
+            $case_array['against1'] = $case_array['against1'];   
         }
         unset($case_array['misc_sr']);
         unset($case_array['connected']);
         unset($case_array['misc_pet']);
+        unset($case_array['files']);
         
         $case_array['created_at'] = (new DateTime())->getTimestamp()."000";
         $case_array['updated_at'] = (new DateTime())->getTimestamp()."000";
 
         $court_case = CaseList::create($case_array);
+        //Save Misc Petition
         foreach ($miscpet_arr as $key => $misc_pet){
             $miscpet_arr[$key]['cid'] = $court_case['id'];
             $miscpet_arr[$key]['sno'] = $court_case['sno'];
@@ -83,6 +88,19 @@ class CaseListController extends Controller
         }
         $petition = Petition::insert($miscpet_arr);    
         
+        //Save Attachment
+        if($request->hasFile('files'))
+        {
+            foreach ($request->file('files') as $key => $file){
+                $file_path = $file->store('public/uploads/case_files');
+                $att_arr[$key]['case_id'] = $court_case['id'];
+                $att_arr[$key]['path'] = $file_path;
+                $att_arr[$key]['name'] = $file->getClientOriginalName();
+                $att_arr[$key]['type'] = $file->getClientOriginalExtension();
+                $att_arr[$key]['org_id'] = $court_case['org_id'];
+                $att_arr[$key]['result'] = Documents::insert($att_arr);
+            }
+        }
         
         $act_id = $court_case['id'];
         $act_type = 'Add';
@@ -96,6 +114,7 @@ class CaseListController extends Controller
                 'saved' => true,
                 'court_case' => $court_case,
                 'misc_pet' => $misc_pet,
+                'upload' => $att_arr,
             ]);
     }
 
@@ -190,7 +209,7 @@ class CaseListController extends Controller
         //
         $case_array = $request->all();
         $case_id = $request->id;
-        
+        print_r($request->all());
         $miscpet_arr = $case_array['misc_pet'];
             
         $case_array['other'] = json_encode($case_array['other']);
@@ -202,7 +221,7 @@ class CaseListController extends Controller
         
         $case_array['updated_at'] = (new DateTime())->getTimestamp()."000";
         
-        $court_case = $caselist->update($case_array);
+        $court_case = CaseList::find($case_array->id)->update($case_array);
         foreach ($miscpet_arr as $key => $misc_pet){
             $pet_id = $miscpet_arr[$key]['id'];
             $miscpet_arr[$key]['sno'] = $court_case['sno'];
@@ -376,6 +395,25 @@ class CaseListController extends Controller
             ->json([
                 'updated' => $status
             ]);
+    }
+    
+    public function addCaseDocument(Request $request){
+        //Save Attachment
+        $att_arr = [];
+        if($request->hasFile('files'))
+        {
+            foreach ($request->file('files') as $key => $file){
+                $file_path = $file->store('public/uploads/case_files');
+                $att_arr[$key]['case_id'] = $request->case_id;
+                $att_arr[$key]['path'] = $file_path;
+                $att_arr[$key]['name'] = $file->getClientOriginalName();
+                $att_arr[$key]['type'] = $file->getClientOriginalExtension();
+                $att_arr[$key]['org_id'] = Auth::user()->org_id;
+                $att_arr[$key]['status'] = Documents::insert($att_arr);
+            }
+        }
+        
+        return response()->json($att_arr);
     }
     
     /*

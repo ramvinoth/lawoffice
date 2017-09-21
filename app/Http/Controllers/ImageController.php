@@ -7,13 +7,12 @@ use Response;
 
 class ImageController extends Controller{
 
-	public function getImage($path,$file){
-        if($file){
-            $url = $path."/".$file;
-        }else{
-            $url = $path;
-        }
-        $path = storage_path("app/public/") . $url;
+	public function getImage($path){
+        $path_arr = explode("/", $path);
+        $length = count($path_arr)-1;
+        $file = $path_arr[$length];
+        
+        $path = storage_path("app/public/") . $path;
         if(!File::exists($path)) abort(404);
 
         $file = File::get($path);

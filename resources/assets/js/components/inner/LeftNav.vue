@@ -42,6 +42,11 @@
             </router-link>
         </li>
         <li>
+          <router-link to="/documents">
+            <i class="fa fa-file-text-o"></i> <span>Documents</span>
+          </router-link>
+        </li>
+        <li>
           <router-link to="/calendar">
             <i class="fa fa-calendar"></i> <span>Calendar</span>
           </router-link>

@@ -197,7 +197,24 @@ class HearingsController extends Controller
         return response()->json($data);
         
     }
-    
+    public function getHearingsDO($sdate, $edate, $isMonthView){
+        $sd = $sdate->getTimestamp()."000";
+        $ed = $edate->getTimestamp()."000";
+        
+        $query = Hearing::select('diary.*');
+        
+        if($isMonthView){
+            $query->where([
+                ['diary.posted','>=',$sd],
+                ['diary.posted','<=',$ed]
+            ]);
+        }else{
+            $query->where('diary.posted','>=',$sd)->orWhere('diary.posted','<=',$ed);
+        }
+        
+        $data = $query->get();
+        return $data;
+    }
     public function getHearingsArr($sdate, $edate, $isMonthView){
         $sd = $sdate->getTimestamp()."000";
         $ed = $edate->getTimestamp()."000";
@@ -228,9 +245,77 @@ class HearingsController extends Controller
         return $data;
     }
     
+    public function getUpcomingHearing(){
+        
+        $sdate = new DateTime('now');
+        $edate = new DateTime('now');
+        
+        date_modify($edate,'+15 day');
+        
+        $isMonthView = true;
+        
+        $data = $this->getHearingsDO($sdate, $edate, $isMonthView);
+        //print_r($data);
+        return $data;
+    }
+    
+    public function getTomorrowsHearingCount(){
+        $sdate = new DateTime('tomorrow');
+        $edate = new DateTime('tomorrow');
+        date_modify($edate,'+1 day');
+        
+        $sd = $sdate->getTimestamp()."000";
+        $ed = $edate->getTimestamp()."000";
+        
+        $isMonthView = true;
+        $data = Hearing::where([
+                ['diary.posted','>=',$sd],
+                ['diary.posted','<=',$ed]
+            ])->count();
+        return $data;
+    }
+    
     public function send($email){
         \Log::info("Sending Email... to ".$email);
         Mail::to($email)->send(new Reminder);
+        if( count(Mail::failures()) > 0 ) {
+           echo "There was one or more failures. They were: <br />";
+           foreach(Mail::failures as $email_address) {
+               echo " - $email_address <br />";
+            }
+        } else {
+            echo "No errors, all sent successfully!";
+        }
+    }
+    
+    public function sendmail(){
+        $sname = "MADURA TRAVELS";
+        $mail_from = "ramvinoth37@gmail.com";
+        $mail_to = "vinothvallavan6@gmail.com";
+        $mail_body = "dummy body";
+        $mail_subject = "Enquiry";
+        $mail_header = "From: ".$sname." <".$mail_from.">\r\n";
+
+        //$mail_from = 'offers@viya.biz';
+        //$mail_to = $email;
+        //$mail_subject = 'Offer code.';
+
+        $headers = "MIME-Version: 1.0\r\n"; 
+        $headers .= "Content-type: text/html; charset=iso-8859-1\r\n"; 
+        $headers .= "From: ".$sname." <".$mail_from.">\r\n";
+
+        $sendmail = mail($mail_to, $mail_subject, $mail_body, $headers);
+        if($sendmail == 1)
+        {
+            $msg = '<script type="text/javascript">
+                  window.onload = function () { alert("Mail Sent"); }
+        </script>';
+        }
+        else
+        {
+            $msg =  "0";
+        }
+        return $msg;
     }
 }
 ?>

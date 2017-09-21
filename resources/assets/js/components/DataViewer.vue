@@ -1,79 +1,87 @@
 <template>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <span class="panel-title">{{title}}</span>
-            <div>
-                <router-link :to="create" class="btn btn-primary btn-sm">Create</router-link>
-                <div class="btn btn-default btn-sm" @click="showFilter = !showFilter"><i class="fa fa-filter"></i></div>
+    <div class="dataviewer" style="display:none;">
+        <div v-if="model.data.length !== 0">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span class="panel-title">{{title}}</span>
+                    <div>
+                        <router-link :to="create" class="btn btn-primary btn-sm">Create</router-link>
+                        <div class="btn btn-default btn-sm" @click="showFilter = !showFilter"><i class="fa fa-filter"></i></div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="filter" v-if="showFilter">
+                        <div class="filter-column">
+                            <select class="form-control" v-model="params.search_column">
+                                <option v-for="column in filter" :value="column">{{column}}</option>
+                            </select>
+                        </div>
+                        <div class="filter-operator">
+                            <select class="form-control" v-model="params.search_operator">
+                                <option v-for="(value, key) in operators" :value="key">{{value}}</option>
+                            </select>
+                        </div>
+                        <div class="filter-input">
+                            <input type="text" class="form-control" v-model="params.search_query_1"
+                                @keyup.enter="fetchData" placeholder="Search">
+                        </div>
+                        <div class="filter-input" v-if="params.search_operator === 'between'">
+                            <input type="text" class="form-control" v-model="params.search_query_2"
+                                @keyup.enter="fetchData" placeholder="Search">
+                        </div>
+                        <div class="filter-btn">
+                            <button class="btn btn-primary btn-sm btn-block" @click="fetchData">Filter</button>
+                        </div>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th v-for="item in thead">
+                                    <div class="dataviewer-th" @click="sort(item.key)" v-if="item.sort">
+                                        <span>{{item.title}}</span>
+                                        <span v-if="params.column === item.key">
+                                            <span v-if="params.direction === 'asc'">&#x25B2;</span>
+                                            <span v-else>&#x25BC;</span>
+                                        </span>
+                                    </div>
+                                    <div v-else>
+                                        <span>{{item.title}}</span>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <slot v-for="item in model.data" :item="item"></slot>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="panel-footer pagination-footer">
+                    <div class="pagination-item">
+                        <span>Per page: </span>
+                        <select v-model="params.per_page" @change="fetchData">
+                            <option>10</option>
+                            <option>25</option>
+                            <option>50</option>
+                        </select>
+                    </div>
+                    <div class="pagination-item">
+                        <small>Showing {{model.from}} - {{model.to}} of {{model.total}}</small>
+                    </div>
+                    <div class="pagination-item">
+                        <small>Current page: </small>
+                        <input type="text" class="pagination-input" v-model="params.page"
+                            @keyup.enter="fetchData">
+                        <small> of {{model.last_page}}</small>
+                    </div>
+                    <div class="pagination-item">
+                        <button @click="prev" class="btn btn-default btn-sm">Prev</button>
+                        <button @click="next" class="btn btn-default btn-sm">Next</button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="panel-body">
-            <div class="filter" v-if="showFilter">
-                <div class="filter-column">
-                    <select class="form-control" v-model="params.search_column">
-                        <option v-for="column in filter" :value="column">{{column}}</option>
-                    </select>
-                </div>
-                <div class="filter-operator">
-                    <select class="form-control" v-model="params.search_operator">
-                        <option v-for="(value, key) in operators" :value="key">{{value}}</option>
-                    </select>
-                </div>
-                <div class="filter-input">
-                    <input type="text" class="form-control" v-model="params.search_query_1"
-                        @keyup.enter="fetchData" placeholder="Search">
-                </div>
-                <div class="filter-input" v-if="params.search_operator === 'between'">
-                    <input type="text" class="form-control" v-model="params.search_query_2"
-                        @keyup.enter="fetchData" placeholder="Search">
-                </div>
-                <div class="filter-btn">
-                    <button class="btn btn-primary btn-sm btn-block" @click="fetchData">Filter</button>
-                </div>
-            </div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th v-for="item in thead">
-                            <div class="dataviewer-th" @click="sort(item.key)" v-if="item.sort">
-                                <span>{{item.title}}</span>
-                                <span v-if="params.column === item.key">
-                                    <span v-if="params.direction === 'asc'">&#x25B2;</span>
-                                    <span v-else>&#x25BC;</span>
-                                </span>
-                            </div>
-                            <div v-else>
-                                <span>{{item.title}}</span>
-                            </div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <slot v-for="item in model.data" :item="item"></slot>
-                </tbody>
-            </table>
-        </div>
-        <div class="panel-footer pagination-footer">
-            <div class="pagination-item">
-                <span>Per page: </span>
-                <select v-model="params.per_page" @change="fetchData">
-                    <option>10</option>
-                    <option>25</option>
-                    <option>50</option>
-                </select>
-            </div>
-            <div class="pagination-item">
-                <small>Showing {{model.from}} - {{model.to}} of {{model.total}}</small>
-            </div>
-            <div class="pagination-item">
-                <small>Current page: </small>
-                <input type="text" class="pagination-input" v-model="params.page"
-                    @keyup.enter="fetchData">
-                <small> of {{model.last_page}}</small>
-            </div>
-            <div class="pagination-item">
-                <button @click="prev" class="btn btn-default btn-sm">Prev</button>
-                <button @click="next" class="btn btn-default btn-sm">Next</button>
+        <div v-else class="nodata-container">
+            <div>No {{title}} Found. Click here to <router-link :to="create" class="link">create new</router-link>
             </div>
         </div>
     </div>
@@ -81,9 +89,11 @@
 <script>
     import Vue from 'vue'
     import axios from 'axios'
+    import mixin from '../mixins/mixin'
 
     export default {
         props: ['source', 'thead', 'filter', 'create', 'title', 'params'],
+        mixins: [ mixin ],
         data() {
             return {
                 showFilter: false,
@@ -138,7 +148,8 @@
                 var vm = this
                 axios.get(this.buildURL())
                     .then(function(response) {
-                        Vue.set(vm.$data, 'model', response.data.model)
+                        Vue.set(vm.$data, 'model', response.data.model);
+                        document.getElementsByClassName("dataviewer")[0].style="block";
                     })
                     .catch(function(error) {
                         console.log(error)

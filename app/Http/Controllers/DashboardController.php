@@ -26,15 +26,20 @@ class DashboardController extends Controller
         }else if($action == 'getcount'){
             $caselist = new CaseListController();
             $event = new EventController();
+            $hearings = new HearingsController();
             $data['all_cases'] = $caselist->getAllCaseCount();
             $data['all_pending'] = $caselist->getAllPendingCaseCount();
             $data['all_events'] = $event->getAllEventsCount();
+            $data['tmrw_hearing'] = $hearings->getTomorrowsHearingCount();
         }else if($action == 'gettodaysevents'){
             $event = new EventController();
             $data = $event->getTodaysEvents();
         }else if($action == 'getcasestatus'){
             $caseController = new CaseListController(); 
             $data = $caseController->getCaseStatusCount();
+        }else if($action == 'getupcominghearing'){
+            $hearingsController = new HearingsController();
+            $data = $hearingsController->getUpcomingHearing();
         }
         return response()->json($data);
     }

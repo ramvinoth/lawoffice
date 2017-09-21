@@ -53,6 +53,7 @@ class HearingReminder extends Command
         Log::info('This is some useful information.1111');
         */
         //Mail::to('ramvinoth37@gmail.com')->send(new Reminder);
+        $this->hearing->sendmail();
         $this->hearing->send('ramvinoth37@gmail.com');
     }
 }

@@ -415,7 +415,7 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Upload File</label>  
-                                    <input type="file" name="upload" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length" accept="image/*" class="form-control" id="uploadFile">
+                                    <input type="file" name="upload" @change="formData = filesChange($event.target.name, $event.target.files,$event.target.files.length);" accept="image/*" class="form-control" id="uploadFile">
                                 </div>
                             </div>
                         </div>
@@ -469,16 +469,17 @@
                 districts: [],
                 courts: [],
                 casetypes: [],
+                formData: new FormData(),
             }
         },
         beforeMount() {
             this.form['against'] = this.against;
             this.form['against1'] = this.against1;
             if(this.$route.meta.mode === 'edit') {
-                this.title = 'Edit'
-                this.initialize = '/api/caselist/' + this.$route.params.id + '/edit'
-                this.store = '/api/caselist/' + this.$route.params.id
-                this.method = 'put'
+                this.title = 'Edit';
+                this.initialize = '/api/caselist/' + this.$route.params.id + '/edit';
+                this.store = '/api/caselist/edit/' + this.$route.params.id;
+                this.method = 'post';
             }
             this.fetchData()
         },
@@ -513,8 +514,19 @@
                     })
             },
             save() {
-                var vm = this
-                axios[this.method](this.store, this.form)
+                var vm = this;
+                const config = {
+                    headers: { 'content-type': 'multipart/form-data' }
+                }
+                for (var key in this.form){
+                    if (this.form.hasOwnProperty(key)) {
+                        if(typeof this.form[key] == "object"){
+                            this.form[key] = JSON.stringify(this.form[key]);
+                        }
+                        this.formData.append(key, this.form[key]);
+                    }
+                }
+                axios[this.method](this.store, this.formData, config)
                     .then(function(response) {
                         if(response.data.saved) {
                             vm.$router.push(vm.redirect)
@@ -570,9 +582,6 @@
             getCaseTypes(){
                 document.getElementById("casetype_div").style.display = 'block';
                 this.getData('/api/court/getdata','type=case_type&court_type='+this.form.court_type_id+'&code='+this.form.court_id,'casetypes');
-            },
-            filesChange: function(name, files){
-                
             },
             addOtherSideCounsel(event){
                 this.form.other.push({

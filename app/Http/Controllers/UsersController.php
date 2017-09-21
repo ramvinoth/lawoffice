@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use Session;
 use App\Models\User;
+use App\Models\Profile;
 use App\Models\UserCompanyMapping;
 use Illuminate\Http\Request;
 
@@ -30,6 +31,40 @@ class UsersController extends Controller
                 'form' => User::initialize(),
                 'option' => []
             ]);
+    }
+    
+    protected function validator(Request $request)
+    {
+        return Validator::make($request, [
+            'name' => 'required|max:255|unique:users',
+            'email' => 'required|email|max:255|unique:users',
+            'password' => 'required|min:6|confirmed'
+        ]);
+    }
+
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param  array  $data
+     * @return User
+     */
+    protected function store(Request $request)
+    {
+        $data = $request->all();
+        $org_id = Auth::user()->org_id;
+        $avatar = 'public/avatars/male.jpg';
+        $user =  User::create([
+            'org_id' => $org_id,
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'gender' => '1',
+            'password' => bcrypt($data['password']),
+            'slug' => str_slug($data['name']),
+            'avatar' => $avatar
+        ]);
+
+        Profile::create(['user_id' => $user->id ]);
+        return $user;
     }
     
     public function edit()
@@ -61,6 +96,24 @@ class UsersController extends Controller
         return redirect()->back();
 
     }
+    
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Case  $case
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(User $user)
+    {
+        //
+        $status = $user->delete();
+        return response()
+            ->json([
+                'deleted' => true,
+                'status' => $status
+            ]);
+    }
+    
     public function getAuthUserData(){
         $id = Auth::user()->id;
         $org_id = Auth::user()->org_id;

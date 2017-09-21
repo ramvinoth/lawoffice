@@ -1119,3 +1119,16 @@ span.required_label {
 .spopview-content{
     font-size: 1.2em;   
 }
+
+/*Empty Page*/
+.nodata-container{
+    text-align: center;
+    font-size: 1.6em;
+    padding: 20px;
+    border: 1px dashed #a7a7a7;
+    margin: auto;
+    margin-top: 10%;
+    position: relative;
+    width: 50%;
+}
+/*Empty Page END*/

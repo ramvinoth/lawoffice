@@ -9,12 +9,12 @@
             </div>
         </section>
         <section class="content">
-            <div class="col-sm-2" v-for="(user, index) in users">
+            <div class="col-sm-2" v-for="(user, index) in users" :id="'user_'+user.id">
                 <div class="box box-primary">
                     <div class="box-body box-profile">
                         <div class="" style="height: 20px;">
                             <div class="fl pointer"><i class="fa fa-edit"></i></div>
-                            <div v-if="authuser.role.role_id == 1" class="fr pointer"><i class="fa fa-trash"></i></div>
+                            <div v-if="authuser.role.role_id == 1" class="fr pointer" @click="removeUser(user.id)"><i class="fa fa-trash"></i></div>
                         </div>
                         <img class="profile-user-img img-responsive img-circle" :src="user.avatar" alt="User profile picture">
                         <h3 class="profile-username text-center oflowEllipsis" :title="user.name">{{user.name}}</h3>
@@ -24,13 +24,14 @@
             </div>
         </section>
         <slide>
-            <component :is="currentView" :data="compdata"></component>
+            <component :is="currentView" :data="compdata" ref="cc1"></component>
         </slide>
     </div>
 </template>
 
 <script>
     import popMixin from '../../mixins/mixin'
+    import Hub from '../../events/Hub'
     import addUser from "../users/form.vue"
     import slide from "../../components/Slide.vue"
     export default{
@@ -46,10 +47,18 @@
             }  
         },
         beforeMount(){
-            this.sendAjax('api/users','', '', 'get','users');
+            this.fetchUser();
             this.sendAjax('get_auth_user_data','', '', 'get','authuser');
         },
+        mounted(){
+            this.$nextTick(function () {
+                Hub.$on('fetch-user-data', this.fetchUser);  
+            }.bind(this));
+        },
         methods:{
+            fetchUser(){
+                this.sendAjax('api/users','', '', 'get','users');  
+            },
             createUser() {
                 this.currentView = 'addUser';
                 this.showSlide();
@@ -59,10 +68,15 @@
                 this.currentView = 'editUser';
                 this.showSlide();
             },
-            removeUser(){
-                
+            removeUser(id){
+                this.sendAjax('api/users/'+id,'','','delete','',function(response){
+                     jQuery('#user_'+id).remove();
+                });
             }
-        }
+        },
+        destroyed() {
+            Hub.$off('fetch-user-data', this.fetchUser);
+        },
     }
 
 </script>

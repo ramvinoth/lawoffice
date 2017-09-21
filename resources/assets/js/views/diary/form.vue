@@ -166,7 +166,6 @@
             concatValue(caseNoObj){
                 //console.log("caseNoObj length : "+caseNoObj.size());
                 var result= caseNoObj.type+"."+caseNoObj;
-                console.log(result);
                 return result;
             },
             addGroup(type){
