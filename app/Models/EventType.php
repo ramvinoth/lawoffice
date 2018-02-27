@@ -15,6 +15,7 @@ class EventType extends BaseModel
     }
     
     protected $table = 'EVENTTYPES';
+    public $timestamps = false;
     
     protected $fillable = ['org_id', 'name', 'color', 'created_at', 'updated_at'];
     

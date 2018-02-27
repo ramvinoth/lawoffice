@@ -64,6 +64,8 @@
             noty({
                 type: 'success',
                 layout: 'bottomLeft',
+                "timeout":3000,
+                "closeButton":true,
                 text: msg
             });
         }

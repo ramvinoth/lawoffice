@@ -52,8 +52,8 @@
           </router-link>
         </li>
         <li>
-          <router-link to="/diary">
-            <i class="fa fa-envelope"></i> <span>Diary</span>
+          <router-link to="/library">
+            <i class="fa fa-envelope"></i> <span>Library</span>
           </router-link>
         </li>
           

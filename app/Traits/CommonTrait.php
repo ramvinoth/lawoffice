@@ -20,7 +20,7 @@ trait CommonTrait{
         }
         return $date->format($format);
     }
-    function getDatetimeNow() {
+    public static function getDatetimeNow() {
         $tz_object = new DateTimeZone('Asia/Calcutta');
         //date_default_timezone_set('Brazil/East');
 
@@ -29,7 +29,7 @@ trait CommonTrait{
         return $datetime->format('d\-m\-Y\ h:i:s');
         //return $datetime->getTimestamp()."000";
     }
-    function getCurrentLongTime(){
+    public function getCurrentLongTime(){
         return (new DateTime())->getTimestamp()."000";
     }
 }   

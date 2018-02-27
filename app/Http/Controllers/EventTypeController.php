@@ -51,8 +51,8 @@ class EventTypeController extends Controller
         //
         $eventType_array = $request->all();
         $date = new DateTime();
-        $eventType_array['created_at'] = $date->getTimeStamp();
-        $eventType_array['updated_at'] = $date->getTimeStamp();
+        $eventType_array['created_at'] = (new DateTime())->getTimestamp()."000";
+        $eventType_array['updated_at'] = (new DateTime())->getTimestamp()."000";
         
         $event = EventType::create($eventType_array);
         

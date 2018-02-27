@@ -8,6 +8,7 @@ Route::get('/', function () {
 Route::group(['prefix' => 'api/', 'middleware' => 'auth'], function(){
     Route::resource('caselist', 'CaseListController');
     Route::resource('diary', 'DiaryController');
+    Route::resource('library', 'LibraryController');
     Route::resource('calendar', 'CalendarController');
     Route::resource('event', 'EventController');
     Route::resource('eventtype', 'EventTypeController');

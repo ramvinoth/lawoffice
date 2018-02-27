@@ -75,6 +75,18 @@ module.exports = {
             this.setPopCurrentView('viewcase');
             this.showPopUp();
         },
+        loadBook(bookId){
+            //this.$router.push('/caselist/' + caseId);
+            var vm =this;
+            this.sendAjax('/api/library/' + bookId, '', '', 'get', 'case_data', function(){
+                vm.setPopCurrentView('viewHearing');
+                vm.pop_data = vm.case_data;
+                vm.pop_title = 'View Book';
+                vm.pop_mode = 'show';
+                vm.currentView = 'viewBook';
+                vm.showSmallPopUp(); 
+            });
+        },
         loadHearing(hearingId){
             //this.$router.push('/caselist/' + caseId);
             var vm =this;
@@ -103,6 +115,10 @@ module.exports = {
         editHearingInline(){
             this.pop_mode = 'edit';
             this.currentView = 'hearingForm';
+        },
+        editBookInline(){
+            this.pop_mode = 'edit';
+            this.currentView = 'bookForm';
         },
         filesChange: function(name, files, count){
             var formData = new FormData()

@@ -20,7 +20,7 @@ class Petition extends BaseModel
     
     protected $table = 'petition';
     
-    protected $fillable = ['org_id', 'cid', 'sno', 'mpno', 'mpdisposal', 'mpprayer', 'mpreturn', 'mprepresent', 'created_at', 'updated_at'];
+    protected $fillable = ['org_id', 'cid', 'sno', 'mpno', 'mptype', 'mpfiling', 'mpdisposal', 'mpprayer', 'mpreturn', 'mprepresent', 'created_at', 'updated_at'];
  
     public function caselist()
     {

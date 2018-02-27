@@ -1132,3 +1132,6 @@ span.required_label {
     width: 50%;
 }
 /*Empty Page END*/
+.medium-textarea{
+    max-width: 285px;
+}

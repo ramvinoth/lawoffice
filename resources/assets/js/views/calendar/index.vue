@@ -2,7 +2,7 @@
     <div id="calendar_div" class="" style="height:100vh">
         <section class="content">
             <div class="row">
-                <div class="col-md-3 hide">
+                <div class="col-md-3">
                     <div class="box box-solid">
                         <div class="box-header with-border">
                             <h4 class="box-title">Draggable Events</h4>
@@ -67,7 +67,7 @@
                     </div>
                 </div>
                 <!-- /.col -->
-                <div class="col-md-12">
+                <div class="col-md-8">
                     <div class="box box-primary">
                         <div class="box-body no-padding">
                             <!-- THE CALENDAR -->

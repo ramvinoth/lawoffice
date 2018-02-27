@@ -13,8 +13,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label>Case Title</label>
-                                    <span class="required_label">*</span>
-                                    <input type="text" name="case_title" placeholder="Case Title" class="form-control" v-model="form.case_title" required>
+                                    <input type="text" name="case_title" placeholder="Case Title" class="form-control" v-model="form.case_title">
                                     <small class="text-danger" v-if="errors.title">{{errors.title[0]}}</small>
                                 </div>
                             </div>
@@ -72,7 +71,7 @@
                                 <div class="form-group">
                                     <label>Court</label>
                                     <div class="select-style">
-                                    <select name="district" id="district" class="form-control" v-model="form.court_id" @change="getCaseTypes">
+                                    <select name="court_id" id="court_id" class="form-control" v-model="form.court_id" @change="getCaseTypes">
                                         <option disabled value="">Select Court</option>
                                         <option v-for="court in courts" :value="court.value">
                                               {{court.text}}
@@ -95,46 +94,6 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Case Number</label>
-                                    <span class="required_label">*</span>
-                                    <input type="text" name="case_no" class="form-control" placeholder="Case Number" v-model="form.case_no" required>
-                                    <small class="text-danger" v-if="errors.case_no">{{errors.address[0]}}</small>
-                                </div>
-                            </div>
-                            
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Category</label>
-                                    <input type="text" name="category" class="form-control" placeholder="Category" v-model="form.category">
-                                    <small class="text-danger" v-if="errors.category">{{errors.category[0]}}</small>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>SR Number</label>
-                                    <input type="text" class="form-control" placeholder="SR Number" v-model="form.sno">
-                                    <small class="text-danger" v-if="errors.court">{{errors.court[0]}}</small>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Vakalath SR</label>
-                                    <input type="text" class="form-control" placeholder="Vakalath SR" v-model="form.vno">
-                                    <small class="text-danger" v-if="errors.vno">{{errors.court_type[0]}}</small>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <hr></hr>
-                    
                         <div class="row">
                             <div class="col-sm-6">
                                 <label>Appearing for</label>
@@ -152,6 +111,85 @@
                                 <input type="text" class="form-control" placeholder="Contact no" v-model="form.contact">
                             </div>
                         </div>
+                        <div class="row pt10">
+                            <div class="col-sm-6" v-if="form.appear == 'Appellant' || form.appear == 'Petitioner'">
+                                <div class="form-group">
+                                    <label>SR Number</label>
+                                    <input type="text" class="form-control" placeholder="SR Number" v-model="form.sno">
+                                    <small class="text-danger" v-if="errors.court">{{errors.court[0]}}</small>
+                                </div>
+                            </div>
+                            <div class="col-sm-6" v-if="form.appear == 'Respondent'">
+                                <div class="form-group">
+                                    <label>Vakalath SR</label>
+                                    <input type="text" class="form-control" placeholder="Vakalath SR" v-model="form.vno">
+                                    <small class="text-danger" v-if="errors.vno">{{errors.court_type[0]}}</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row pt10">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Date of Filing</label>
+                                    <datepicker v-model="form.filing_date" :value="form.filing_date" placeholder="Date of Filing"></datepicker>
+                                    <small class="text-danger" v-if="errors.email">{{errors.email[0]}}</small>
+                                </div>
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Date of Admission</label>
+                                    <datepicker v-model="form.admission" :value="form.admission" placeholder="Date of Admission"></datepicker>
+                                    <small class="text-danger" v-if="errors.phone">{{errors.phone[0]}}</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Case Number</label>
+                                    <input type="text" name="case_no" class="form-control" placeholder="Case Number" v-model="form.case_no">
+                                    <small class="text-danger" v-if="errors.case_no">{{errors.address[0]}}</small>
+                                </div>
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <input type="text" name="category" class="form-control" placeholder="Category" v-model="form.category">
+                                    <small class="text-danger" v-if="errors.category">{{errors.category[0]}}</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Subject (Provision)</label>
+                                    <input type="text" name="subject" class="form-control" placeholder="Subject" v-model="form.subject">
+                                    <small class="text-danger" v-if="errors.subject">{{errors.category[0]}}</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr></hr>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Refered By</label>
+                                    <input type="text" class="form-control" placeholder="Refered By" v-model="form.refer_by">
+                                </div>
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <div class="form-hr-50">
+                                    <label>Contact No</label>
+                                    <input type="text" class="form-control" placeholder="Contact no" v-model="form.refer_contact">
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div class="row">
                             <div class="col-sm-12">
                                 <label>Other Side Counsel</label>
@@ -171,96 +209,69 @@
                     
                         <hr></hr>
                         
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <datepicker v-model="form.filing_date" :value="form.filing_date" placeholder="Date of Filing"></datepicker>
-                                    <small class="text-danger" v-if="errors.email">{{errors.email[0]}}</small>
-                                </div>
-                            </div>
-                            
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <datepicker v-model="form.admission" :value="form.admission" placeholder="Date of Admission"></datepicker>
-                                    <small class="text-danger" v-if="errors.phone">{{errors.phone[0]}}</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row pt10">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <datepicker v-model="form.returned" :value="form.returned" placeholder="Date of Return"></datepicker>
-                                    <small class="text-danger" v-if="errors.phone">{{errors.phone[0]}}</small>
-                                </div>
-                            </div>
-                            
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <datepicker v-model="form.return_expiry" :value="form.return_expiry" placeholder="Date of Expiry"></datepicker>
-                                    <small class="text-danger" v-if="errors.phone">{{errors.phone[0]}}</small>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row pt20">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Refered By</label>
-                                    <input type="text" class="form-control" placeholder="Refered By" v-model="form.refer_by">
-                                </div>
-                            </div>
-                            
-                            <div class="col-sm-6">
-                                <div class="form-hr-50">
-                                    <label>Contact No</label>
-                                    <input type="text" class="form-control" placeholder="Contact no" v-model="form.refer_contact">
-                                </div>
-                            </div>
-                        </div>
                         <div id="lowercourt_div" style="display:none;">
                             <label>Lower Court Number</label>
                             <div class="form-group form-inline-block form-box">
                                 <div class="row">
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <input type="text" class="form-control" placeholder="Type" v-model="form.against.lno">
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <input type="text" class="form-control" placeholder="Court" v-model="form.against.lcourt">
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <input type="text" class="form-control" placeholder="Place" v-model="form.against.lplace">
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <datepicker v-model="form.against.lorder" :value="form.against.lorder" placeholder="Order Date"></datepicker>
                                     </div>
                                 </div>
                                 <hr></hr>
                                 <div class="row">
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <input type="text" class="form-control" placeholder="Lower Court Number" v-model="form.against1.lno">
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <input type="text" class="form-control" placeholder="Court" v-model="form.against1.lcourt">
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <input type="text" class="form-control" placeholder="Place" v-model="form.against1.lplace">
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <datepicker v-model="form.against1.order" :value="form.against1.lorder" placeholder="Order Date"></datepicker>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="form-group">
-                            <label>Appellant/Petitioner</label>
-                            <textarea name="petitioner" class="form-control" v-model="form.petitioner"></textarea>
-                            <small class="text-danger" v-if="errors.address">{{errors.address[0]}}</small>
-                        </div>
-                        <div class="form-group">
-                            <label>Respondant</label>
-                            <textarea name="respondant" class="form-control" v-model="form.respondant"></textarea>
-                            <small class="text-danger" v-if="errors.address">{{errors.address[0]}}</small>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Appellant/Petitioner</label>
+                                    <input name="petitioner" id="petitioner" class="form-control" v-model="form.petitioner" />
+                                    <small class="text-danger" v-if="errors.petitioner">{{errors.address[0]}}</small>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Appellant/Petitioner's Address</label>
+                                    <textarea name="petitioner_addr" id="petitioner_addr" class="form-control" v-model="form.petitioner_addr"></textarea>
+                                    <small class="text-danger" v-if="errors.address">{{errors.address[0]}}</small>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Respondant</label>
+                                    <input name="respondant" id="respondant" class="form-control" v-model="form.respondant" />
+                                    <small class="text-danger" v-if="errors.respondant">{{errors.address[0]}}</small>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Respondant's Address</label>
+                                    <textarea name="respondant_addr" id="respondant_addr" class="form-control" v-model="form.respondant_addr"></textarea>
+                                    <small class="text-danger" v-if="errors.address">{{errors.address[0]}}</small>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="row">
@@ -268,9 +279,9 @@
                                 <label>Priority</label>
                                 <div class="select-style">
                                     <select name="c_prayer" class="form-control" v-model="form.priority" placeholder="Case Priority">
-                                        <option value="0">Low</option>
-                                        <option value="1">Medium</option>
-                                        <option value="2">High</option>
+                                        <option value="Low">Low</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="High">High</option>
                                     </select>
                                 </div>
                                 <small class="text-danger" v-if="errors.address">{{errors.address[0]}}</small>
@@ -280,7 +291,7 @@
                         <div class="row mT10">
                             <div class="col-sm-12">
                                 <label>Prayer</label>
-                                <textarea name="c_prayer" class="form-control" v-model="form.c_prayer" placeholder="Case Description"></textarea>
+                                <textarea name="c_prayer" class="form-control large-textarea" v-model="form.c_prayer" placeholder="Case Description"></textarea>
                                 <small class="text-danger" v-if="errors.address">{{errors.address[0]}}</small>
                             </div>
                         </div>
@@ -322,6 +333,22 @@
                         </div>
 
                         <!--************************** To be Moved Inside **************************-->
+                        <div class="row pt10" style="display:none;">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <datepicker v-model="form.returned" :value="form.returned" placeholder="Date of Return"></datepicker>
+                                    <small class="text-danger" v-if="errors.phone">{{errors.phone[0]}}</small>
+                                </div>
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <datepicker v-model="form.return_expiry" :value="form.return_expiry" placeholder="Date of Expiry"></datepicker>
+                                    <small class="text-danger" v-if="errors.phone">{{errors.phone[0]}}</small>
+                                </div>
+                            </div>
+                        </div>
+
                         <div id="representation" class="row" style="display:none;">
                             <hr></hr>
                             <div class="col-sm-4">
@@ -498,16 +525,20 @@
                     .then(function(response) {
                         Vue.set(vm.$data, 'form', response.data.form)
                         Vue.set(vm.$data, 'option', response.data.option)
+                        vm.selectCourt();
                     })
                     .catch(function(error) {
                         console.log(error)
                     })
             },
-            getData(url,params,data_var) {
+            getData(url,params,data_var, callback) {
                 var vm = this
                 axios.get(url+"?"+params)
                     .then(function(response) {
                         Vue.set(vm.$data, data_var, response.data)
+                        if(typeof callback === "function"){
+                            callback(response.data);
+                        }
                     })
                     .catch(function(error) {
                         console.log(error)
@@ -533,7 +564,9 @@
                         }
                     })
                     .catch(function(error) {
-                        Vue.set(vm.$data, 'errors', error.response.data)
+                        console.log("Error adding Case : "+error);
+                        notify("Error adding Case. Please try after sometime or Contact Technical Support");
+                        //Vue.set(vm.$data, 'errors', error.response.data)
                     })
             },
             selectCourt(){
@@ -543,9 +576,9 @@
                 document.getElementById("lowercourt_div").style.display = 'none';
                 document.getElementById("bench_div").style.display = 'none';
                 document.getElementById("state_div").style.display = 'none';
-                this.form.court_id = '';
+                //this.form.court_id = '';
                 this.form.district = '';
-                this.form.case_type = '';
+                //this.form.case_type = '';
                 this.form.state_id = 31;
                 
                 if(this.form.court_type_id == "1") //Supreme Court
@@ -576,8 +609,14 @@
                 this.getData('/api/court/getdata','type=district&code='+this.form.court_type_id);
             },
             getListOfCourts(){
+                var vm = this;
                 document.getElementById("court_div").style.display = 'block';
-                this.getData('/api/court/getdata','type=court&court_type='+this.form.court_type_id+'&district_code='+this.form.district,'courts');
+                this.getData('/api/court/getdata','type=court&court_type='+this.form.court_type_id+'&district_code='+this.form.district,'courts', function(){
+                    if(vm.form.court_id === undefined){
+                        vm.form.court_id = 507;
+                    }
+                    vm.getCaseTypes();
+                });
             },
             getCaseTypes(){
                 document.getElementById("casetype_div").style.display = 'block';

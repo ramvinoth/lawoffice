@@ -9,6 +9,7 @@ use App\Traits\Audit;
 use App\Traits\CommonTrait;
 use App\Traits\CaseListTrait;
 use Auth;
+use DateTime;
 
 class CaseList extends BaseModel
 {
@@ -36,12 +37,12 @@ class CaseList extends BaseModel
     protected $hidden = ['created_at'];
     
     protected $fillable = [
-        'case_title', 'court_type_id', 'court_id', 'state_id', 'bench', 'sno', 'vno', 'case_type', 'filing_date', 'admission', 'petitioner', 'respondant', 'appear', 'contact', 'no_of', 'refer_by', 'refer_contact', 'refer_to', 'to_contact', 'district', 'c_prayer', 'citation', 'status', 's_text', 'disposal', 'expiry_date', 'by_whom', 'category', 'case_no', 'against', 'against1', 'mcdisposal', 'mcjudge', 'judge', 'main_petitioner', 'posted_date', 'mpno', 'other', 'crime_no', 'police_st', 'loan', 'bank', 'branch', 'loan_cat', 'possession', 'sale', 'upload', 'returned', 'represent', 'present', 'return_expiry', 'result', 'priority', 'created_at', 'updated_at'
+        'case_title', 'court_type_id', 'court_id', 'state_id', 'bench', 'sno', 'vno', 'case_type', 'filing_date', 'admission', 'petitioner', 'petitioner_addr', 'respondant', 'respondant_addr', 'appear', 'contact', 'no_of', 'refer_by', 'refer_contact', 'refer_to', 'to_contact', 'district', 'c_prayer', 'citation', 'status', 's_text', 'disposal', 'expiry_date', 'by_whom', 'category', 'subject', 'case_no', 'against', 'against1', 'mcdisposal', 'mcjudge', 'judge', 'main_petitioner', 'posted_date', 'mpno', 'other', 'crime_no', 'police_st', 'loan', 'bank', 'branch', 'loan_cat', 'possession', 'sale', 'upload', 'returned', 'represent', 'present', 'return_expiry', 'result', 'priority', 'created_at', 'updated_at'
     ];
 
     // whitelist of filter-able columns
     protected $filter = [
-        'id', 'case_title', 'court_type_id', 'court_id', 'state_id', 'bench', 'sno', 'vno', 'case_type', 'filing_date', 'admission', 'petitioner', 'respondant', 'appear', 'contact', 'no_of', 'refer_by', 'refer_contact', 'refer_to', 'to_contact', 'district', 'c_prayer', 'citation', 'status', 's_text', 'disposal', 'expiry_date', 'by_whom', 'category', 'case_no', 'against', 'against1', 'mcdisposal', 'mcjudge', 'judge', 'main_petitioner', 'posted_date', 'mpno', 'other', 'crime_no', 'police_st', 'loan', 'bank', 'branch', 'loan_cat', 'possession', 'sale', 'upload', 'returned', 'represent', 'present', 'return_expiry', 'result', 'priority'
+        'id', 'case_title', 'court_type_id', 'court_id', 'state_id', 'bench', 'sno', 'vno', 'case_type', 'filing_date', 'admission', 'petitioner', 'petitioner_addr', 'respondant', 'respondant_addr', 'appear', 'contact', 'no_of', 'refer_by', 'refer_contact', 'refer_to', 'to_contact', 'district', 'c_prayer', 'citation', 'status', 's_text', 'disposal', 'expiry_date', 'by_whom', 'category', 'subject', 'case_no', 'against', 'against1', 'mcdisposal', 'mcjudge', 'judge', 'main_petitioner', 'posted_date', 'mpno', 'other', 'crime_no', 'police_st', 'loan', 'bank', 'branch', 'loan_cat', 'possession', 'sale', 'upload', 'returned', 'represent', 'present', 'return_expiry', 'result', 'priority'
     ];
     
     public function misc_sr()
@@ -64,21 +65,46 @@ class CaseList extends BaseModel
         return $this->convertLongToDate($updated_at, 'd-m-Y H:i:s', 'Asia/Calcutta');
     }
     
+    public function getPriorityAttribute($priority)
+    {
+        $priority_txt = "Low";
+        if($priority == 2){
+            $priority_txt = "Medium";
+        }else if($priority == 3){
+            $priority_txt = "High";
+        }
+        return $priority_txt;
+    }
+    
+    public function setPriorityAttribute($priority)
+    {
+        $priority_txt = 1;
+        if($priority == "Medium"){
+            $priority_txt = 2;
+        }else if($priority == "High"){
+            $priority_txt = 3;
+        }
+        $this->attributes['priority'] = $priority_txt;
+    }
+    
     public static function initialize()
     {
+        $curr_date = CommonTrait::getDatetimeNow();
         $cases_table = [
-            'court_type_id' => '',
+            'court_type_id' => '2',
             'case_title' => '',
-            'court_id' => '',
+            'court_id' => '507',
             'state_id' => '',
             'bench' => '',
             'sno' => '',
             'vno' => '',
             'case_type' => '',
-            'filing_date' => '',
-            'admission' => '',
+            'filing_date' => $curr_date,
+            'admission' => $curr_date,
             'petitioner' => '',
+            'petitioner_addr' => '',
             'respondant' => '',
+            'respondant_addr' => '',
             'appear' => '',
             'contact' => '',
             'no_of' => '',
@@ -95,6 +121,7 @@ class CaseList extends BaseModel
             'expiry_date' => '',
             'by_whom' => '',
             'category' => '',
+            'subject' => '',
             'case_no' => '',
             'against' => ['lno'=> '', 'lcourt'=> '', 'lplace'=> '', 'lorder'=> ''],
             'against1' => ['lno'=> '', 'lcourt'=> '', 'lplace'=> '', 'lorder'=> ''],
@@ -119,13 +146,13 @@ class CaseList extends BaseModel
             'present' => '',
             'return_expiry' => '',
             'result' => '',
-            'priority' => '',
+            'priority' => 'Low',
         ];
         $connected_table = ["connected" => ''];
         
         $misc_sr_table = ["misc_sr" => array(['category' => '', 'sr_no' => '', 'year' => '', 'date' => ''])];
         
-        $misc_pet_table = ["misc_pet" => array(['mpno' => '', 'mpprayer' => '', 'mpdisposal' => '', 'mpreturn' => '', 'mprepresent' => ''])];
+        $misc_pet_table = ["misc_pet" => array(['mptype' => '', 'mpno' => '', 'mpprayer' => '', 'mpdisposal' => '', 'mpfiling' => '', 'mpreturn' => '', 'mprepresent' => ''])];
         
         $merged_arr = array_merge($cases_table, $connected_table, $misc_sr_table, $misc_pet_table);
         

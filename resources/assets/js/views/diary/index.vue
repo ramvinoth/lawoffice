@@ -15,7 +15,7 @@
     import DataViewer from '../../components/DataViewer.vue'
 
     export default {
-        name: 'CaseListIndex',
+        name: 'DiaryIndex',
         data() {
             return {
                 title: 'Diary',

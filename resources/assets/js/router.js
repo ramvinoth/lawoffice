@@ -16,6 +16,11 @@ const router = new VueRouter({
         {path: '/diary/:id/edit', component: require('./views/diary/form.vue'), meta: {mode: 'edit', requiresAuth: true }},
         {path: '/diary/:id', component: require('./views/diary/show.vue'), meta: { requiresAuth: true }},
         
+        {path: '/library', component: require('./views/Library/index.vue'), meta: { requiresAuth: true }},
+        {path: '/library/create', component: require('./views/Library/form.vue'), meta: { requiresAuth: true }},
+        {path: '/library/:id/edit', component: require('./views/Library/form.vue'), meta: {mode: 'edit', requiresAuth: true }},
+        {path: '/library/:id', component: require('./views/Library/show.vue'), meta: { mode: 'show', requiresAuth: true }},
+        
         {path: '/caselist', component: require('./views/caselist/index.vue'), meta: { requiresAuth: true }},
         {path: '/caselist/create', component: require('./views/caselist/form.vue'), meta: { requiresAuth: true }},
         {path: '/caselist/:id/edit', component: require('./views/caselist/form.vue'), meta: {mode: 'edit', requiresAuth: true }},

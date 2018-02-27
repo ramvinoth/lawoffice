@@ -43,11 +43,11 @@
                             <div class="tab-pane active" id="info">
                                 <div class="row caseinfo">
                                     <div class="col-sm-4">
-                                        <div>
+                                        <div v-if="model.appear == 'Respondent'">
                                             <label>Vakalath No</label>
                                             <span :title="model.vno">{{model.vno}}</span>
                                         </div>
-                                        <div>
+                                        <div v-if="model.sno === 'Petitioner' || model.sno === 'Appelant'">
                                             <label>SR No</label>
                                             <span :title="model.sno">{{model.sno}}</span>
                                         </div>
@@ -104,16 +104,6 @@
                                         <div>
                                             <label>Priority</label>
                                             <span :title="model.priority">{{model.priority}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div>
-                                            <label>Created At</label>
-                                            <span :title="model.created_at">{{model.created_at}}</span>
-                                        </div>
-                                        <div>
-                                            <label>Updated At</label>
-                                            <span :title="model.updated_at">{{model.updated_at}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -185,12 +175,22 @@
                                             </div>
                                             <div class="col-sm-4">
                                                 <div>
+                                                    <label>Hearing Date</label>
+                                                    <span :title="obj.item">{{obj.cdate}}</span>
+                                                </div>
+                                                <div>
+                                                    <label>Posted on</label>
+                                                    <span :title="obj.posted">{{obj.posted}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div>
                                                     <label>Item no.</label>
                                                     <span :title="obj.item">{{obj.item}}</span>
                                                 </div>
                                                 <div>
-                                                    <label>Posted</label>
-                                                    <span :title="obj.posted">{{obj.posted}}</span>
+                                                    <label>Judges</label>
+                                                    <span :title="obj.created_at">{{obj.judges}}</span>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
@@ -201,16 +201,6 @@
                                                 <div>
                                                     <label>Status</label>
                                                     <span :title="obj.status">{{obj.status}}</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div>
-                                                    <label>Updated date</label>
-                                                    <span :title="obj.created_at">{{obj.updated_at}}</span>
-                                                </div>
-                                                <div>
-                                                    <label>Created date</label>
-                                                    <span :title="obj.created_at">{{obj.created_at}}</span>
                                                 </div>
                                             </div>
 
